@@ -1,0 +1,21 @@
+
+// Respawn type, see the table below
+respawn = 3;
+// Delay in seconds before playable unit respawns.
+respawnDelay = 3;
+// Delay in seconds before vehicle respawns.
+respawnVehicleDelay = 60;
+// 0 to disable the score table (it can still be opened manually by pressing 'P' key).
+respawnDialog = 0;
+// Respawn templates from CfgRespawnTemplates. You can combine any number of them together.
+respawnTemplates[] = {"Counter","Wave"};
+// Side specific respawn templates. When undefined, general respawnTemplates are used instead.
+respawnTemplatesEast[] = {"Counter"};
+// 1 to respawn player when he joins the game. Available only for INSTANT and BASE respawn types.
+respawnOnStart = 1;
+// When 1, the score table contains score of all playable units as opposed to players only.
+aikills = 1;
+
+
+#include "INDICAM\indiCam_gui\indiCam_gui_definitions.hpp"
+#include "INDICAM\indiCam_gui\indiCam_gui_dialogs.hpp"

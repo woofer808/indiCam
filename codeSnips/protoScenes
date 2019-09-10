@@ -1,0 +1,33 @@
+			case "panWidePerson": {
+				if (_sceneSelectorDebug) then {systemChat "case is panning wide"};
+				detach indiCam;
+				logicEmpty = createVehicle ["Sign_Sphere10cm_F", getPos actor, [], 0, "CAN_COLLIDE"];
+				//hideObject logicEmpty;
+				logicCurrentAngle = 0;
+				[] spawn {
+					onEachFrame {
+						_angleSpeed = 10;
+						_time = (1 / diag_fps);
+						_angleDelta = _angleSpeed * _time;
+						logicCurrentAngle = logicCurrentAngle + _angleDelta;
+						_newVector = [
+									10*cos logicCurrentAngle,
+									20*sin logicCurrentAngle,
+									1.8
+									];
+						_newVector = _newVector vectorMultiply 1;
+						_newPos = (getPos actor) vectorAdd _newVector;
+						logicEmpty setPos _newPos;
+					};
+				};
+				_cameraTaketime = 15;
+				_cameraMovementRate = 0;
+				_cameraTarget = logicEmpty;
+				// Randomize the next position for camera around the actor
+				_posX = random [-20,0,20];
+				_posY = random [-20,0,20];
+				_posZ = random [1,5,40];
+				_newCameraPos = (actor modelToWorld [0,-50,10]);
+				_newFov = (selectRandom [0.5]);
+				_maxDistance = 200;
+			}; // end of case

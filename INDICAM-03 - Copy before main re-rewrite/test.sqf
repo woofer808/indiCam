@@ -1,0 +1,4 @@
+/*
+[] execVM "INDICAM\test.sqf";
+*/
+

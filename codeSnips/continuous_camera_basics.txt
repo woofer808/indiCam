@@ -1,0 +1,27 @@
+indiCam = "camera" camCreate (player modelToWorld [0.5,-1,1.8]); 
+indiCam cameraEffect ["internal","back"]; 
+indiCam camSetTarget player; 
+camUseNVG false; 
+showCinemaBorder false; 
+indiCam camCommand "inertia on";
+indiCam camSetFov 1;
+indiCam camcommit 0;
+
+
+
+
+indicam camSetRelPos [0,-5,1.8];
+indiCam camcommit 0;
+
+
+
+
+jonas = false;
+sleep 0.5;
+jonas = true;
+while {jonas} do {
+indicam camSetTarget actor;
+indicam camSetRelPos [0,-1,1.8];
+indiCam camcommit 0;
+sleep (1/90);
+};

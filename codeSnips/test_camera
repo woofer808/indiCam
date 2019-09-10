@@ -1,0 +1,18 @@
+indiCam = "camera" camCreate (getPos player);
+indiCam cameraEffect ["internal","back"];
+indiCam camSetTarget actor;
+camUseNVG false;
+showCinemaBorder false;
+indiCam camCommand "inertia on";
+
+indiCam camPrepareTarget player;
+indiCam camPreparePos getPos player;
+indiCam camPrepareFov 1;
+waitUntil {camPreloaded indiCam};
+indiCam camCommitPrepared 0;
+
+indiCam camCommand "manual on";
+sleep 5;
+
+indiCam cameraEffect ["terminate","back"];
+camDestroy indiCam;

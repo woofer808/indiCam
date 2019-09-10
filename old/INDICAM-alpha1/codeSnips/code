@@ -1,0 +1,62 @@
+
+comment "Sets up the actor and pushes the cameraman to world origin 0,0,0";
+actor = cursortarget;
+player setPos [0,0,0];
+
+
+
+starts BIS camera
+call BIS_fnc_camera
+
+
+----------------------------------------------
+
+
+
+
+
+
+// The most basic panning camera starting off from above
+camUseNVG false; 
+showCinemaBorder false;
+_duration = 10;
+
+_camera = "camera" camCreate (actor modelToWorld [5,-1,10]);
+_camera cameraEffect ["internal","back"];
+_camera camSetTarget actor;
+_camera camSetPos (actor modelToWorld [0,-1,3]);
+_camera camPrepareFOV 0.900;
+_camera camcommit _duration;
+waitUntil {camCommitted _camera};
+
+
+
+// The most basic follow camera over shoulder. Very stiff.
+camUseNVG false;  
+showCinemaBorder false; 
+_duration = 10; 
+ 
+_camera = "camera" camCreate (actor modelToWorld [5,-1,10]);
+_camera cameraEffect ["internal","back"];
+_camera attachTo [actor, [0.5, -1, 1.8]];
+_camera camSetPos (actor modelToWorld [0,-1,3]);
+_camera setDir 0;
+_camera camPrepareFOV 0.500;
+_camera camcommit _duration;
+waitUntil {camCommitted _camera};
+
+
+
+// Very basic top-down camera, rotates with character.
+camUseNVG false;  
+showCinemaBorder false; 
+_duration = 1; 
+ 
+_camera = "camera" camCreate (actor modelToWorld [0,0,100]);  
+_camera cameraEffect ["internal","back"];  
+_camera camSetTarget actor;
+_camera camPrepareFOV 0.500; 
+_camera camcommit _duration; 
+waitUntil {camCommitted _camera};
+
+
