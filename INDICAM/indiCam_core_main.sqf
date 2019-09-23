@@ -76,14 +76,4 @@ if (indiCam_devMode) then {
 };
 
 
-// Initialize controls
-if (indiCam_devMode) then {
-	[] execVM "INDICAM\indiCam_core_inputControls.sqf";
-} else {
-	[] spawn indiCam_core_inputControls;
-};
-
-
-
-
 indiCam_var_requestMode = "default";
