@@ -8,7 +8,7 @@ class EditorData
 	toggles=9;
 	class ItemIDProvider
 	{
-		nextID=2421;
+		nextID=2423;
 	};
 	class MarkerIDProvider
 	{
@@ -68,7 +68,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=1;
+		items=2;
 		class Item0
 		{
 			dataType="Group";
@@ -98,6 +98,36 @@ class Mission
 			{
 			};
 			id=2262;
+		};
+		class Item1
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={23008.764,3.1914392,18784.357};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+					};
+					id=2422;
+					type="B_soldier_AAR_F";
+					atlOffset=2.3841858e-007;
+				};
+			};
+			class Attributes
+			{
+			};
+			id=2421;
+			atlOffset=2.3841858e-007;
 		};
 	};
 };

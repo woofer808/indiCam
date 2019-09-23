@@ -43,6 +43,7 @@ comment " SCRIPTED SCENES ";
 //TODO- Scripted scene: DropOff - Keep track of helicopters when they have low velocity < 70 and are close to ground (< 10m) and in camera vincinity
 
 comment " BACKLOG ";
+//TODO- Fog of war functionality. A checkbox in the GUI that only shows enemies that current camera side knowsAbout.
 //TODO- Might need to spawn a background function that keeps track of indiCam_running variable
 //TODO- Scripted scenes that makes jumps to close-by animals
 //TODO- Make a scene switch if the camera is stuck to the ground for too long
@@ -256,35 +257,9 @@ indiCam_fnc_clearEventhandlers = {
 };
 
 
-// Give the player the option to start indiCam UI
-// Currently temporary. Make a script that makes sure that the player has these on him even after remoting with AIC
-// player addAction ["indiCam", "_handle=createdialog 'indiCam_gui_dialogMain'"];
 
-
-
-
-
-// Define the function that is to run when the CBA bound key is pressed.
-indiCam_fnc_keyGUI = {
-	// Only open the dialog if it's not already open
-	if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
-};	
-
-/* DIK keycodes
-https://community.bistudio.com/wiki/DIK_KeyCodes
-DIK_F1	0x3B, DEC_F1 59
-*/
-if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {		// Only use CBA keybindings if CBA is loaded
-	["indiCam","GUI_key", "show/hide indiCam controls", {_this call indiCam_fnc_keyGUI}, {}, [59, [false, false, false]]] call CBA_fnc_addKeybind;
-} else {																// If CBA isn't present, use the legacy input control
-	// Legacy key input is currently located in indiCam_gui_init.sqf
-	systemChat "--> indiCam: CBA not loaded, using key for SelectGroupUnit1 (usually F1)";
-	[] spawn {
-		while {true} do {
-			waitUntil {inputAction "SelectGroupUnit1" > 0};
-			_handle=createdialog "indiCam_gui_dialogMain";
-			waitUntil {inputAction "SelectGroupUnit1" <= 0};
-		};
-	};
+if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {
+	[] spawn indiCam_core_inputControls;
+} else {
+	systemChat "indiCam --> CBA not loaded!";
 };
-
