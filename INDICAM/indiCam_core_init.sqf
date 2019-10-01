@@ -1,26 +1,34 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										independent cinematic camera									";
-comment "																										";
-comment "																										";
-comment "	The purpose of the init is to compile all functions and set all variables from start.				";
-comment "																										";
-comment "																										";
-comment "	Definitions:																						";
-comment "	- Scene: A predefined camera angle with camera movement along with take time, fov and so on.		";
-comment "	- Variable names: indiCam_var_variableName															";
-comment "	- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)									";
-comment "	- Object names: indiCam_objectName																	";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Compile all functions and set all variables from start.
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * call indicam_core_fnc_init
+ *
+ * Public: No
+ */
+
+/*
+	Definitions:
+		- Scene: A predefined camera angle with camera movement along with take time, fov and so on.
+		- Variable names: indiCam_var_variableName
+		- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)
+		- Object names: indiCam_objectName
+*/
+
 // Versioning: Significant new functionality adds to the tenth of a version, scene additions and fixes adds to the hundreds
 
 //REMOVED- Neither script nor mod version gives the cameraman an addaction anymore. Use default F1 or set your own key
 
 
 /* Changelog version 1.31*/	
-comment " PRIORITIES / DONE ";
+///		PRIORITIES / DONE
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
 //TODO- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are still working.
 //TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post
@@ -34,7 +42,7 @@ comment " PRIORITIES / DONE ";
 //TODO- Would be totally cool with a flashlight type function as with Zeus or the editor. Maybe spawn a local light above the actor?
 //TODO- Preventing scene switching doesn't seem to prevent scene switching by obscured actor. Are we fine with that?
 
-comment " SCRIPTED SCENES ";
+///		SCRIPTED SCENES
 //TODO- How do the new special scene actor stuff work alongside unconcious units with ace or reggs script?
 //TODO- Add "killer" as scripted scene as a death scene. Could be made to be shown on every occation in GUI.
 //TODO- Detect incoming mortar fire and switch to show an overview of the location at impact
@@ -42,7 +50,7 @@ comment " SCRIPTED SCENES ";
 //TODO- When the AT script is activated, it should keep a lookout if the unit puts the AT back.
 //TODO- Scripted scene: DropOff - Keep track of helicopters when they have low velocity < 70 and are close to ground (< 10m) and in camera vincinity
 
-comment " BACKLOG ";
+///		BACKLOG
 //TODO- Might need to spawn a background function that keeps track of indiCam_running variable
 //TODO- Scripted scenes that makes jumps to close-by animals
 //TODO- Make a scene switch if the camera is stuck to the ground for too long
@@ -97,10 +105,10 @@ comment " BACKLOG ";
 //IDEA- A scene that checks for building windows around the actor and attempts to look through from the inside.
 //IDEA- Maybe use something like {_justPlayers = allPlayers - entities "HeadlessClient_F";} to find players instead of what's used now
 
+/* ----------------------------------------------------------------------------------------------------
+											init
+   ---------------------------------------------------------------------------------------------------- */
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "													init												";
-comment "-------------------------------------------------------------------------------------------------------";
 // indiCam script should only init on player clients or on player hosts.
 if (!hasInterface) exitWith {};
 
@@ -127,10 +135,10 @@ indiCam_running = false;
 // Initialize the diary entry
 [] execVM "INDICAM\indiCam_core_diary.sqf";
 
+/* ----------------------------------------------------------------------------------------------------
+												Variables
+   ---------------------------------------------------------------------------------------------------- */
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												variables												";
-comment "-------------------------------------------------------------------------------------------------------";
 // Actor management
 indiCam_var_enterVehicleEH = 0;				// Eventhandler for actorManager
 indiCam_var_exitVehicleEH = 0;				// Eventhandler for actorManager
@@ -203,9 +211,9 @@ indiCam_var_SceneOverrideState = false;
 indiCam_var_guiSceneOverrideDuration = 30;
 indiCam_var_sceneSwitch = true;
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												functions												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+											functions
+   ---------------------------------------------------------------------------------------------------- */
 // Compile functions as a function. Makes it possible to compile on the fly
 indiCam_fnc_compileAll = {
 	indiCam_core_main = compile preprocessFileLineNumbers "INDICAM\indiCam_core_main.sqf";
@@ -287,4 +295,3 @@ if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {		// Only use CB
 		};
 	};
 };
-

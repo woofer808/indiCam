@@ -1,8 +1,4 @@
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										actor in vehicle scenes											";
-comment "-------------------------------------------------------------------------------------------------------";
-
+// Actor in vehicle
 
 if ((speed vehicle indiCam_actor) < 3 ) then { // Low speed or stationary vehicle
 
@@ -318,5 +314,3 @@ if ( ((speed vehicle indiCam_actor) > 50) ) then { // Speed of Speed
 	}; // End of switch
 
 }; // End of Speed scenes
-
-

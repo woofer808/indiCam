@@ -1,8 +1,4 @@
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										actor in boat scenes											";
-comment "-------------------------------------------------------------------------------------------------------";
-
+// Actor in boat
 
 if ( ((speed vehicle indiCam_actor) < 3) ) then { // Low speed value scenes
 
@@ -214,4 +210,3 @@ if ( ((speed vehicle indiCam_actor) > 3) ) then { // High speed value scenes
 
 
 }; // End of medium action value scenes
-

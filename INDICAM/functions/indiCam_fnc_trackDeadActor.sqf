@@ -1,12 +1,18 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										   indiCam_fnc_trackDeadActor									";
-comment "																										";
-comment "							WORK IN PROGRESS 1!!!!!!!!!!!!!!!											";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/*
+ * Author: woofer
+ * WIP
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * spawn indiCam_fnc_trackDeadActor
+ *
+ * Public: No
+ */
 
 // Keep track of a player actor through death in case respawn takes too long
 // Run this function in the main loop when the actor has been found dead
@@ -53,18 +59,3 @@ if (isMultiplayer) then { // We only need to track players through respawn in MP
 	};
 
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

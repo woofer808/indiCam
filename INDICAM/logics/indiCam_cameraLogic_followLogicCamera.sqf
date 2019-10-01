@@ -1,31 +1,30 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "									indiCam_cameraLogic_followLogicCamera									";
-comment "																										";
-comment "	Activates and contiunally commits a camera in relation to the camera logic							";
-comment "																										";
-comment "	This script contains sleep and has to be spawned.													";
-comment "	Arguments: [ cameraChaseSpeed ]																		";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Activates and continually commits a camera in relation to the camera logic.
+ *
+ * Arguments:
+ * 0: Chase Speed <NUMBER>
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * [10] spawn indicam_cameraLogic_fnc_followLogicCamera
+ *
+ * Public: No
+ */
 
+/* ----------------------------------------------------------------------------------------------------
+									Arguments
+   ---------------------------------------------------------------------------------------------------- */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Arguments			 																				";
-comment "-------------------------------------------------------------------------------------------------------";
 private _relativePosition = _this select 0;
 private _cameraChaseSpeed = (1 / (_this select 1));
 private _cameraChaseDistance = _this select 2; // Determines how close the logic can come to the actor
-comment "-------------------------------------------------------------------------------------------------------";
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Script control block
+   ---------------------------------------------------------------------------------------------------- */
 // Hold on to the marbles until the script is let loose - or kill it if it won't be used.
 // Basically I only want it to run when the scene change is happening in sceneCommit.
 // It will not have to be held for long, only for the duration to evaluate the next scene.
@@ -37,13 +36,10 @@ while {indiCam_var_holdScript} do {
 
 if (indiCam_var_runScript) then { // if this script is terminated above, don't run this section
 
-comment "-------------------------------------------------------------------------------------------------------";
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Game logic animation																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Game logic animation
+   ---------------------------------------------------------------------------------------------------- */
 
 	// The following creates a logic position for the camera
 	[_relativePosition,_cameraChaseSpeed,_cameraChaseDistance] spawn {
@@ -70,9 +66,4 @@ comment "-----------------------------------------------------------------------
 
 };
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "																										";
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";
-

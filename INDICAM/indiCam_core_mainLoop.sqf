@@ -1,15 +1,18 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										   indiCam_fnc_mainLoop											";
-comment "									  main loop eventhandler function									";
-comment "																										";
-comment "																										";
-comment "	Runs on each frame. 																				";
-comment "	Handles running mode changes, impulse checks and timers. 											";
-comment "																										":
-comment "-------------------------------------------------------------------------------------------------------";
-
+/*
+ * Author: woofer
+ * Handles running mode changes, impulse checks, and timers.
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * call indicam_core_fnc_mainLoop
+ *
+ * Public: No
+ */
 
 // If the current mode is different from the currently active value,
 // stop whatever is going on and switch to the new mode

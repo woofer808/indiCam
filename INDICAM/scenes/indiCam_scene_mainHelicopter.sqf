@@ -1,14 +1,12 @@
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "									actor in helicopter scenes											";
-comment "																										";
-comment "	Current altitude checks																				";
-comment "	Aircraft on ground or landing: less than 3m															";
-comment "	Aircraft low altitude: between 3m and 15m															";
-comment "	Aircraft medium altitude: between 15m and 600m														";
-comment "	Aircraft high altitude: above 600m																	";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* -------------------------------------------------------------------------------------------------------
+ * 									actor in helicopter
+ *
+ * 	Current altitude checks
+ * 	Aircraft on ground or landing: less than 3m
+ * 	Aircraft low altitude: between 3m and 15m
+ * 	Aircraft medium altitude: between 15m and 600m
+ * 	Aircraft high altitude: above 600m
+ * ------------------------------------------------------------------------------------------------------- */
 
 if ( ((getPos vehicle indiCam_actor) select 2) < 3 ) then { // Aircraft on ground or landing scenes
 
@@ -429,4 +427,3 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 600) ) then { // Aircraft high
 	}; // End of switch
 
 }; // End of high altitude scenes
-

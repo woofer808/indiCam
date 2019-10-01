@@ -1,28 +1,29 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "											   diary entries											";
-comment "																										";
-comment "																										";
-comment "	Contains all the diary entries with information and script execution for indiCam					";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Contains all the diary entries with information and script execution for indiCam
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * call indicam_core_fnc_diary
+ *
+ * Public: No
+ */
+
 // Info here: https://community.bistudio.com/wiki/createDiaryRecord
 // This is how BI does it in MP missions https://forums.bistudio.com/forums/topic/163884-briefing-and-creatediaryrecord/?do=findComment&comment=2565014
 
-
 _index = player createDiarySubject ["indiCam","indiCam"];
-
 
 
 funcProcessDiaryLink = {
     processDiaryLink createDiaryLink ["indiCam", _this, ""];
 };
 
-
-
-
-	
 
 indiCam_diaryControls = player createDiaryRecord ["indiCam", ["Controls", 
     "
@@ -67,5 +68,3 @@ indiCam_diaryHelp = player createDiaryRecord ["indiCam", ["General help",
 	woofer<br/>
 	"
 ]];
-
-

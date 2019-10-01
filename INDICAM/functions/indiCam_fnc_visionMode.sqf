@@ -1,12 +1,18 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_fnc_visionMode										";
-comment "																										";
-comment "	Sets and manages vision modes.																		";
-comment "	Params: [ _this ]																					";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Sets and manages vision modes.
+ *
+ * Arguments:
+ * 0: Camera <OBJECT>
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * [myCamera] call indicam_fnc_visionMode
+ *
+ * Public: No
+ */
 
 //TODO-Add the flashlight mode (invisible light source above actor)
 

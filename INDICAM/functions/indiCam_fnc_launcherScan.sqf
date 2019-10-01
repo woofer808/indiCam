@@ -1,17 +1,23 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_fnc_launcherScan										";
-comment "																										";
-comment "	Spawn this script to detect units have pulling out their launcher to cream a hard target.			";
-comment "	When the script deem it appropriate, it will force an AT scene on that unit.						";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Spawn this script to detect units have pulling out their launcher to cream a hard target.
+ * When the script deem it appropriate, it will force an AT scene on that unit.
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * spawn indiCam_fnc_launcherScan
+ *
+ * Public: No
+ */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Long loop unit list to keep a unit list up to date.													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+		Long loop unit list to keep a unit list up to date.											
+   ---------------------------------------------------------------------------------------------------- */
 
 // Build a list of units that are close enough and AT capable
 indiCam_fnc_launcherScanUnitList = { // 0.21 ms @ 100 units
@@ -45,12 +51,9 @@ private _longCycle = 30; // Defines how often this loop should run
 };
 [] spawn indiCam_fnc_launcherScanUnitList; // Spawn this to run in background until camera is stopped
 
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Short loop unit list and action.																	";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+		Short loop unit list and action.										
+   ---------------------------------------------------------------------------------------------------- */
 
 // Check the current list for units that have the launcher in hand
 indiCam_fnc_launcherScanCheckList = { // 0.35 ms @ 100 units
@@ -151,7 +154,3 @@ indiCam_fnc_launcherScanCheckList = { // 0.35 ms @ 100 units
 [] spawn indiCam_fnc_launcherScanCheckList;
 
 if (indiCam_debug) then {systemChat "starting indiCam_fnc_launcherScan"};
-
-
-
-

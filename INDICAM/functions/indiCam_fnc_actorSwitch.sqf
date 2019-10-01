@@ -1,15 +1,20 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										   indiCam_fnc_actorSwitch										";
-comment "																										";
-comment "	Assigns a new actor according to actor autoswitch settings and migrates actor properties.			";
-comment "	If nothing is passed to the function, it assumes values from actorAutoSwitch settings.				";
-comment "	If a unit is passed to the function it will migrate all properties to this new actor.				";
-comment "																										";
-comment "	Params: [ _unit ]																					";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Assign a new actor according to actor autoswitch.
+ * If nothing is passed to the function, it assumes values from actorAutoSwitch settings.
+ * If a unit is passed to the function it will migrate all properties to this new actor.
+ *
+ * Arguments:
+ * 0: Unit <OBJECT>
+ *
+ * Reutrn Value:
+ * New Actor <OBJECT>
+ *
+ * Example:
+ * [player] call indiCam_fnc_actorSwitch
+ *
+ * Public: No
+ */
 
 // Default setting, make better by figuring out how params really work
 private _newActor = player;
@@ -29,16 +34,12 @@ private _switchProximity = indiCam_var_actorSwitchSettings select 2; 		  // rand
 private _autoSwitchDurationSwitch = indiCam_var_actorSwitchSettings select 3; // Actor auto switch is off/on
 private _autoSwitchDuration = indiCam_var_actorSwitchSettings select 4; 	  // Actor auto switch duration
 	
+/* ----------------------------------------------------------------------------------------------------
+									In case where no unit was passed to the function
+   ---------------------------------------------------------------------------------------------------- */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "							In case where no unit was passed to the function							";
-comment "-------------------------------------------------------------------------------------------------------";
 // Check if a unit was passed to the script. If not, use current autoswitch settings.
 if (str _this == "[]") then { // There really should be a more elegant way to do this check, right?
-
-
 
 
 private _case = (indiCam_var_actorSwitchSettings select 0);	// If nothing was passed, assume switching occurs between what is currently set
@@ -138,23 +139,19 @@ switch (_case) do {
 
 }; // End of switch
 
+/* ----------------------------------------------------------------------------------------------------
+									In case where a unit was passed													
+   ---------------------------------------------------------------------------------------------------- */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "									In case where a unit was passed										";
-comment "-------------------------------------------------------------------------------------------------------";
 // If there was something passed to this script, use that.
 } else {
 	_newActor = (_this select 0);
 };
 
+/* ----------------------------------------------------------------------------------------------------
+											Eventhandlers												
+   ---------------------------------------------------------------------------------------------------- */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											Eventhandlers												";
-comment "-------------------------------------------------------------------------------------------------------";
 // This is where we strip the previous actor of any previous indicam eventhandlers
 // I should probably list all eventhandlers that I defined in here
 
@@ -199,9 +196,9 @@ if (_newACtor != player) then { // Dont bother with eventhandlers on the cameram
 
 };
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											Return values												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+											Return values												
+   ---------------------------------------------------------------------------------------------------- */
 
 
 

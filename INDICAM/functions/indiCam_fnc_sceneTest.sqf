@@ -1,13 +1,20 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "											indiCam_fnc_sceneTest										";
-comment "																										";
-comment "	This function returns true if the actor is not visible enough from the next camera position.		";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-//[] execVM "indiCam\indiCam_fnc_sceneTest.sqf";
+/*
+ * Author: woofer
+ * Returns if the actor is not visible enough from the next camera position.
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * Visible <BOOL>
+ *
+ * Example:
+ * [] call indiCam_fnc_sceneTest
+ *
+ * Public: No
+ */
 
+//[] execVM "indiCam\indiCam_fnc_sceneTest.sqf";
 
 private _ASLvisible = 0;
 private _AGLvisible = 0;

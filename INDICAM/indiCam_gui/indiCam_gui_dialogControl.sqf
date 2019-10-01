@@ -20,11 +20,9 @@ waitUntil {dialog};
 private _currentActorDisplay = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiActorDisplay; // Define the displaycontrol
 _currentActorDisplay ctrlSetText format ['Current actor: %1', (name indiCam_actor)];
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											START/STOP scripts											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									START / STOP scripts
+   ---------------------------------------------------------------------------------------------------- */
 // A script that checks all settings that applies any settings done in GUI before the camera is started 
 indiCam_fnc_guiStart = {
 
@@ -71,10 +69,9 @@ indiCam_fnc_guiClose = {
 	
 };
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										debug mode toggle												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Debug mode toggle
+   ---------------------------------------------------------------------------------------------------- */
 // Upon opening of gui, let the control show the current selected value
 private _debugControl = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiDebugCheckbox; // Define the displaycontrol
 if (indiCam_var_guiDebugCheckboxState or indiCam_debug) then {
@@ -99,11 +96,9 @@ indiCam_fnc_guiDebug = {
 
 };
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										scripted scenes													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Scripted scenes
+   ---------------------------------------------------------------------------------------------------- */
 // Upon opening of gui, let the control show the current selected value
 private _scriptedScenecontrol = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiScriptedScenes; // Define the displaycontrol
 if (indiCam_var_scriptedScenesCheckboxState) then {
@@ -187,25 +182,9 @@ indiCam_fnc_scriptedSceneChanceSlider = {
 	
 }; // End of scripted scene slider function
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										scene holding													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Scene holding
+   ---------------------------------------------------------------------------------------------------- */
 // This should stop scene switching by setting indiCam_var_sceneHold to true, which will set _future to 999999 in main loop
 // I'd prefer it to actually stop on the particular scene that is currently on, but that will require more work
 // It also needs to prevent autoswitching from LOS checks and so on. Will also need more work.
@@ -242,13 +221,9 @@ indiCam_fnc_guiSceneHold = {
 	};
 };
 
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "									scene duration override timer										";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									scene duration override timer
+   ---------------------------------------------------------------------------------------------------- */
 
 // This is code that sets the duration of the overridden scene duration
 _sliderMinAutoSwitchScene = 10;
@@ -264,9 +239,6 @@ _controlSliderText = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_
 
 // Update the text box with the new value.
 _controlSliderText ctrlSetText format ["duration: %1 seconds", indiCam_var_guiSceneOverrideSliderState];
-
-
-
 
 
 // This function is run by the slider eventhandler and the checkbox eventhandler in dialogs
@@ -292,10 +264,6 @@ indiCam_fnc_guiSceneOverride = {
 	};
 };
 
-
-
-
-
 // CHECKBOX
 // Upon opening of gui, let the control show the current selected value
 private _sceneOverrideTimerControl = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiSceneOverrideCheckbox; // Define the displaycontrol
@@ -307,16 +275,9 @@ if (indiCam_var_guiSceneOverrideCheckboxState) then {
 	_sceneOverrideTimerControl cbSetChecked false; // Set the stored value
 };
 
-
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											vision mode													";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* ----------------------------------------------------------------------------------------------------
+									Vision mode
+   ---------------------------------------------------------------------------------------------------- */
 
 indiCam_fnc_guiVisionMode = {
 	// Grab the index number corresponding to each vision mode
@@ -350,16 +311,9 @@ private _visionModeCombo = (findDisplay indiCam_id_guiDialogMain) displayCtrl in
 // After loading gui, set the dropdown to it's current value
 lbSetCurSel [indiCam_id_guiVisionModeDropdown, indiCam_var_guiVisionModeDropdownState];
 
-
-
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										Actor auto switch 												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Actor auto switch
+   ---------------------------------------------------------------------------------------------------- */
 
 // This is code that sets the duration between automatic actor switching
 // This functionality is currently only supported by the GUI
@@ -411,9 +365,6 @@ indiCam_fnc_actorAutoSwitchTimeSlider = {
 }; // End of auto switch slider function
 
 
-
-
-
 // Set the checkbox to reflect the current state upon loading gui
 private _autoSwitchCheckbox = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiActorAutoswitchCheckbox; // Define the displaycontrol
 if (indiCam_var_actorAutoSwitchCheckboxState) then {
@@ -423,8 +374,6 @@ if (indiCam_var_actorAutoSwitchCheckboxState) then {
 	// Set the checkbox to unchecked
 	_autoSwitchCheckbox cbSetChecked false; // Set the stored value
 };
-
-
 
 // This is a function to toggle the checkbox
 indiCam_fnc_guiCheckboxActorAutoswitch = {
@@ -454,8 +403,6 @@ indiCam_fnc_guiCheckboxActorAutoswitch = {
 	};
 
 };
-
-
 
 indiCam_fnc_guiDropdownActorAutoswitch = {
 	// Find out what was just selected in the dropdown
@@ -492,12 +439,9 @@ private _autoswitchCombo = (findDisplay indiCam_id_guiDialogMain) displayCtrl in
 // After loading gui, set the dropdown to it's current value
 lbSetCurSel [indiCam_id_guiActorAutoswitchDropdown, indiCam_var_guiActorAutoswitchDropdownState];
 
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										player selection list											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Player selection list
+   ---------------------------------------------------------------------------------------------------- */
 // Reset the player array
 indiCam_var_guiPlayerListArray = [];
 
@@ -509,10 +453,6 @@ indiCam_var_guiPlayerListArray = allPlayers - _allHCs;
 // Define the displaycontrol
 private _playerSelectionList = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiPlayerList;
 
-
-
-
-
 // Populate the dialog control with the list to generate proper indexes.
 private _selectedIndex = 0;
 private _playerName = 0;
@@ -522,9 +462,6 @@ private _playerName = 0;
 	_playerSelectionList lbAdd _playerName;
 } forEach indiCam_var_guiPlayerListArray;
 
-
-
-
 // This function is called by the eventhandler for the listbox in dialogs
 indiCam_fnc_guiPlayerList = {
 	// Find out what was just selected in the list
@@ -532,9 +469,6 @@ indiCam_fnc_guiPlayerList = {
 	// Store the corresponding player in in variable
 	indiCam_var_guiPlayerListSelectedPlayer = (indiCam_var_guiPlayerListArray select _selectedIndex);
 };
-
-
-
 
 // This is called from the "actor" button at the player listbox
 indiCam_fnc_guiPlayerListButton = {
@@ -546,7 +480,6 @@ indiCam_fnc_guiPlayerListButton = {
 };
 
 
-
 // If the actor is any of the selected players in the list, then select that player (otherwise, select none?)
 _checkArray = indiCam_actor in indiCam_var_guiPlayerListArray;
 if (_checkArray) then {
@@ -556,16 +489,9 @@ if (_checkArray) then {
 	// Actor is not in array. Don't select anyone, or select the topmost unit.
 };
 
-
-
-
-	
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											Manual mode													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Manual mode
+   ---------------------------------------------------------------------------------------------------- */
 indiCam_fnc_guiManualMode = {
 
 closeDialog 0;
@@ -573,13 +499,9 @@ closeDialog 0;
 
 };
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										Map side selector												";
-comment "-------------------------------------------------------------------------------------------------------";
-
-
+/* ----------------------------------------------------------------------------------------------------
+									Map side selector
+   ---------------------------------------------------------------------------------------------------- */
 
 // This function is triggered on combo switch eventhandler
 indiCam_fnc_guiSetMapSide = {
@@ -627,7 +549,6 @@ indiCam_fnc_guiSetMapSide = {
 	
 };
 
-
 // This will populate RscCombo indiCam_id_guiMapSideDropdown
 {_index = lbAdd [indiCam_id_guiMapSideDropdown, _x]
 } forEach 	[ // The order is dependent on index number to match function in main indiCam script
@@ -641,4 +562,3 @@ indiCam_fnc_guiSetMapSide = {
 
 // After loading gui, set the dropdown to it's current value
 lbSetCurSel [indiCam_id_guiMapSideDropdown, indiCam_var_guiMapSideDropdownState];
-

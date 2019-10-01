@@ -1,16 +1,23 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_fnc_unitCooldown										";
-comment "																										";
-comment "	Call this script to add to/remove from, or check if a unit is on cooldown list.						";
-comment "																										";
-comment "	Returns true when unit already exists on cooldown list.												";
-comment "	Returns false when unit had to be added to cooldown list.											";
-comment "	Returns true if _checkUnit was passed while also finding the unit on the list.						";
-comment "	Returns false if _checkUnit was passed while not finding the unit on the list.						";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Add to/remove from, or check if a unit is on cooldown list.
+ *
+ * Arguments:
+ * 0: Unit <OBJECT>
+ * 1: Cooldown Time <NUMBER>
+ * 2: Check <BOOL>
+ *
+ * Reutrn Value:
+ * true when unit already exists on cooldown list.
+ * false when unit had to be added to cooldown list.
+ * true if _checkUnit was passed while also finding the unit on the list.
+ * false if _checkUnit was passed while not finding the unit on the list.
+ *
+ * Example:
+ * [player, 10, false] call indiCam_fnc_unitCooldown
+ *
+ * Public: No
+ */
 
 // Checking the list for a unit: 0.24ms
 // Trying to add a unit to the list: 0.61ms

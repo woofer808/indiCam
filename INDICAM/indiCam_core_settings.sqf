@@ -1,12 +1,18 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										   indiCam_core_settings										";
-comment "																										";
-comment "																										";
-comment "	This is read at init to declare and set the most commonly used variables. 							";
-comment "																										":
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Declare and set the most commonly used variables.
+ *
+ * Arguments:
+ * None
+ *
+ * Reutrn Value:
+ * None
+ *
+ * Example:
+ * call indicam_core_fnc_settings
+ *
+ * Public: No
+ */
 
 indiCam_devMode = false; // Makes scripts to either run as uncompiled with execVM or to recompile them continuously to speed up development.
 indiCam_debug = false; // Switch this to true to enable debug messages in systemChat during operation (can be done in GUI).

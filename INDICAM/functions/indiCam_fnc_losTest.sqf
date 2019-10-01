@@ -1,11 +1,19 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam by woofer											";
-comment "																										";
-comment "											indiCam_fnc_losTest											";
-comment "																										";
-comment "	This function returns tests if there is line of sight between the camera and the target object.		";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Tests if there is line of sight between the camera and ther target object.
+ *
+ * Arguments:
+ * 0: Target <OBJECT>
+ *
+ * Reutrn Value:
+ * Visible <BOOL>
+ *
+ * Example:
+ * [player] call indicam_fnc_losTest
+ *
+ * Public: No
+ */
+
 //[_target] execVM "INDICAM\funcitons\indiCam_fnc_losTest.sqf";
 
 indiCam_var_lineColor = [1,1,0,1];

@@ -1,20 +1,27 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "											indiCam_cameraLogic_orbit									";
-comment "																										";
-comment "	Makes the indiCam_logicA orbit a position AGL according to passed arguments							";
-comment "	arguments: [ radius , heightAGL , chaseSpeed , rotationSpeed ] 																						";
-comment "	camera target: indiCam_orbitLogic						 										";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Makes the indiCam_logicA orbit a position AGL according to passed arguments.
+ * Camera target: indiCam_orbitLogic
+ *
+ * Arguments:
+ * 0: Radius <NUMBER>
+ * 1: Height AGL <NUMBER>
+ * 2: Chase Speed <NUMBER>
+ * 3: Rotation Speed <NUMBER>
+ *
+ * Reutrn Value:
+ * Visible <BOOL>
+ *
+ * Example:
+ * [player] call indicam_fnc_losTest
+ *
+ * Public: No
+ */
 
+/* ----------------------------------------------------------------------------------------------------
+								Script control block
+   ---------------------------------------------------------------------------------------------------- */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "-------------------------------------------------------------------------------------------------------";
 // Hold on to the marbles until the script is let loose - or kill it if it won't be used.
 // Basically I only want it to run when the scene change is happening in sceneCommit.
 // It will not have to be held for long, only for the duration to evaluate the next scene.
@@ -25,9 +32,6 @@ while {indiCam_var_holdScript} do {
 };
 
 if (indiCam_var_runScript) then { // if this script is terminated, don't run this
-comment "-------------------------------------------------------------------------------------------------------";
-
-
 	// Pull the values passed to the function
 	private _radius = (_this select 0);
 	private _altitude = (((getpos actor) select 2) + (_this select 1));
@@ -40,13 +44,9 @@ comment "-----------------------------------------------------------------------
 	// Start the logic off in a random direction from the actor
 	private _currentAngle = random 360;
 
-	
-	
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Game logic animation																				";
-comment "-------------------------------------------------------------------------------------------------------";
-	
+/* ----------------------------------------------------------------------------------------------------
+								Game logic animation
+   ---------------------------------------------------------------------------------------------------- */
 	
 	// Setup the loop that actually animates the rotation logic
 	[_radius,_altitude,_logicChaseSpeed,_updateFrequency,_logicRotationSpeed] spawn {
@@ -79,8 +79,4 @@ comment "-----------------------------------------------------------------------
 	
 };
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "																										";
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";
