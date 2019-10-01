@@ -5,7 +5,7 @@
  * Arguments:
  * 0: Distance <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

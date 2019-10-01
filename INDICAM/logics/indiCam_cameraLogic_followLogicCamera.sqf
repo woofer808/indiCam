@@ -5,7 +5,7 @@
  * Arguments:
  * 0: Chase Speed <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

@@ -6,7 +6,7 @@
  * Chase Speed <NUMBER>
  * Tracking Speed <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

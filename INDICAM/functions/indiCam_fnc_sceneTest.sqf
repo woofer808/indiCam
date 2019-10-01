@@ -5,7 +5,7 @@
  * Arguments:
  * None
  *
- * Reutrn Value:
+ * Return Value:
  * Visible <BOOL>
  *
  * Example:

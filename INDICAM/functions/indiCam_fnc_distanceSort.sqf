@@ -8,7 +8,7 @@
  * 1: Target <OBJECT>
  * 2: Max Distance <NUMBER> -1 will include entire terrain
  *
- * Reutrn Value:
+ * Return Value:
  * Sorted Units [<OBJECT>]
  *
  * Example:

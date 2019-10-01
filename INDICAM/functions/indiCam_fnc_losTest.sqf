@@ -5,7 +5,7 @@
  * Arguments:
  * 0: Target <OBJECT>
  *
- * Reutrn Value:
+ * Return Value:
  * Visible <BOOL>
  *
  * Example:

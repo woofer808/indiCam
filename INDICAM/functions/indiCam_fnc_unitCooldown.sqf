@@ -7,7 +7,7 @@
  * 1: Cooldown Time <NUMBER>
  * 2: Check <BOOL>
  *
- * Reutrn Value:
+ * Return Value:
  * true when unit already exists on cooldown list.
  * false when unit had to be added to cooldown list.
  * true if _checkUnit was passed while also finding the unit on the list.

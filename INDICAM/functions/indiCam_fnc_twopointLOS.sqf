@@ -7,7 +7,7 @@
  * 1: UnitB <OBJECT>
  * 2: Start <ASL POS>
  *
- * Reutrn Value:
+ * Return Value:
  * Visible <BOOL>
  *
  * Example:

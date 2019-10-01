@@ -7,7 +7,7 @@
  * Arguments:
  * 0: Unit <OBJECT>
  *
- * Reutrn Value:
+ * Return Value:
  * New Actor <OBJECT>
  *
  * Example:

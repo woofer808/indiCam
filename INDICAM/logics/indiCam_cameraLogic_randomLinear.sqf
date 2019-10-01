@@ -11,7 +11,7 @@
  * 4: Proximity <NUMBER>
  * 5: Target <OBJECT>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

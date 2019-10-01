@@ -5,7 +5,7 @@
  * Arguments:
  * None
  *
- * Reutrn Value:
+ * Return Value:
  * 0: Ocean <BOOL>
  * 1: Forest <BOOL>
  * 2: Urban <BOOL>

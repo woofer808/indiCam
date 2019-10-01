@@ -5,7 +5,7 @@
  * Arguments:
  * 0: Camera <OBJECT>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

@@ -8,7 +8,7 @@
  * Arguments:
  * None
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

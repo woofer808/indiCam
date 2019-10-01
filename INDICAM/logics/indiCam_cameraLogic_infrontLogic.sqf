@@ -6,7 +6,7 @@
  * 0: Distance <NUMBER>
  * 1: Tracking Speed <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

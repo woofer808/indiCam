@@ -7,7 +7,7 @@
  * 1: End Point <POSITION>
  * 2: Speed Multiplier <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:

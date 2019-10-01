@@ -10,7 +10,7 @@
  * 2: Chase Speed <NUMBER>
  * 3: Rotation Speed <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * Visible <BOOL>
  *
  * Example:

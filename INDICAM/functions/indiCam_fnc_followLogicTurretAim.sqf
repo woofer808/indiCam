@@ -8,7 +8,7 @@
  * 1: Target <OBJECT>
  * 2: Speed <NUMBER>
  *
- * Reutrn Value:
+ * Return Value:
  * None
  *
  * Example:
