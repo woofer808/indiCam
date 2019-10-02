@@ -1,12 +1,19 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_fnc_situationCheck									";
-comment "																										";
-comment "	This script keeps track of the situation around the actor. 											";
-comment "	Updates a value corresponding to a list of defined situation types.									";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Keeps track of the situation around the actor.
+ * Updates a value corresponding to a list of defined situation types.
+ *
+ * Arguments:
+ * None
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * spawn indiCam_fnc_situationCheck
+ *
+ * Public: No
+ */
 
 /*
 vehicle values
@@ -25,10 +32,9 @@ action levels
 3 - high action level
 */
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												init													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													init
+   ---------------------------------------------------------------------------------------------------- */
 
 private _situationCheckDebug = false;
 private _actionLevel = 0;
@@ -46,18 +52,15 @@ indiCam_var_movingValue = 0; // Unused for now
 indiCam_var_proximityValue = 0; // Unused for now
 
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												main loop												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													main loop
+   ---------------------------------------------------------------------------------------------------- */
 while {indiCam_running} do {
 
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											turret / pylon check										";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													turret / pylon check
+   ---------------------------------------------------------------------------------------------------- */
 
 /* UNDER CONSTRUCTION
 
@@ -83,11 +86,9 @@ weaponState - Returns the currently selected weapon state for unit or vehicle.
 https://community.bistudio.com/wiki/weaponState
 */
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											vision check												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													vision check
+   ---------------------------------------------------------------------------------------------------- */
 // Checks general visibility and decides what vision mode should be active
 // Only run if indiCam_var_visionIndex = 0
 // Currently only switches between daylight and night vision.
@@ -110,12 +111,9 @@ if (indiCam_var_visionIndex == 0) then {
 	
 };
 
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											vehicle check												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													vehicle check
+   ---------------------------------------------------------------------------------------------------- */
 	
 if ((vehicle indiCam_actor) isKindOf "Man") then {indiCam_var_sceneType = "foot"};				// If actor is on foot
 if ((vehicle indiCam_actor) isKindOf "Car") then {indiCam_var_sceneType = "car"}; 				// If actor is in a car, truck or equivalent
@@ -128,18 +126,18 @@ if ((vehicle indiCam_actor) isKindOf "Ship") then {indiCam_var_sceneType = "ship
 
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											action level check											";
-comment "																										";
-comment "	The action level is determined by a points system.													";
-comment "	Currently the action level varies between 0-3, each integer being a specific level.					";
-comment "																										";
-comment "	If the actor fires his weapon during a loop cyle, the action value goes up.							";
-comment "	If the actor hasn't fired his weapon during a time period, the value goes down one notch.			";
-comment "	The time period gets shorter the higher the action value is, thus making it harder to stay on		";
-comment "	higher values.																						";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/* -------------------------------------------------------------------------------------------------------
+ * 											action level check											
+ * 																										
+ * 	The action level is determined by a points system.													
+ * 	Currently the action level varies between 0-3, each integer being a specific level.					
+ * 																										
+ * 	If the actor fires his weapon during a loop cyle, the action value goes up.							
+ * 	If the actor hasn't fired his weapon during a time period, the value goes down one notch.			
+ * 	The time period gets shorter the higher the action value is, thus making it harder to stay on		
+ * 	higher values.																						
+ * 																										
+ * -------------------------------------------------------------------------------------------------------*/
 
 	// This is a timer that resets every _timerFireDuration
 	if (time > _timerFireFuture) then {
@@ -165,11 +163,10 @@ comment "-----------------------------------------------------------------------
 	};
 
 
+/* ----------------------------------------------------------------------------------------------------
+								(NOT IN USE)		movement check			(NOT IN USE)
+   ---------------------------------------------------------------------------------------------------- */
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "						(NOT IN USE)		movement check			(NOT IN USE)						";
-comment "-------------------------------------------------------------------------------------------------------";
 // This is a bit tricky as it probably should take into account what vehicle is used.
 
 
@@ -202,19 +199,16 @@ comment "-----------------------------------------------------------------------
 	};
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "					(NOT IN USE)		surrounding terrain check			(NOT IN USE)				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+							(NOT IN USE)		surrounding terrain check			(NOT IN USE)
+   ---------------------------------------------------------------------------------------------------- */
 	// Check what type of terrain there is around the actor. Test for buildings for example, I dunno really.
 	indiCam_var_proximityValue = 0; // this has to be replaced with proper tests
 
-
-
+/* ----------------------------------------------------------------------------------------------------
+												end of main loop
+   ---------------------------------------------------------------------------------------------------- */	
 	
-	
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											end of main loop											";
-comment "-------------------------------------------------------------------------------------------------------";	
 sleep indiCam_var_situationCheck; // Duration of situation check loop
 }; // End of main loop
 if (indiCam_debug) then {systemChat "stopping indiCam_fnc_situationCheck...";};

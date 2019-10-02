@@ -1,9 +1,9 @@
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										actor in tank scenes											";
-comment "																										";
-comment "	Current check is a single actionValue of below 10													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* -------------------------------------------------------------------------------------------------------
+ * 										actor in tank
+ *
+ * 	Current check is a single actionValue of below 10
+ * ------------------------------------------------------------------------------------------------------- */
 
 
 if (indiCam_var_actionValue < 10) then { // Low action value scenes
@@ -139,4 +139,3 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 
 }; // End of very high action value scenes
 */
-

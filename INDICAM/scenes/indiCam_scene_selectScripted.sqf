@@ -1,28 +1,22 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										 indiCam_scene_selectScripted									";
-comment "																										";
-comment "	Contains scene definitions used in scripted scens													";
-comment "	Scenes are first defined as usual, then a code block containing code that is passed to,				";
-comment "	and executed by indiCam_fnc_sceneCommit.															";
-comment "																										";
-comment "	Each scene type is dedicated to a specific type of scene.											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* -------------------------------------------------------------------------------------------------------
+ * 										 indiCam_scene_selectScripted									
+ *
+ * 	Contains scene definitions used in scripted scens													
+ * 	Scenes are first defined as usual, then a code block containing code that is passed to,				
+ * 	and executed by indiCam_fnc_sceneCommit.															
+ *											
+ * 	Each scene type is dedicated to a specific type of scene.
+ * ------------------------------------------------------------------------------------------------------- */
 
-
-
-
-comment "												WARNING                        							";
-comment "-------------------------------------------------------------------------------------------------------";
-comment "					!!! DO NOT USE CAMSETPOS AND CAMCOMMIT IN SCRIPTED SCENES!!!                        ";
-comment "																										";
-comment "					!!! ALL SCRIPTS HERE NEED TERMINATION STATES OF THEIR OWN !!!						";
-comment "-------------------------------------------------------------------------------------------------------";
+/* 												WARNING
+ * -------------------------------------------------------------------------------------------------------
+ * 					!!! DO NOT USE CAMSETPOS AND CAMCOMMIT IN SCRIPTED SCENES!!!
+ * 
+ * 					!!! ALL SCRIPTS HERE NEED TERMINATION STATES OF THEIR OWN !!!
+ * ------------------------------------------------------------------------------------------------------- */
 
 // Declaring this scope to give scene scripts the ability to exit to the main scope
 scopeName "topLevel";
-
 
 // This script has to be spawned, so let's give a simple way of knowing if it's currently running
 indiCam_var_scriptedSceneRunning = true;
@@ -32,7 +26,6 @@ indiCam_var_scriptedSceneRunning = true;
 
 // Set the proper running mode
 indiCam_var_requestMode = "scripted";
-
 
 // The required scene type should have been set by now in one of the monitoring funcitons or eventhandlers
 
@@ -48,20 +41,14 @@ private _selectedScene = "";
 // ["actorDeath",unitone] call indiCam_scene_selectScripted
 
 if (_sceneType == "actorDeath") then { // Start of actor death scene type
-
-	
 	// These scenes should always run and not be subject to scene Chance tests
-	
-
 	_selectedScene = selectRandom [
 								"actorDeathOne",	// Basic scripted death scene
 								"actorDeathTwo"		// Basic scripted death scene
 							];
 
 	switch (_selectedScene) do {
-		
-		case "actorDeathOne": {
-			
+		case "actorDeathOne": {	
 			// Get the actual position of the actor
 			private _pos = getPosASL _unit;
 			
@@ -81,12 +68,8 @@ if (_sceneType == "actorDeath") then { // Start of actor death scene type
 			
 			// Switch to a new actor
 			[] call indiCam_fnc_actorSwitch;
-			
-			
 		}; // end of case
-		
-		
-		
+
 		case "actorDeathTwo": {
 			
 			// Get the actual position of the actor
@@ -108,27 +91,16 @@ if (_sceneType == "actorDeath") then { // Start of actor death scene type
 			
 			// Switch to a new actor
 			[] call indiCam_fnc_actorSwitch;
-			
-			
 		}; // end of case
-		
 	}; // End of switch
-
 }; // End of actor death scenes
 
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											scripted scenes												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Scripted scenes
+   ---------------------------------------------------------------------------------------------------- */
 
 if (_sceneType == "ATGuy") then {
-	
-	
 	// Evaluate the chance of these scenes to happen in the corresponding monitoring function
-	
 	
 	_selectedScene = selectRandom [
 								"ATcamOne",	// Basic scripted AT scene that tracks projectile
@@ -151,8 +123,6 @@ if (_sceneType == "ATGuy") then {
 	}; // End of switch
 
 }; // End of ATGuy scenes
-
-
 
 indiCam_var_scriptedSceneRunning = false;
 // When done, resume normal operations

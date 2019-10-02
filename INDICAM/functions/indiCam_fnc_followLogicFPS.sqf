@@ -1,15 +1,22 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_fnc_followLogicFPS									";
-comment "																										";
-comment "																										";
-comment "	Call this function using a stackable eventhandler onEachFrame to make an object follow a position.	";
-comment "	Uses FPS only as a divider of time for now. Would be nice to detect low FPS and mitigate that.		";
-comment "																										";
-comment "	Params: [ _object, _target _speed ]																	";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Make a unit follow a position, use in onEachFrame.
+ * Uses FPS only as a divider of time for now. Would be nice to detect low FPS and mitigate that.
+ *
+ * Arguments:
+ * 0: Unit <OBJECT>
+ * 1: Target <OBJECT>
+ * 2: Speed <NUMBER>
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [someUnit, player, 5] call indiCam_fnc_followLogicFPS
+ *
+ * Public: No
+ */
+
 // Result: 0.0431 ms
 // Cycles: 10000/10000
 
@@ -84,6 +91,3 @@ _newPos = _pos vectorAdd _velocityVector;
 
 // Move the object one _frameDistance in the direction of _velocityVector
 _object setPosASL _newPos;
-
-
-

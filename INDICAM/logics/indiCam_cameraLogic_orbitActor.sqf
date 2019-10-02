@@ -1,21 +1,27 @@
+/*
+ * Author: woofer
+ * Tests if there is line of sight between the camera and ther target object.
+ * Camera Target: indiCam_centerLogic
+ * Camera Attach: indiCam_orbitLogic
+ *
+ * Arguments:
+ * 0: Radius <NUMBER>
+ * 1: Height AGL <NUMBER>
+ * 2: Chase Speed <NUMBER>
+ * 3: Rotation Speed <NUMBER>
+ *
+ * Return Value:
+ * Visible <BOOL>
+ *
+ * Example:
+ * [15, 10, 10, 5] spawn indicam_cameraLogic_fnc_orbitActor
+ *
+ * Public: No
+ */
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										indiCam_cameraLogic_orbitActor									";
-comment "																										";
-comment "	Makes the a logic orbit an actor chase logic according to passed arguments							";
-comment "	arguments: [ radius , heightAGL , chaseSpeed , rotationSpeed ]										";
-comment "	camera target: indiCam_centerLogic						 										";
-comment "	camera attach: indiCam_orbitLogic						 										";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+								Script control block
+   ---------------------------------------------------------------------------------------------------- */
 // Hold on to the marbles until the script is let loose - or kill it if it won't be used.
 // Basically I only want it to run when the scene change is happening in sceneCommit.
 // It will not have to be held for long, only for the duration to evaluate the next scene.
@@ -26,9 +32,6 @@ while {indiCam_var_holdScript} do {
 };
 
 if (indiCam_var_runScript) then { // if this script is terminated, don't run this section
-comment "-------------------------------------------------------------------------------------------------------";
-
-
 	// Pull the values passed to the function
 	private _radius = (_this select 0);
 	private _altitude = (((getposASL actor) select 2) + (_this select 1));
@@ -41,13 +44,9 @@ comment "-----------------------------------------------------------------------
 	// Start the logic off in a random direction from the actor
 	private _currentAngle = random 360;
 
-
-	
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Game logic animation																				";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* ----------------------------------------------------------------------------------------------------
+								Game logic animation
+   ---------------------------------------------------------------------------------------------------- */
 
 	// Create the first game logic that the second game logic can rotate around
 	// Doing it this way instead of rotating around the actual actor unit will make it way less jittery
@@ -68,8 +67,6 @@ comment "-----------------------------------------------------------------------
 		};
 		
 	};
-
-
 
 	// Setup the loop that actually animates the rotation logic
 	[_radius,_altitude,_logicChaseSpeed,_updateFrequency,_logicRotationSpeed] spawn {
@@ -98,11 +95,6 @@ comment "-----------------------------------------------------------------------
 		};
 		
 	};
-
-
-comment "-------------------------------------------------------------------------------------------------------";
 };
-comment "	Script control block 																				";
-comment "																										";
+
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";

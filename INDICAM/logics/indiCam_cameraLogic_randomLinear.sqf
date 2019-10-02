@@ -1,23 +1,31 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "									indiCam_cameraLogic_randomLinear									";
-comment "																										";
-comment "	Animates a logic around a target from random point to random point.				 					";
-comment "	Currently uses a half period sinusoidal movement pattern along each distance.						";
-comment "																										";
-comment "	This script contains sleep and has to be spawned.													";
-comment "	Arguments: [ xDistance , yDistance , zDistance , speed , proximity , target ]						";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/*
+ * Author: woofer
+ * Animates a logic around a target from random point to random point.
+ * Currently uses a half period sinusoidal movement pattern along each distance.
+ *
+ * Arguments:
+ * 0: X Distance <NUMBER>
+ * 1: Y Distance <NUMBER>
+ * 2: Z Distance <NUMBER>
+ * 3: Speed <NUMBER>
+ * 4: Proximity <NUMBER>
+ * 5: Target <OBJECT>
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [10, 10, 0, 50, 0.5, actor] spawn indicam_cameraLogic_fnc_randomLinear
+ *
+ * Public: No
+ */
 
 
 // Needs to be fixed so that target can accept a point in space rather than an object (or both).
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Arguments			 																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+								Arguments
+   ---------------------------------------------------------------------------------------------------- */
 
 //[_xDistance,yDistance,zheight,speed,proximity,target]
 params	[ // Params is pretty clever. Privatizes vars while also assigning both the (_this select x) and a default value
@@ -39,15 +47,9 @@ private [ // No need to use private when params exist really, but to keep them a
 		"_distance"
 		];
 
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Script control block
+   ---------------------------------------------------------------------------------------------------- */
 // Hold on to the marbles until the script is let loose - or kill it if it won't be used.
 // Basically I only want it to run when the scene change is happening in sceneCommit.
 // It will not have to be held for long, only for the duration to evaluate the next scene.
@@ -58,32 +60,24 @@ while {indiCam_var_holdScript} do {
 };
 
 if (indiCam_var_runScript) then { // if the script is terminated, don't run this section
-comment "-------------------------------------------------------------------------------------------------------";
+	/* ----------------------------------------------------------------------------------------------------
+										Game logic animation
+	---------------------------------------------------------------------------------------------------- */
 
+	// Set a starting point for the logic to move toward
+	_startingPoint = _target modelToWorld [random [-_posX,0,_posX],random [-_posY,0,_posY],random [-_posZ,0,_posZ]];
+	_currentPoint = _startingPoint;
+	_newPoint = _startingPoint;
+	_movingVector = 0;
 
+	indiCam_indiCamLogicLoop = true;
+	while {indiCam_indiCamLogicLoop} do {
+		_endingPoint = _target modelToWorld [random [-_posX,0,_posX],random [-_posY,0,_posY],random [-_posZ,0,_posZ]];
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Game logic animation																				";
-comment "-------------------------------------------------------------------------------------------------------";
+		_startingDistance = _startingPoint distance _endingPoint;
+		_distance = 20;
 
-
-// Set a starting point for the logic to move toward
-_startingPoint = _target modelToWorld [random [-_posX,0,_posX],random [-_posY,0,_posY],random [-_posZ,0,_posZ]];
-_currentPoint = _startingPoint;
-_newPoint = _startingPoint;
-_movingVector = 0;
-
-
-indiCam_indiCamLogicLoop = true;
-while {indiCam_indiCamLogicLoop} do {
-	
-	_endingPoint = _target modelToWorld [random [-_posX,0,_posX],random [-_posY,0,_posY],random [-_posZ,0,_posZ]];
-
-	_startingDistance = _startingPoint distance _endingPoint;
-	_distance = 20;
-
-	indiCam_linearLogic setPos _startingPoint;
-
+		indiCam_linearLogic setPos _startingPoint;
 		while {(_distance) > _proximity} do {
 			_distanceVector = _currentPoint vectorFromTo _endingPoint; // Determine the vector between the two points
 			_distance = _currentPoint distance _endingPoint; // Get the actual length of the vector
@@ -99,18 +93,9 @@ while {indiCam_indiCamLogicLoop} do {
 
 			sleep (1/90); // Update frequency of the logic movement cycle
 		};
-
-	_currentPoint = _newPoint;
-	_startingPoint = _currentPoint;
-
+		_currentPoint = _newPoint;
+		_startingPoint = _currentPoint;
+	};
 };
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-};
-comment "	Script control block 																				";
-comment "																										";
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";
-

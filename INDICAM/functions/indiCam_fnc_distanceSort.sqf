@@ -1,16 +1,22 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										 indiCam_fnc_distanceSort										";
-comment "																										";
-comment "	Sorts a list of units according to 2D-proximity from a point/object.								";
-comment "	If no arguments are passed, it will list and sort ALL units with respect to the actor.				";
-comment "																										";
-comment "	Third parameter gives max distance from the target unit. -1 will include entire terrain.			";
-comment "																										";
-comment "	Params: [ _unitArray, _target, _maxDistance ]														";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Sorts a list of units according to 2D-proximity from a point/object.
+ * If no arguments are passed, it will list and sort ALL units with respect to the actor.
+ *
+ * Arguments:
+ * 0: Units [<OBJECT>]
+ * 1: Target <OBJECT>
+ * 2: Max Distance <NUMBER> -1 will include entire terrain
+ *
+ * Return Value:
+ * Sorted Units [<OBJECT>]
+ *
+ * Example:
+ * [allUnits, myActor, 10] call indiCam_fnc_actorSwitch
+ *
+ * Public: No
+ */
+
 //TODO- This function needs to check its input
 
 // Prolly needs if ( isNull (_this select 0) ) then {};

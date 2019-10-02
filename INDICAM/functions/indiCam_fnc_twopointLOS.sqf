@@ -1,18 +1,26 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam by woofer											";
-comment "																										";
-comment "										indiCam_fnc_twopointLOS											";
-comment "																										";
-comment "	This function finds a ASL point in space that has a line of sight onto two objects.					";
-comment "	Params: [ _unitOne, _unitTwo, _startPoint ]															";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Finds an ASL point in space that has a line of sight onto two objects.
+ *
+ * Arguments:
+ * 0: UnitA <OBJECT>
+ * 1: UnitB <OBJECT>
+ * 2: Start <ASL POS>
+ *
+ * Return Value:
+ * Visible <BOOL>
+ *
+ * Example:
+ * [player, otherUnit, [100,100,10]] call indiCam_fnc_twopointLOS
+ *
+ * Public: No
+ */
 
 // ~0.12 ms
 
 params [ 			// Vars passed to this function
-		"_unitOne",	// Pos ASL or object
-		"_unitTwo",	// Pos ASL or object
+		"_unitA",	// Pos ASL or object
+		"_unitB",	// Pos ASL or object
 		"_startPos"	// Pos ASL (assumes between the two points if no param given)
 		];
 
@@ -21,13 +29,13 @@ private _AGLvisible = false;
 private _posOne = [];
 private _posTwo = [];
 private _testPos = [];
-private _distance = ( (_unitOne distance2D _unitTwo) * 0.5 );
+private _distance = ( (_unitA distance2D _unitB) * 0.5 );
 private _return = false;
 private _returnTest = false;
 
 // Check type of inputs and adjust for errors
-if ( (typeName _unitOne) == "OBJECT" ) then {_posOne = getPosASL _unitOne} else {systemChat "indiCam_fnc_twopointLOS param 0 needs to be object"};
-if ( (typeName _unitTwo) == "OBJECT" ) then {_posTwo = getPosASL _unitTwo} else {systemChat "indiCam_fnc_twopointLOS param 1 needs to be object"};
+if ( (typeName _unitA) == "OBJECT" ) then {_posOne = getPosASL _unitA} else {systemChat "indiCam_fnc_twopointLOS param 0 needs to be object"};
+if ( (typeName _unitB) == "OBJECT" ) then {_posTwo = getPosASL _unitB} else {systemChat "indiCam_fnc_twopointLOS param 1 needs to be object"};
 
 
 if ( (typeName _startPos) == "ARRAY" ) then {
@@ -53,7 +61,7 @@ while {
 	_iteration = _iteration + 1; // Count up one on the iteration
 	
 	
-	// Find out what our position delta interval is. Should be related to the distance between _unitOne and _unitTwo
+	// Find out what our position delta interval is. Should be related to the distance between _unitA and _unitB
 	
 	
 	// Make a position to test that isn't too far from the original _startPoint
@@ -63,8 +71,8 @@ while {
 	_testPos = _startPos vectorAdd [_deltaX,_deltaY,_deltaZ];
 	
 	// Assume ASL and do the line intersect checks accordingly
-	_losOne = lineIntersectsSurfaces [_testPos, _posOne, (vehicle _unitOne), (vehicle _unitTwo)];
-	_losTwo = lineIntersectsSurfaces [_testPos, _posTwo, (vehicle _unitOne), (vehicle _unitTwo)];
+	_losOne = lineIntersectsSurfaces [_testPos, _posOne, (vehicle _unitA), (vehicle _unitB)];
+	_losTwo = lineIntersectsSurfaces [_testPos, _posTwo, (vehicle _unitA), (vehicle _unitB)];
 	
 	// If none of the two intersect checks found anything, return the position in ASL
 	if ( (count _losOne == 0) && (count _losTwo == 0) ) then {
@@ -76,4 +84,3 @@ while {
 
 };
 _return;
-
