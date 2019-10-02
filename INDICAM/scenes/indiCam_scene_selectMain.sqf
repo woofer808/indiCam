@@ -1,28 +1,12 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										  indiCam_scene_selectMain										";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												init													";
-comment "-------------------------------------------------------------------------------------------------------";
-
 // Set the outside all brackets scope name to give us a place to exit to
 scopeName "topLevel";
 
 // This is a way to make known that scene select is currently running. Turns false at the end.
 indiCam_var_sceneSelectRunning = true;
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												init													";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* ----------------------------------------------------------------------------------------------------
+									init
+   ---------------------------------------------------------------------------------------------------- */
 
 // Get the current sceneType
 	// foot
@@ -38,16 +22,16 @@ private _environmentCheck = [] call indicam_fnc_environmentCheck;
 
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											main loop start												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									main loop start
+   ---------------------------------------------------------------------------------------------------- */
 // This loop will run until a scene is found that will have enough visibility of the actor.
 while {true} do {
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										scene vehicle selection											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									scene vehicle selection
+   ---------------------------------------------------------------------------------------------------- */
 // Pulls scene parameters defined in separate categories depending on what string was passed
 
 	switch (_sceneType) do {
@@ -130,46 +114,30 @@ comment "-----------------------------------------------------------------------
 	}; // Switch closed
 	
 	
-	
-	
-	comment "-------------------------------------------------------------------------------------------------------";
-	comment "										scene prototyping area											";
-	comment "																										";
-	comment "					To be used when developing sceens - set the bool below to true						";
-	comment "																										";
-	comment "-------------------------------------------------------------------------------------------------------";
+	/* ----------------------------------------------------------------------------------------------------
+									Scene prototyping area
+   	   ---------------------------------------------------------------------------------------------------- */
 	private _prototypeScene = false; // Switch this to true to use the prototyping area
 	if (_prototypeScene) then {
-	systemChat "Testing area scene";
-	// Change the stuff below here
-	
-
-			// Regular stationary camera tracking a logic target around the actor
-			indiCam_var_cameraType = "stationaryCameraLogicTarget";
-			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
-			_posX = selectRandom [random [-15,-2,-15],random [2,15,2]]; // Specifies the range for the camera position sideways to the actor
-			_posY = selectRandom [random [-15,-10,-15],random [10,15,10]];	// Specifies the range for the camera position to the front and back of the actor
-			_posZ = random [0.5,1,2];				// Specifies the range for the camera position vertically from the actor
-			indiCam_var_cameraPos = [_posX,_posY,_posZ]; // Position of camera relative to the actor
-			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
-			indiCam_var_targetSpeed = 0.6;			// Defines how tightly the logic will track it's defined position
-			indiCam_var_cameraTarget = indiCam_var_proxyTarget;	// The object that the camera is aimed at
-			indiCam_var_cameraFov = random [0.1,0.2,0.3]; // Field of view, standard Arma FOV is 0.74
-			indiCam_var_maxDistance = 600;			// Max distance between actor and camera before scene switches
-			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
-			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
-			
-
-
-	comment "-------------------------------------------------------------------------------------------------------";
-	indiCam_var_previousScene = "letsnotgothere";
+		systemChat "Testing area scene";
+		// Change the stuff below here
+		// Regular stationary camera tracking a logic target around the actor
+		indiCam_var_cameraType = "stationaryCameraLogicTarget";
+		indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+		indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+		_posX = selectRandom [random [-15,-2,-15],random [2,15,2]]; // Specifies the range for the camera position sideways to the actor
+		_posY = selectRandom [random [-15,-10,-15],random [10,15,10]];	// Specifies the range for the camera position to the front and back of the actor
+		_posZ = random [0.5,1,2];				// Specifies the range for the camera position vertically from the actor
+		indiCam_var_cameraPos = [_posX,_posY,_posZ]; // Position of camera relative to the actor
+		indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
+		indiCam_var_targetSpeed = 0.6;			// Defines how tightly the logic will track it's defined position
+		indiCam_var_cameraTarget = indiCam_var_proxyTarget;	// The object that the camera is aimed at
+		indiCam_var_cameraFov = random [0.1,0.2,0.3]; // Field of view, standard Arma FOV is 0.74
+		indiCam_var_maxDistance = 600;			// Max distance between actor and camera before scene switches
+		indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+		indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		indiCam_var_previousScene = "letsnotgothere";
 	}; // End of prototyping area
-	comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-
 
 	// This disables the previous scene check that prevents scenes repeating
 	// Used for debugging
@@ -177,12 +145,9 @@ comment "-----------------------------------------------------------------------
 		indiCam_var_previousScene = "letsnotgothere";
 	};
 
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											test the scene												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									test the scene
+   ---------------------------------------------------------------------------------------------------- */
 
 	// Do all the necessary tests
 	
@@ -210,14 +175,9 @@ comment "-----------------------------------------------------------------------
 	
 };
 
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											commit the scene											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									commit the scene
+   ---------------------------------------------------------------------------------------------------- */
 
 // Move the values over to permanent variables so that the scene selection can get going again
 // Keeping this system for now. At least it can be used to recall last known values
@@ -325,7 +285,6 @@ switch (indiCam_appliedVar_cameraType) do {
 	}; // end of case
 	
 }; // end of switch
-
 
 // This is used to tell scripts that scene select is now done
 indiCam_var_sceneSelectRunning = false;

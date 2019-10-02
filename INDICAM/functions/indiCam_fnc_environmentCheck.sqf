@@ -1,17 +1,21 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "									    indiCam_fnc_environmentCheck									";
-comment "																										";
-comment "	This function continuously checks the actor's current surroundings  								";
-comment "																										";
-comment "	Returns:																							";
-comment "	[ oceanBool , forestBool , urbanBool , _airborneBool]												";
-comment "																										";
-comment "	If all are false, we can assume pretty much open area on land.										";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/*
+ * Author: woofer
+ * Continuously checks the actor's current surroundings.
+ *
+ * Arguments:
+ * None
+ *
+ * Return Value:
+ * 0: Ocean <BOOL>
+ * 1: Forest <BOOL>
+ * 2: Urban <BOOL>
+ * 3: Airborne <BOOL>
+ *
+ * Example:
+ * call indiCam_fnc_environmentCheck
+ *
+ * Public: No
+ */
 
 /*
 testit = false; 
@@ -54,27 +58,26 @@ sleep 0.2;
 };
 */
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												init													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													init												
+   ---------------------------------------------------------------------------------------------------- */
 private _oceanBool = false;
 private _forestBool = false;
 private _urbanBool = false;
 private _airborneBool = false;
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											actor over water											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+												actor over water												
+   ---------------------------------------------------------------------------------------------------- */
 // This only checks ocean water. Won't work on inland water.
 // Purpose is to know when to use either AGL or ASL.
 _oceanBool = surfaceIsWater getPosASL indiCam_actor;
 
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "												forest areas											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+												forest areas												
+   ---------------------------------------------------------------------------------------------------- */
 // This keeps track if the actor is within a collection of trees and bushes
 // A dense Altian forest gets between 25-45 trees and bushes at 25m radius
 // About 15 at the edge of the forest
@@ -85,9 +88,9 @@ if (_treeCount >= 10) then {_forestBool = true} else {_forestBool = false};
 
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											urban areas													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+												urban areas											
+   ---------------------------------------------------------------------------------------------------- */
 // This keeps track if the actor is in an urban area by counting houses in the vincinity.
 
 // Above 9 houses within a radius of 50m is an okay approximation of urban area at first glance
@@ -105,9 +108,9 @@ if (_houseCount >= 9) then {_urbanBool = true} else {_urbanBool = false};
 
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											altitude check												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													altitude check												
+   ---------------------------------------------------------------------------------------------------- */
 // This just checks how far above ground or water the player is
 
 private _altitude = 7; // this number determines how high is considered airborne or climbing tall buildings
@@ -120,9 +123,9 @@ if (_oceanBool) then {
 
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											return values												";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+													return values
+   ---------------------------------------------------------------------------------------------------- */
 // Not sure if this is going to be a function or if it's gonna be running continuously yet.
 // Could spawn different checks with different update timings
 // Most likely I'll call this at the start of sceneSelect and/or in individual scenes

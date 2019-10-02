@@ -1,34 +1,31 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "											indiCam_cameraLogic_infrontLogic										";
-comment "																										";
-comment "	Creates, maintains and removes logic objects for use with the camera.								";
-comment "																										";
-comment "	This script contains sleep and has to be spawned.													";
-comment "	Arguments: [ cameraChaseSpeed , _targetTrackingSpeed ]												";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-
-
+/*
+ * Author: woofer
+ * Creates, maintains, and removes logic objects for use with the camera.
+ *
+ * Arguments:
+ * 0: Distance <NUMBER>
+ * 1: Tracking Speed <NUMBER>
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [10, 5] spawn indicam_cameraLogic_fnc_infrontLogic
+ *
+ * Public: No
+ */
 
 // I need to somehow commit this after the scene pre-check
 // Otherwise the current logic will break
-
 
 
 // Make this into a function and pass these arguments here
 private _distance = _this select 0; // How far in front of the actor to place the logic target
 private _targetTrackingSpeed = _this select 1; // How quickly the logic should be striving toward the point in front of the actor
 
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Script control block
+   ---------------------------------------------------------------------------------------------------- */
 // Hold on to the marbles until the script is let loose - or kill it if it won't be used.
 // Basically I only want it to run when the scene change is happening in sceneCommit.
 // It will not have to be held for long, only for the duration to evaluate the next scene.
@@ -41,13 +38,9 @@ while {indiCam_var_holdScript} do {
 
 if (indiCam_var_runScript) then { // if this script is terminated, don't run this
 
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Game logic animation																				";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Game logic animation
+   ---------------------------------------------------------------------------------------------------- */
 
 	// The following creates a logic position for the camera target
 	[_distance,_targetTrackingSpeed] spawn {
@@ -66,8 +59,4 @@ comment "-----------------------------------------------------------------------
 	};
 };
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "																										";
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";

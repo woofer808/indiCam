@@ -1,27 +1,6 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										independent cinematic camera									";
-comment "																										";
-comment "																										";
-comment "	This is the GUI for indiCam	which is the main way to operate the script.							";
-comment "	It is written as a stand-alone from the main script so that indiCam can operate without it.			";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
-
-
-
-
-
-
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "								variables and default settings											";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									variables and default settings
+   ---------------------------------------------------------------------------------------------------- */
 
 // Control buttons
 indiCam_fnc_guiStart = {};
@@ -84,14 +63,9 @@ if (side player == EAST) then {indiCam_var_guiMapSideDropdownState = 2};
 if (side player == resistance) then {indiCam_var_guiMapSideDropdownState = 3};
 if (side player == civilian) then {indiCam_var_guiMapSideDropdownState = 4};
 
-
-
-
-
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											variables													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									variables
+   ---------------------------------------------------------------------------------------------------- */
 // These numbers has to match what's defined in indiCam_gui_dialogs.hpp
 indiCam_id_guiDialogMain = 808;
 indiCam_id_guiDebugCheckbox = 818;
@@ -118,12 +92,10 @@ indiCam_id_guiScriptedSceneSlider = 830;
 indiCam_id_guiScriptedSceneText = 831;
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											functions													";
-comment "-------------------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									functions
+   ---------------------------------------------------------------------------------------------------- */
 // The GUI outputs the following controls to be used in the main indiCam script.
 indiCam_gui_dialogControl = compile preprocessFileLineNumbers "INDICAM\indiCam_gui\indiCam_gui_dialogControl.sqf";
 indiCam_gui_mapControl = compile preprocessFileLineNumbers "INDICAM\indiCam_gui\indiCam_gui_mapControl.sqf";
 [] execVM "INDICAM\indiCam_gui\indiCam_gui_mapControl.sqf";
-
-

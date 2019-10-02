@@ -1,11 +1,20 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "											indiCam_cameraLogic_orbit										";
-comment "																										";
-comment "	Makes the indiCam_logicA move in a linear fashion in accordance to passed arguments					";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Makes indiCam_logicA move in a linear fashion in accordance to passed arguments;
+ *
+ * Arguments:
+ * 0: Start Point <POSITION>
+ * 1: End Point <POSITION>
+ * 2: Speed Multiplier <NUMBER>
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * [posA, posB, 2] spawn indiCam_cameraLogic_fnc_linear
+ *
+ * Public: No
+ */
 
 /*
 indiCam_logicA = createVehicle ["Sign_Sphere25cm_F", actor modelToWorld [0,5,1], [], 0, "NONE"];
@@ -16,16 +25,13 @@ Also need to know how to test for the new camera angle I don't know where the ne
 
 */
 
-
 // Make sure to stop any active logic loops - this will cause problems
 indiCam_indiCamLogicLoop = false;
-
 
 // Pull the values passed to the function
 private _startPoint = _this select 0;
 private _endPoint = _this select 1;
 private _speedMultiplier = _this select 2;
-
 
 // These are constant, could be changed to global
 private _updateFrequency = (1 / 90);
@@ -46,9 +52,4 @@ while {indiCam_indiCamLogicLoop} do {
 
 };
 	
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "	Script control block 																				";
-comment "																										";
 indiCam_var_exitScript = false; // Used for killing waiting logic scripts
-comment "-------------------------------------------------------------------------------------------------------";

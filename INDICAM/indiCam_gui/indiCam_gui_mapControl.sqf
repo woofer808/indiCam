@@ -1,8 +1,6 @@
-
-
-comment "-------------------------------------------------------------------------------------------";
-comment "								actor map selection											";
-comment "-------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+									Actor map selection
+   ---------------------------------------------------------------------------------------------------- */
 
 // This function shows ALL units as markes on the map so that one can be selected as actor
 // Format:
@@ -185,9 +183,6 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 			
 		};// End of case
 		
-		
-		
-		
 	
 		case 3: { // IND
 			
@@ -264,10 +259,6 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 			};
 			
 		};// End of case
-		
-		
-		
-		
 	
 		case 4: { // CIV
 			
@@ -343,13 +334,6 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 			};
 			
 		};// End of case
-	
-	
-	
-	
-	
-	
-		
 	
 		case 5: { // ALL
 			
@@ -434,13 +418,9 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 		
 	}; // End of switch
 	
-
-	
-	
-
-	comment "-------------------------------------------------------------------------------------------";
-	comment "							actor selection	and assignment on map							";
-	comment "-------------------------------------------------------------------------------------------";
+	/* ----------------------------------------------------------------------------------------------------
+										actor selection and assignment on map
+	   ---------------------------------------------------------------------------------------------------- */
 	//openMap [true, false]; // Force a soft map opening
 	//indiCam_var_mapOpened = addMissionEventHandler ["Map",{mapClosed = true;indiCam_var_showMarkers = false;}];
 
@@ -486,9 +466,6 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 	// This will reset the script and kill spawned map markers
 	indiCam_var_showMarkers = false;
 	
-	
 	//removeMissionEventHandler ["Map", indiCam_var_mapOpened];
 	//onMapSingleClick {}; // empty brackets stops the eventhandler?
-
-
 };

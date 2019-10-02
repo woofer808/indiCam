@@ -1,22 +1,25 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										indiCam_fnc_visibilityCheck										";
-comment "																										";
-comment "	This function continuously checks if the camera has a clear line of sight or is close enough 		";
-comment "	to the actor based on values given by the active scene.												";
-comment "	It is started and continuously executed while the camera is in use.									";
-comment "	It is terminated on camera termination.																";
-comment "																										";
-comment "	This script contains sleep and has to be spawned.													";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/*
+ * Author: woofer
+ * Continuously checks if the camera has a clear line of sight or is close enough
+ * to the actor based on values given by the active scene.
+ * It is started and continuously executed while the camera is in use.
+ * It is terminated on camera termination.
+ *
+ * Arguments:
+ * None
+ *
+ * Return Value:
+ * None
+ *
+ * Example:
+ * spawn indicam_fnc_visibilityCheck
+ *
+ * Public: No
+ */
 
 /*
 lineIntersectsSurfaces is useful for LOS checking (returns list, seems heavy)
 */
-
-
 
 private _actorObscured = false;
 private _future = time;
@@ -25,10 +28,9 @@ private _timerRestart = true;
 
 while {indiCam_running} do {
 
-
-comment "-------------------------------------------------------------------------------------------";
-comment "									Visibility check										";
-comment "-------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+										Visibility Check
+   ---------------------------------------------------------------------------------------------------- */
 
 	if (!indiCam_appliedVar_ignoreHiddenActor) then {
 		// Do the LOS check
@@ -63,9 +65,9 @@ comment "-----------------------------------------------------------------------
 		
 	};
 	
-comment "-------------------------------------------------------------------------------------------";
-comment "									Distance check											";
-comment "-------------------------------------------------------------------------------------------";
+/* ----------------------------------------------------------------------------------------------------
+										Distance Check
+   ---------------------------------------------------------------------------------------------------- */
 	// Check if the actor is further away from the camera than what is allowed by the scene
 	// Force a scene change if that's the case
 	private _distanceCheck = indiCam_camera distance indiCam_actor;

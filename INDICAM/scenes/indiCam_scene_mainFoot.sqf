@@ -1,8 +1,4 @@
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "										actor on foot scenes											";
-comment "-------------------------------------------------------------------------------------------------------";
-
+// Actor on foot
 
 if (indiCam_var_actionValue == 0) then { // Low action value scenes
 
@@ -568,4 +564,3 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 	}; // end of switch
 
 }; // End of very high action value scenes
-
