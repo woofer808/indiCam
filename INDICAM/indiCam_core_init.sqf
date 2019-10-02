@@ -105,6 +105,10 @@ comment "-----------------------------------------------------------------------
 // indiCam script should only init on player clients or on player hosts.
 if (!hasInterface) exitWith {};
 
+
+indiCam_fnc_init = {	// Here to suspend initialization if there is a mission control box.
+
+
 // Player is now either not spawned or has died
 waitUntil {alive player};
 
@@ -262,4 +266,32 @@ if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {
 	[] spawn indiCam_core_inputControls;
 } else {
 	systemChat "indiCam --> CBA not loaded!";
+};
+
+}; // end of init function
+
+
+
+
+
+if (isNil {missionNamespace getVariable "indiCam_missionControl"}) then {
+
+	[] call indiCam_fnc_init; // Initialize indiCam if no box was found
+	
+} else {
+
+	if (indiCam_debug) then {systemChat "Mission control box found"};	// make debug
+	
+	indiCam_missionControl addAction ["start indiCam", {				// Put the addaction to the object
+		[] spawn {
+			[] call indiCam_fnc_init;					// initialize indiCam scripts
+			hintSilent "indiCam starting...";
+			sleep 1;
+			createDialog "indiCam_gui_dialogMain";
+			hintSilent "indiCam initialized";
+			
+		};
+		
+	}];
+
 };
