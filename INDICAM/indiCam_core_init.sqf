@@ -29,6 +29,7 @@
 
 /* Changelog version 1.31*/	
 ///		PRIORITIES / DONE
+//- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
 //TODO- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are still working.
 //TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post
@@ -114,6 +115,27 @@ if (!hasInterface) exitWith {};
 
 // Player is now either not spawned or has died
 waitUntil {alive player};
+
+
+// Check if mission control object exists. If it does, stop init and let the mission control box add indicam to user on request
+if !(isNil {missionNamespace getVariable "indiCam_missionControl"}) exitWith {
+
+	if (indiCam_debug) then {systemChat "Mission control box found"};
+
+	indiCam_missionControl addAction ["start indiCam", {				// Put the addaction to the object
+		[] spawn {
+			[] call indiCam_core_init;										// initialize indiCam scripts
+			hintSilent "indiCam starting...";
+			sleep 1;
+			createDialog "indiCam_gui_dialogMain";
+			hintSilent "indiCam initialized";
+		};
+		
+	}];
+
+};
+
+
 
 indiCam_actor = player;
 
@@ -262,14 +284,6 @@ indiCam_fnc_clearEventhandlers = {
 	};
 
 };
-
-
-// Give the player the option to start indiCam UI
-// Currently temporary. Make a script that makes sure that the player has these on him even after remoting with AIC
-// player addAction ["indiCam", "_handle=createdialog 'indiCam_gui_dialogMain'"];
-
-
-
 
 
 // Define the function that is to run when the CBA bound key is pressed.

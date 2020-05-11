@@ -32,7 +32,7 @@ waituntil {indiCam_var_currentMode != "off";};
 			waituntil {inputAction "SelectGroupUnit1" <= 0};
 		};
 };
-*/
+
 
 /* ----------------------------------------------------------------------------------------------------
 			Next Scene - F2
