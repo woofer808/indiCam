@@ -1,19 +1,7 @@
 
-/*
- * Author: woofer
- * Initialize camera, main loop, and backgroud functions.
- *
- * Arguments:
- * None
- *
- * Return Value:
- * None.
- *
- * Example:
- * call indiCam_core_fnc_main
- *
- * Public: No
- */
+comment "-------------------------------------------------------------------------------------------------------";
+comment "								initialization of camera and main loop									";
+comment "-------------------------------------------------------------------------------------------------------";
 
 indiCam_running = true;
 
@@ -52,9 +40,11 @@ if (indiCam_devMode) then {
 	[] spawn indiCam_scene_selectMain;
 };
 
-/* ----------------------------------------------------------------------------------------------------
-									Initiliaze background functions
-   ---------------------------------------------------------------------------------------------------- */
+
+
+comment "-------------------------------------------------------------------------------------------------------";
+comment "								initialization of background functions									";
+comment "-------------------------------------------------------------------------------------------------------";
 
 // Actor auto switching
 if (indiCam_var_actorAutoSwitch) then { // If actor autoswtiching is on, reset the timer with the current duration
@@ -84,16 +74,6 @@ if (indiCam_devMode) then {
 } else {
 	[] spawn indiCam_fnc_launcherScan;
 };
-
-
-// Initialize controls
-if (indiCam_devMode) then {
-	[] execVM "INDICAM\indiCam_core_inputControls.sqf";
-} else {
-	[] spawn indiCam_core_inputControls;
-};
-
-
 
 
 indiCam_var_requestMode = "default";

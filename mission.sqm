@@ -8,7 +8,7 @@ class EditorData
 	toggles=9;
 	class ItemIDProvider
 	{
-		nextID=2421;
+		nextID=2425;
 	};
 	class MarkerIDProvider
 	{
@@ -16,26 +16,35 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={22917.367,115.32468,18883.043};
-		dir[]={0.68493813,-0.40443459,-0.60605884};
-		up[]={0.30289233,0.91456288,-0.26801145};
-		aside[]={-0.66267222,-2.925517e-007,-0.74891883};
+		pos[]={22935.336,13.580799,18880.666};
+		dir[]={0.56158561,-0.59730411,-0.57259876};
+		up[]={0.41824201,0.80200994,-0.42644432};
+		aside[]={-0.71394569,2.1548476e-007,-0.70021296};
 	};
 };
 binarizationWanted=0;
 addons[]=
 {
-	"A3_Characters_F"
+	"A3_Characters_F",
+	"A3_Props_F_Enoch_Military_Equipment",
+	"A3_Props_F_Enoch_Civilian_Camping"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=1;
+		items=2;
 		class Item0
 		{
 			className="A3_Characters_F";
 			name="Arma 3 Alpha - Characters and Clothing";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item1
+		{
+			className="A3_Props_F_Enoch";
+			name="Arma 3 Enoch - Decorative and Mission Objects";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
@@ -68,7 +77,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=1;
+		items=4;
 		class Item0
 		{
 			dataType="Group";
@@ -98,6 +107,70 @@ class Mission
 			{
 			};
 			id=2262;
+		};
+		class Item1
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={23008.764,3.1914392,18784.357};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+					};
+					id=2422;
+					type="B_soldier_AAR_F";
+					atlOffset=2.3841858e-007;
+				};
+			};
+			class Attributes
+			{
+			};
+			id=2421;
+			atlOffset=2.3841858e-007;
+		};
+		class Item2
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={22940.729,6.3683209,18873.178};
+				angles[]={0.014137167,3.0332775,6.2671809};
+			};
+			side="Empty";
+			class Attributes
+			{
+				name="indiCam_missionControl";
+			};
+			id=2423;
+			type="Land_MultiScreenComputer_01_black_F";
+			atlOffset=0.9579978;
+		};
+		class Item3
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={22940.643,5.6529527,18872.096};
+				angles[]={0.012000273,0,6.2671871};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+			};
+			id=2424;
+			type="Land_WoodenTable_02_large_F";
+			atlOffset=-4.1007996e-005;
 		};
 	};
 };

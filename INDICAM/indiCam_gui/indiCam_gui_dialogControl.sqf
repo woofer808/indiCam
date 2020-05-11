@@ -50,6 +50,8 @@ indiCam_fnc_guiStart = {
 			indiCam_var_sceneTimer = time + indiCam_var_SceneOverrideDuration;
 		};
 		
+		indiCam_var_sceneList = [];	// Reset the sceneList array before starting the camera from being off
+		
 		
 		
 	};
