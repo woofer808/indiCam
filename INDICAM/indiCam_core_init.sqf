@@ -20,7 +20,9 @@ comment "-----------------------------------------------------------------------
 
 
 /* Changelog version 1.31*/	
-comment " PRIORITIES / DONE ";
+///		PRIORITIES / DONE
+//- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
+
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
 //TODO- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are still working.
 //TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post
@@ -111,6 +113,27 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 
 // Player is now either not spawned or has died
 waitUntil {alive player};
+
+
+// Check if mission control object exists. If it does, stop init and let the mission control box add indicam to user on request
+if !(isNil {missionNamespace getVariable "indiCam_missionControl"}) exitWith {
+
+	if (indiCam_debug) then {systemChat "Mission control box found"};
+
+	indiCam_missionControl addAction ["start indiCam", {				// Put the addaction to the object
+		[] spawn {
+			[] call indiCam_core_init;										// initialize indiCam scripts
+			hintSilent "indiCam starting...";
+			sleep 1;
+			createDialog "indiCam_gui_dialogMain";
+			hintSilent "indiCam initialized";
+		};
+		
+	}];
+
+};
+
+
 
 indiCam_actor = player;
 
@@ -261,6 +284,13 @@ indiCam_fnc_clearEventhandlers = {
 };
 
 
+/*
+// Define the function that is to run when the CBA bound key is pressed.
+indiCam_fnc_keyGUI = {
+	// Only open the dialog if it's not already open
+	if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
+};	
+*/
 
 if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {
 	[] spawn indiCam_core_inputControls;
@@ -275,6 +305,7 @@ if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {
 
 
 if (isNil {missionNamespace getVariable "indiCam_missionControl"}) then {
+
 
 	[] call indiCam_fnc_init; // Initialize indiCam if no box was found
 	

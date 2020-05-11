@@ -1,25 +1,37 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "									    indiCam_core_inputControls										";
-comment "																										";
-comment "	Register keybinds with CBA eventhandlers.															";
-comment "																										";
-comment "   F1 - Stop camera / open GUI																			";
-comment "   F2 - Force new scene																				";
-comment "   F3 - Force new actor																				";
-comment "   F4 - Manual mode																					";
-comment "   F5 - Previous vision mode																			";
-comment "   F6 - Next vision mode																				";
-comment "   F9 - Print scene name to chat																		";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+/* -------------------------------------------------------------------------------------------------------
+ * 									    indiCam_core_inputControls
+ *
+ * 	This purpose of this script is to keep the basic indiCam controls updated for the player.
+ *
+ *    F1 - Stop camera / open GUI	
+ *    F2 - Force new scene
+ *    F3 - Force new actor
+ *    F4 - Manual mode
+ *    F5 - Previous vision mode	
+ *    F6 - Next vision mode
+ *    F9 - Print scene name to chat
+ *
+ * ------------------------------------------------------------------------------------------------------- */
 
 
-/* DIK keycodes
-https://community.bistudio.com/wiki/DIK_KeyCodes
-DIK_F1	0x3B, DEC_F1 59
-*/
+// Make sure the camera is running before attempting to create the camera control button event handlers
+waituntil {indiCam_var_currentMode != "off";};
+
+
+/* Commenting out this one as it is used for the GUI. Probably will have to make it run only if gui is present
+/* ----------------------------------------------------------------------------------------------------
+			Stop Camera / Open GUI - F1
+   ---------------------------------------------------------------------------------------------------- */
+// When the camera isn't running, the EH will be killed off
+[] spawn {
+		while {indiCam_running} do {
+			waituntil {(inputAction "SelectGroupUnit1" > 0) or (!indiCam_running)};
+			if (indiCam_debug) then {systemChat "F1-key pressed"};
+			indiCam_running = false;
+			indiCam_var_manualMode = false;
+			waituntil {inputAction "SelectGroupUnit1" <= 0};
+		};
+};
 
 
 
