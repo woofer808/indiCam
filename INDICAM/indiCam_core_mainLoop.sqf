@@ -70,7 +70,9 @@ if (indiCam_var_currentMode != indiCam_var_requestMode) then {
 			indiCam_appliedVar_ignoreHiddenActor = true;
 
 			// Start manual camera functions
-			
+			indiCam_camera camSetTarget indiCam_actor;
+			indiCam_camera camCommit 0;
+
 			// set this mode to stable
 			indiCam_var_currentMode = "manual";
 			indiCam_var_requestMode = "manual";

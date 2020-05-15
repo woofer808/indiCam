@@ -8,7 +8,7 @@ class EditorData
 	toggles=9;
 	class ItemIDProvider
 	{
-		nextID=2425;
+		nextID=2426;
 	};
 	class MarkerIDProvider
 	{
@@ -16,24 +16,24 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={22935.336,13.580799,18880.666};
-		dir[]={0.56158561,-0.59730411,-0.57259876};
-		up[]={0.41824201,0.80200994,-0.42644432};
-		aside[]={-0.71394569,2.1548476e-007,-0.70021296};
+		pos[]={22939.268,7.1938062,18874.402};
+		dir[]={0.62974638,-0.5341351,-0.56404746};
+		up[]={0.3978937,0.84538102,-0.35638374};
+		aside[]={-0.66719133,2.30968e-007,-0.74490267};
 	};
 };
 binarizationWanted=0;
 addons[]=
 {
 	"A3_Characters_F",
-	"A3_Props_F_Enoch_Military_Equipment",
-	"A3_Props_F_Enoch_Civilian_Camping"
+	"A3_Props_F_Enoch_Civilian_Camping",
+	"A3_Missions_F_Oldman"
 };
 class AddonsMetaData
 {
 	class List
 	{
-		items=2;
+		items=3;
 		class Item0
 		{
 			className="A3_Characters_F";
@@ -45,6 +45,13 @@ class AddonsMetaData
 		{
 			className="A3_Props_F_Enoch";
 			name="Arma 3 Enoch - Decorative and Mission Objects";
+			author="Bohemia Interactive";
+			url="https://www.arma3.com";
+		};
+		class Item2
+		{
+			className="A3_Missions_F_Oldman";
+			name="Arma 3 Oldman - Playable Content";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
@@ -143,23 +150,6 @@ class Mission
 			dataType="Object";
 			class PositionInfo
 			{
-				position[]={22940.729,6.3683209,18873.178};
-				angles[]={0.014137167,3.0332775,6.2671809};
-			};
-			side="Empty";
-			class Attributes
-			{
-				name="indiCam_missionControl";
-			};
-			id=2423;
-			type="Land_MultiScreenComputer_01_black_F";
-			atlOffset=0.9579978;
-		};
-		class Item3
-		{
-			dataType="Object";
-			class PositionInfo
-			{
 				position[]={22940.643,5.6529527,18872.096};
 				angles[]={0.012000273,0,6.2671871};
 			};
@@ -171,6 +161,24 @@ class Mission
 			id=2424;
 			type="Land_WoodenTable_02_large_F";
 			atlOffset=-4.1007996e-005;
+		};
+		class Item3
+		{
+			dataType="Object";
+			class PositionInfo
+			{
+				position[]={22940.303,6.402112,18873.221};
+				angles[]={0.014137167,2.7017522,6.2671809};
+			};
+			side="Empty";
+			flags=4;
+			class Attributes
+			{
+				name="indiCam_missioncontrol";
+			};
+			id=2425;
+			type="Item_Laptop_Unfolded";
+			atlOffset=0.00051927567;
 		};
 	};
 };
