@@ -5,6 +5,9 @@ comment "-----------------------------------------------------------------------
 
 indiCam_running = true;
 
+// Initialize the keyboard controls
+[] spawn indiCam_core_inputControls;
+
 // Spawning target objects depending on debug mode or not while making sure it's only visible on the local machine.
 if (indiCam_debug) then { // When debug is on, create all logics locally visible
 	
