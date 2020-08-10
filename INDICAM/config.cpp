@@ -35,4 +35,4 @@ class CfgFunctions
 #include "indiCam_gui\indiCam_gui_definitions.hpp"
 #include "indiCam_gui\indiCam_gui_dialogs.hpp"
 
-#include "\a3\editor_f\Data\Scripts\dikCodes.h" // Edited: Fix an error.
+#include "\a3\editor_f\Data\Scripts\dikCodes.h"
