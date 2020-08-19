@@ -174,7 +174,7 @@ class Mission
 			flags=4;
 			class Attributes
 			{
-				name="indiCam_missioncontrol";
+				name="indiCam_missioncontrol_disabled";
 			};
 			id=2425;
 			type="Item_Laptop_Unfolded";
