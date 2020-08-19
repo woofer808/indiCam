@@ -134,30 +134,6 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 
 
 
-
-	/*
-
-	// Check if mission control object exists. If it does, stop init and let the mission control box add indicam to user on request
-	if !(isNil {missionNamespace getVariable "indiCam_missionControl"}) exitWith {
-
-		if (indiCam_debug) then {systemChat "Mission control box found"};
-
-		indiCam_missionControl addAction ["start indiCam", {				// Put the addaction to the object
-			[] spawn {
-				[] call indiCam_core_init;										// initialize indiCam scripts
-				hintSilent "indiCam starting...";
-				sleep 1;
-				createDialog "indiCam_gui_dialogMain";
-				hintSilent "indiCam initialized";
-			};
-			
-		}];
-
-	};
-	*/
-
-
-
 	indiCam_actor = player;
 
 	// Read up on all the hottest settings
