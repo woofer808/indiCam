@@ -368,6 +368,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 								"chaseCam",			// Advanced FPS-based chase cam
 								"cheeseCam",		// Advanced FPS-based chase cam with logic target
 								"faceCam",			// Advanced FPS-based chase cam with logic target
+								"lowCloseCam",			// Advanced FPS-based chase cam with logic target
 								"skyCam"			// Still camera from far above tracking a slow logic
 							];
 
@@ -433,6 +434,25 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
 			indiCam_var_cameraFov = random [0.5,0.74,1];			// Field of view, standard Arma FOV is 0.74
 			indiCam_var_maxDistance = 100;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+
+		case "lowCloseCam": {
+			// Advanced chase cam with logic target updated on every frame
+			// Regular stationary camera tracking a logic target around the actor close and low in higher action levels
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-5,-2,-5],random [3,2,3]]; // Specifies the range for the camera position sideways to the actor
+			_posY = selectRandom [random [-5,-2,-5],random [5,2,5]];	// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [0.4,1,0.4];				// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ]; // Position of camera relative to the actor
+			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.6;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;	// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.3,0.4,0.5]; // Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 10;			// Max distance between actor and camera before scene switches
 			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
 			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
 		}; // end of case

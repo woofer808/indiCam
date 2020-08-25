@@ -117,25 +117,35 @@ while {true} do {
 	/* ----------------------------------------------------------------------------------------------------
 									Scene prototyping area
    	   ---------------------------------------------------------------------------------------------------- */
-	private _prototypeScene = false; // Switch this to true to use the prototyping area
+	private _prototypeScene = false; 				// Switch this to true to use the prototyping area
+		
 	if (_prototypeScene) then {
+		indiCam_devMode = true;	indiCam_debug = true;	// Activate debug and devmode stuff to speed up development. Refresh scene in Arma.
 		systemChat "Testing area scene";
 		// Change the stuff below here
-		// Regular stationary camera tracking a logic target around the actor
-		indiCam_var_cameraType = "stationaryCameraLogicTarget";
-		indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-		indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
-		_posX = selectRandom [random [-15,-2,-15],random [2,15,2]]; // Specifies the range for the camera position sideways to the actor
-		_posY = selectRandom [random [-15,-10,-15],random [10,15,10]];	// Specifies the range for the camera position to the front and back of the actor
-		_posZ = random [0.5,1,2];				// Specifies the range for the camera position vertically from the actor
-		indiCam_var_cameraPos = [_posX,_posY,_posZ]; // Position of camera relative to the actor
-		indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
-		indiCam_var_targetSpeed = 0.6;			// Defines how tightly the logic will track it's defined position
-		indiCam_var_cameraTarget = indiCam_var_proxyTarget;	// The object that the camera is aimed at
-		indiCam_var_cameraFov = random [0.1,0.2,0.3]; // Field of view, standard Arma FOV is 0.74
-		indiCam_var_maxDistance = 600;			// Max distance between actor and camera before scene switches
-		indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
-		indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		// Make sure to stop and start camera to see debug proxies
+
+
+
+			// Stationary ground watch flyover
+			indiCam_var_cameraType = "stationaryCameraAbsoluteZ";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
+			_posX = random [100,300,100]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = selectRandom [random [-50,-20,-50],random [50,20,50]]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = 1;			// Specifies the range for the camera position vertically in absolute height
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [60,0,0];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.3;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.15,0.4,0.15];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 2000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+
+
+
+
 		indiCam_var_previousScene = "letsnotgothere";
 	}; // End of prototyping area
 
@@ -222,6 +232,28 @@ switch (indiCam_appliedVar_cameraType) do {
 			indiCam_camera camCommit (((indiCam_camera distance indiCam_appliedVar_cameraPos) / (indiCam_appliedVar_takeTime - 1)) / indiCam_appliedVar_cameraMovementRate);
 		};
 		
+	}; // end of case
+
+
+	case "stationaryCameraAbsoluteZ": {
+		// Camera is stationary at given point at absolute height AGL (above terrain or sea level waves).
+		// Camera target is a follow logic calculated on each frame.
+				
+		indiCam_var_proxyTarget setPosASL (indiCam_actor modelToWorldWorld indiCam_appliedVar_targetPos);
+
+		_pos = (indiCam_actor modelToWorldWorld indiCam_appliedVar_cameraPos);
+		_pos set [2,(indiCam_appliedVar_cameraPos select 2)]; // Convert the Z position to the absolute value before committing it
+
+		indiCam_camera setPos _pos; // Use the converted absolute position
+
+		["indiCam_id_logicTarget", "onEachFrame", {[indiCam_var_proxyTarget,(indiCam_actor modelToWorldWorld indiCam_appliedVar_targetPos),indiCam_appliedVar_targetSpeed] call indiCam_fnc_followLogicFPS}] call BIS_fnc_addStackedEventHandler;
+		// Add this eventhandler to the current EH list
+		indiCam_var_activeEventHandlers pushBackUnique "indiCam_id_logicTarget";
+		
+		indiCam_camera camSetFov indiCam_appliedVar_cameraFov;
+		indiCam_camera camSetTarget indiCam_appliedVar_cameraTarget;
+		indiCam_camera camCommit 0;
+	
 	}; // end of case
 	
 	

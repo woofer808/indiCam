@@ -54,5 +54,5 @@ private _toLog = 	_this select 2;
 
 
 
-if (indiCam_debug && _toScreen) then {systemchat str _message};
-if (_toLog) then {diag_log str _message};
+if (indiCam_debug && _toScreen) then {systemchat format [_message]};
+if (_toLog) then {diag_log format [_message]};

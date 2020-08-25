@@ -223,14 +223,73 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 3) && (((getPos vehicle indiCa
 if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiCam_actor) select 2) < 600) ) then { // Aircraft low altitude scenes
 
 	indiCam_var_scene = selectRandom [ // Choose a random scene from the list
-								"standardScene",	// Stationary camera tracking a logic
-								"chaseCam",			// Advanced FPS-based chase cam
-								"cheeseCam",		// Advanced FPS-based chase cam with logic target
-								"faceCam",			// Advanced FPS-based chase cam with logic target
-								"skyCam"			// Still camera from far above tracking a slow logic
+								"groundWatcherFront",	// Stationary ground watch flyover
+								"farFrontFlyBy",		// Stationary far ahead camera looking back
+								"flyByPlane",			// Fast stationary camera low drive-by zoomed in
+								"standardScene",		// Stationary camera tracking a logic
+								"chaseCam",				// Advanced FPS-based chase cam
+								"cheeseCam",			// Advanced FPS-based chase cam with logic target
+								"faceCam",				// Advanced FPS-based chase cam with logic target
+								"skyCam"				// Still camera from far above tracking a slow logic
 							];
 
 	switch (indiCam_var_scene) do {
+		
+		
+		case "groundWatcherFront": {
+			// Stationary ground watch flyover
+			indiCam_var_cameraType = "stationaryCameraAbsoluteZ";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 15;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-30,-10,-30],random [30,10,30]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [600,800,600]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [1,5,1];			// Specifies the range for the camera position vertically in absolute height
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.8,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+
+
+		case "farFrontFlyBy": {
+			// Stationary far ahead camera looking back
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-30,-10,-30],random [30,10,30]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [300,400,300]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [-2,-10,-2];			// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.2,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+		
+		case "flyByPlane": {
+			// Fast stationary camera low drive-by zoomed in
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-80,-100,-80],random [80,100,80]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [40,60,40]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [6,6,6];			// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.2,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
 		
 		case "cheeseCam": {
 			// Advanced chase cam with logic target updated on every frame
@@ -328,6 +387,9 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 if ( (((getPos vehicle indiCam_actor) select 2) > 600) ) then { // Aircraft high altitude scenes
 
 	indiCam_var_scene = selectRandom [ // Choose a random scene from the list
+								"highAltitudeChase",// Followcam top-bottom rear with vistas
+								"farFrontFlyBy",	// Stationary far ahead camera looking back
+								"flyByPlane",		// Fast stationary camera low drive-by zoomed in
 								"standardScene",	// Stationary camera tracking a logic
 								"chaseCam",			// Advanced FPS-based chase cam
 								"cheeseCam",		// Advanced FPS-based chase cam with logic target
@@ -336,6 +398,61 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 600) ) then { // Aircraft high
 							];
 
 	switch (indiCam_var_scene) do {
+
+		case "highAltitudeChase": {
+			// Followcam top-bottom rear with vistas
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-30,-10,-30],random [30,10,30]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [300,400,300]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [-2,-10,-2];			// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.2,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+		
+		case "farFrontFlyBy": {
+			// Stationary far ahead camera looking back
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-30,-10,-30],random [30,10,30]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [300,400,300]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [-2,-10,-2];			// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.2,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+		
+		case "flyByPlane": {
+			// Fast stationary camera low drive-by zoomed in
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
+			_posX = selectRandom [random [-80,-100,-80],random [80,100,80]]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = random [40,60,40]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [6,6,6];			// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,6,1];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.1,0.2,0.1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = true;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
+
 		
 		case "cheeseCam": {
 			// Advanced chase cam with logic target updated on every frame
