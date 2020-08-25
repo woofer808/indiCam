@@ -23,10 +23,24 @@ comment "-----------------------------------------------------------------------
 /*
 
 Current problem seems to be that the button presses stack when initializing with mission control.
-
 What's the best way to stop them from being applied twice. I still want the CBA keybinds to work.
-
 Buttons don't work when GUI is open.
+
+
+
+Need a sequence to start the camera without the GUI
+---------------------------------------------------
+[] execVM "INDICAM\indiCam_core_init.sqf";
+
+[] execVM "INDICAM\indiCam_gui\indiCam_gui_init.sqf";
+
+Following will work if gui has been opened once
+[] call indiCam_fnc_guiStart;
+
+
+
+
+Scenes. Always gotta have new scenes.
 
 */
 
@@ -36,16 +50,19 @@ Buttons don't work when GUI is open.
 /* Changelog version 1.31*/	
 ///		PRIORITIES / DONE
 //FIXED- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
-//ADDED- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are still working.
+//ADDED- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are used.
 //FIXED- Manual camera now targets the actual actor, not any proxy objects.
 //REMOVED- Neither script nor mod version gives the cameraman an addaction anymore. Use default F1 or set your own key
 //ADDED- Added a centralized debug system. Replacement of old system in code will be ongoing.
+//ADDED- Various new scenes to each of the vehicle types.
+//ADDED- New scenetype "stationaryCameraAbsoluteZ" for absolute altitude instead of relative to actor.
+//FIXED- Switching actor will now reset the automatic actor switch timer
+
 
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
-//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post
+//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Past me, thanks for this not so informative comment.
 
-//TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.﻿﻿
-//TODO- F3 should reset auto switch timer for actor
+//TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
 //TODO- Make names of players show in GUI map
 //TODO- Make sure the camera keeps following actors after death.
@@ -339,8 +356,9 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 }; // end of init function
 
 
-
-
+// If there is an object in the mission called indiCam_missionControl that will get the action menu option to initialize at will
+// Perfect for when only a specific user should have access to the indiCam script version
+// This part makes sure indiCam only initializes if there is no mission control box
 if (isNil {missionNamespace getVariable "indiCam_missionControl"}) then {
 
 	[] spawn indiCam_fnc_init; 												// Initialize indiCam if no box was found

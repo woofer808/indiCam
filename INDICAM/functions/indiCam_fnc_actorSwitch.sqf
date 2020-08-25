@@ -208,5 +208,11 @@ indiCam_actor = _newActor;
 // Store current actorSide
 indiCam_var_actorSwitchSettings set [5,(side indiCam_actor)];
 
+// Reset the actor switch timer if it's active
+if (indiCam_var_actorAutoSwitch) then {
+	indiCam_var_actorTimer = time + (indiCam_var_actorSwitchSettings select 4);
+};
+
+
 // Return the new indiCam_actor as well
 _newActor;
