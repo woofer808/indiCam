@@ -37,10 +37,14 @@ Need a sequence to start the camera without the GUI
 Following will work if gui has been opened once
 [] call indiCam_fnc_guiStart;
 
-
-
-
 Scenes. Always gotta have new scenes.
+
+
+
+player names on map
+_name = format ["%1",name player]; // name without quotes
+
+
 
 */
 
@@ -62,6 +66,7 @@ Scenes. Always gotta have new scenes.
 //FIXED- Scene followTight is now used for infantry at action value 1. Thanks to VileAce!
 //FIXED- Automatic switching of random unit within distance from current actor always picked the current actor. Thanks to VileAce!
 //FIXED- removeAllEventHandlers was causing issues with other mods running in special scene atGuy - code fix by VileAce!
+//ADDED- Names of players now show in GUI map.
 
 
 
@@ -71,7 +76,6 @@ Scenes. Always gotta have new scenes.
 
 //TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
-//TODO- Make names of players show in GUI map
 //TODO- Make sure the camera keeps following actors after death.
 //TODO- Add "persistent actor" function if that's not already in by default by selecting "none" in randomizer. It would then need something else to do while respawning and come back to the same player unit after respawn.
 //TODO- Would be totally cool with a flashlight type function as with Zeus or the editor. Maybe spawn a local light above the actor?
