@@ -110,6 +110,8 @@ switch (_case) do {
 	case 7: { // Random unit search started within distance actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to units on current side within given distance.", _case];};
 				
+				_unitArray = allUnits - [player,indiCam_actor];
+
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
 				} forEach _unitArray;

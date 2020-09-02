@@ -290,7 +290,11 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
 			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,50,3];		// Position of camera relative to the actor
-			indiCam_var_cameraSpeed = ( 0.2 / ((speed indiCam_actor) / 200) );	// Defines how tightly the camera will track it's defined position
+			if (isNil {missionNamespace getVariable "indiCam_actor"}) then {
+				indiCam_var_cameraSpeed = 0.5;
+			} else {
+				indiCam_var_cameraSpeed = ( 0.2  / (((speed indiCam_actor) / 200) + 0.001) );	// Defines how tightly the camera will track it's defined position
+			};
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.01;			// Defines how tightly the logic will track it's defined position
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at

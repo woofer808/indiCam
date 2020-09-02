@@ -311,7 +311,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
 		}; // end of case
 		
-		case "skyCam": {
+		case "followTight": {
 			// Smooth non-jerky follow cam with closeup
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 		// If true, this scene will not be applied and a new one will be selected
