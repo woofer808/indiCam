@@ -57,10 +57,17 @@ Scenes. Always gotta have new scenes.
 //ADDED- Various new scenes to each of the vehicle types.
 //ADDED- New scenetype "stationaryCameraAbsoluteZ" for absolute altitude instead of relative to actor.
 //FIXED- Switching actor will now reset the automatic actor switch timer
+//FIXED- Some slight code optimization
+//FIXED- Zero divisor math error in a helicopter scene fixed. Thanks to Damien!
+//FIXED- Scene followTight is now used for infantry at action value 1. Thanks to VileAce!
+//FIXED- Automatic switching of random unit within distance from current actor always picked the current actor. Thanks to VileAce!
+//FIXED- removeAllEventHandlers was causing issues with other mods running in special scene atGuy - code fix by VileAce!
+
+
 
 
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
-//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Past me, thanks for this not so informative comment.
+//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Thanks for this not so informative comment, past me.
 
 //TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
@@ -70,7 +77,7 @@ Scenes. Always gotta have new scenes.
 //TODO- Would be totally cool with a flashlight type function as with Zeus or the editor. Maybe spawn a local light above the actor?
 //TODO- Preventing scene switching doesn't seem to prevent scene switching by obscured actor. Are we fine with that?
 
-comment " SCRIPTED SCENES ";
+///		SCRIPTED SCENES 
 //TODO- How do the new special scene actor stuff work alongside unconcious units with ace or reggs script?
 //TODO- Add "killer" as scripted scene as a death scene. Could be made to be shown on every occation in GUI.
 //TODO- Detect incoming mortar fire and switch to show an overview of the location at impact
@@ -78,7 +85,7 @@ comment " SCRIPTED SCENES ";
 //TODO- When the AT script is activated, it should keep a lookout if the unit puts the AT back.
 //TODO- Scripted scene: DropOff - Keep track of helicopters when they have low velocity < 70 and are close to ground (< 10m) and in camera vincinity
 
-comment " BACKLOG ";
+///		BACKLOG
 //TODO- Fog of war functionality. A checkbox in the GUI that only shows enemies that current camera side knowsAbout.
 //TODO- Might need to spawn a background function that keeps track of indiCam_running variable
 //TODO- Scripted scenes that makes jumps to close-by animals

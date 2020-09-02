@@ -19,7 +19,7 @@ class EditorData
 		pos[]={18181.203,195.68681,11484.317};
 		dir[]={0,-0.70710683,0.70710683};
 		up[]={0,0.70710677,0.70710677};
-		aside[]={0.99999994,0,-0};
+		aside[]={0.99999994,0,0};
 	};
 };
 binarizationWanted=0;
@@ -607,7 +607,7 @@ class Mission
 					showWP="NEVER";
 					id=2456;
 					type="Move";
-					atlOffset=34.25209;
+					atlOffset=34.252003;
 				};
 				class Item7
 				{
