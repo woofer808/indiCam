@@ -1,58 +1,31 @@
-comment "-------------------------------------------------------------------------------------------------------";
-comment "											indiCam, by woofer.											";
-comment "																										";
-comment "										independent cinematic camera									";
-comment "																										";
-comment "																										";
-comment "	The purpose of the init is to compile all functions and set all variables from start.				";
-comment "																										";
-comment "																										";
-comment "	Definitions:																						";
-comment "	- Scene: A predefined camera angle with camera movement along with take time, fov and so on.		";
-comment "	- Variable names: indiCam_var_variableName															";
-comment "	- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)									";
-comment "	- Object names: indiCam_objectName																	";
-comment "																										";
-comment "-------------------------------------------------------------------------------------------------------";
+//-------------------------------------------------------------------------------------------------------
+//											indiCam, by woofer.
+//
+//										independent cinematic camera									"
+//																										
+//																										
+//	The purpose of the init is to compile all functions and set all variables from start.				
+//																										
+//																										
+//	Definitions:																						
+//	- Scene: A predefined camera angle with camera movement along with take time, fov and so on.		
+//	- Variable names: indiCam_var_variableName															
+//	- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)									
+//	- Object names: indiCam_objectName																	
+//																										
+//-------------------------------------------------------------------------------------------------------
 // Versioning: Significant new functionality adds to the tenth of a version, scene additions and fixes adds to the hundreds
 
 
 
 
 // Currently doing:
-/*
-
-Current problem seems to be that the button presses stack when initializing with mission control.
-What's the best way to stop them from being applied twice. I still want the CBA keybinds to work.
-Buttons don't work when GUI is open.
-
-
-
-Need a sequence to start the camera without the GUI
----------------------------------------------------
-[] execVM "INDICAM\indiCam_core_init.sqf";
-
-[] execVM "INDICAM\indiCam_gui\indiCam_gui_init.sqf";
-
-Following will work if gui has been opened once
-[] call indiCam_fnc_guiStart;
-
-Scenes. Always gotta have new scenes.
-
-
-
-player names on map
-_name = format ["%1",name player]; // name without quotes
-
-
-
-*/
-
 
 
 
 /* Changelog version 1.31*/	
 ///		PRIORITIES / DONE
+//ADDED- Names of players now show in GUI map.
 //FIXED- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
 //ADDED- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are used.
 //FIXED- Manual camera now targets the actual actor, not any proxy objects.
@@ -66,8 +39,7 @@ _name = format ["%1",name player]; // name without quotes
 //FIXED- Scene followTight is now used for infantry at action value 1. Thanks to VileAce!
 //FIXED- Automatic switching of random unit within distance from current actor always picked the current actor. Thanks to VileAce!
 //FIXED- removeAllEventHandlers was causing issues with other mods running in special scene atGuy - code fix by VileAce!
-//ADDED- Names of players now show in GUI map.
-
+//FIXED- Removed some comments used with the comment=""-command (Thanks to Brett)
 
 
 
@@ -146,9 +118,9 @@ _name = format ["%1",name player]; // name without quotes
 //IDEA- Maybe use something like {_justPlayers = allPlayers - entities "HeadlessClient_F";} to find players instead of what's used now
 
 
-comment "-------------------------------------------------------------------------------------------------------";
-comment "													init												";
-comment "-------------------------------------------------------------------------------------------------------";
+// ------------------------------------------------------------------------------------------------------
+//													init												
+//-------------------------------------------------------------------------------------------------------
 // indiCam script should only init on player clients or on player hosts.
 if (!hasInterface) exitWith {};
 
@@ -183,9 +155,9 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	[] execVM "INDICAM\indiCam_core_diary.sqf";
 
 
-	comment "-------------------------------------------------------------------------------------------------------";
-	comment "												variables												";
-	comment "-------------------------------------------------------------------------------------------------------";
+	//-------------------------------------------------------------------------------------------------------
+	//												variables												
+	//-------------------------------------------------------------------------------------------------------
 	// Actor management
 	indiCam_var_enterVehicleEH = 0;				// Eventhandler for actorManager
 	indiCam_var_exitVehicleEH = 0;				// Eventhandler for actorManager
@@ -261,9 +233,9 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	// Variables to fix bugs
 	indiCam_var_visionIndex = 0;
 
-	comment "-------------------------------------------------------------------------------------------------------";
-	comment "												functions												";
-	comment "-------------------------------------------------------------------------------------------------------";
+	//-------------------------------------------------------------------------------------------------------
+	//												functions												
+	//-------------------------------------------------------------------------------------------------------
 	// Compile functions as a function. Makes it possible to compile on the fly
 	indiCam_fnc_compileAll = {
 		indiCam_core_main = compile preprocessFileLineNumbers "INDICAM\indiCam_core_main.sqf";
@@ -330,9 +302,9 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 		missionNamespace setVariable ["indiCam_var_inizialized", true];
 
 
-		comment "-------------------------------------------------------------------------------------------------------";
-		comment "	Stop camera / Open GUI - F1-key																		";
-		comment "-------------------------------------------------------------------------------------------------------";
+		//-------------------------------------------------------------------------------------------------------
+		//	Stop camera / Open GUI - F1-key																		
+		//-------------------------------------------------------------------------------------------------------
 
 		// Define the function that is to run when the CBA bound key is pressed.
 		indiCam_fnc_keyGUI = {
