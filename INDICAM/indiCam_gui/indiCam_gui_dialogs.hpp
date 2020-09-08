@@ -480,7 +480,7 @@ class indiCam_gui_dialogMain {
 		
 		class indiCam_gui_scriptInfo: indiCam_RscText {
 			idc = indiCam_id_guiActorDisplay;
-			text = "indiCam 1.31 by woofer";
+			text = "indiCam 1.32 by woofer";
 			x = 0.575 * safezoneW + safezoneX;
 			y = 0.7 * safezoneH + safezoneY;
 			w = 0.065 * safezoneW;

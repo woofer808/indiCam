@@ -23,23 +23,8 @@
 // - Can't seem to compile with 	#include "\a3\editor_f\Data\Scripts\dikCodes.h"  in config.cpp
 
 
-/* Changelog version 1.31*/	
+/* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
-//ADDED- Names of players now show in GUI map.
-//FIXED- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
-//ADDED- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are used.
-//FIXED- Manual camera now targets the actual actor, not any proxy objects.
-//REMOVED- Neither script nor mod version gives the cameraman an addaction anymore. Use default F1 or set your own key
-//ADDED- Added a centralized debug system. Replacement of old system in code will be ongoing.
-//ADDED- Various new scenes to each of the vehicle types.
-//ADDED- New scenetype "stationaryCameraAbsoluteZ" for absolute altitude instead of relative to actor.
-//FIXED- Switching actor will now reset the automatic actor switch timer
-//FIXED- Some slight code optimization
-//FIXED- Zero divisor math error in a helicopter scene fixed. Thanks to Damien!
-//FIXED- Scene followTight is now used for infantry at action value 1. Thanks to VileAce!
-//FIXED- Automatic switching of random unit within distance from current actor always picked the current actor. Thanks to VileAce!
-//FIXED- removeAllEventHandlers was causing issues with other mods running in special scene atGuy - code fix by VileAce!
-//FIXED- Removed some comments used with the comment=""-command (Thanks to Brett)
 
 
 
