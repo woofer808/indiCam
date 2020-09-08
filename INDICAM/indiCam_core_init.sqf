@@ -20,7 +20,7 @@
 
 
 // Currently doing:
-
+// - Can't seem to compile with 	#include "\a3\editor_f\Data\Scripts\dikCodes.h"  in config.cpp
 
 
 /* Changelog version 1.31*/	
