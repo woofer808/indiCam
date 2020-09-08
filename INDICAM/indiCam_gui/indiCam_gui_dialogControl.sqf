@@ -30,7 +30,7 @@ indiCam_fnc_guiStart = {
 	if (!indiCam_running) then {
 
 		// Actually start the camera before launching any other side scripts
-		[] execVM "INDICAM\indiCam_core_main.sqf";		
+		[] execVM "INDICAM\indiCam_core_main.sqf";
 		
 		// Scene duration override
 		if (indiCam_var_SceneOverrideState) then {
@@ -49,6 +49,8 @@ indiCam_fnc_guiStart = {
 		if (indiCam_var_guiSceneOverrideCheckboxState) then {
 			indiCam_var_sceneTimer = time + indiCam_var_SceneOverrideDuration;
 		};
+		
+		indiCam_var_sceneList = [];	// Reset the sceneList array before starting the camera from being off
 		
 		
 		
@@ -495,7 +497,7 @@ if (_checkArray) then {
 indiCam_fnc_guiManualMode = {
 
 closeDialog 0;
-[] call indiCam_fnc_manualMode;
+[] spawn indiCam_fnc_manualMode;
 
 };
 

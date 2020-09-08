@@ -66,9 +66,9 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 						if ((vehicle _x isKindOf "Helicopter")) then {_markername setMarkerTextLocal "Helicopter";};
 						if ((vehicle _x isKindOf "Plane")) then {_markername setMarkerTextLocal "Plane";};
 						if ((vehicle _x isKindOf "Ship")) then {_markername setMarkerTextLocal "Ship";};
-						if (isPlayer _x) then {_markername setMarkerColorLocal "ColorYellow";_markername setMarkerTextLocal "a player";};
-						if (_x == indiCam_actor) then {_markername setMarkerColorLocal "ColorOrange";_markername setMarkerTextLocal "current actor";};
-						if ((_x == indiCam_actor) && (isPlayer _x)) then {_markername setMarkerColorLocal "ColorOrange";_markername setMarkerTextLocal  "current actor (a player)";};
+						if (isPlayer _x) then {_playerName = format ["player (%1)",name _x];_markername setMarkerColorLocal "ColorYellow";_markername setMarkerTextLocal str _playerName;};
+						if (_x == indiCam_actor) then {_markername setMarkerColorLocal "ColorOrange";_markername setMarkerTextLocal "current actor (AI)";};
+						if ((_x == indiCam_actor) && (isPlayer _x)) then {_playerName = format ["current actor (%1)",name _x];_markername setMarkerColorLocal "ColorOrange";_markername setMarkerTextLocal str _playerName;};
 						
 					} foreach _unitArray;
 

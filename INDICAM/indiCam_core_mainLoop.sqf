@@ -65,8 +65,14 @@ if (indiCam_var_currentMode != indiCam_var_requestMode) then {
 			// Stop the camera in its current position
 			// Stop all running camera movement functions
 			// Make sure no scripted scenes can take over
+			indiCam_var_actorTimer = time + 99999;
+			indiCam_appliedVar_maxDistance = 99999;
+			indiCam_appliedVar_ignoreHiddenActor = true;
+
 			// Start manual camera functions
-			
+			indiCam_camera camSetTarget indiCam_actor;
+			indiCam_camera camCommit 0;
+
 			// set this mode to stable
 			indiCam_var_currentMode = "manual";
 			indiCam_var_requestMode = "manual";

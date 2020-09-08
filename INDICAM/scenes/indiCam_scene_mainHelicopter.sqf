@@ -221,6 +221,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 3) && (((getPos vehicle indiCa
 if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiCam_actor) select 2) < 600) ) then { // Aircraft low altitude scenes
 
 	indiCam_var_scene = selectRandom [ // Choose a random scene from the list
+								"groundWatcherFront",	// Stationary camera tracking a logic
 								"standardScene",	// Stationary camera tracking a logic
 								"chaseCam",			// Advanced FPS-based chase cam
 								"cheeseCam",		// Advanced FPS-based chase cam with logic target
@@ -229,6 +230,24 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 							];
 
 	switch (indiCam_var_scene) do {
+		
+		case "groundWatcherFront": {
+			// Stationary ground watch flyover
+			indiCam_var_cameraType = "stationaryCameraAbsoluteZ";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
+			_posX = random [100,300,100]; 	// Specifies the range for the camera position sideways to the actor
+			_posY = selectRandom [random [-50,-20,-50],random [50,20,50]]; 				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = 1;			// Specifies the range for the camera position vertically in absolute height
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [60,0,0];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.3;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.15,0.4,0.15];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 2000;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
 		
 		case "cheeseCam": {
 			// Advanced chase cam with logic target updated on every frame
@@ -271,7 +290,11 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
 			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,50,3];		// Position of camera relative to the actor
-			indiCam_var_cameraSpeed = ( 0.2 / ((speed indiCam_actor) / 200) );	// Defines how tightly the camera will track it's defined position
+			if (isNil {missionNamespace getVariable "indiCam_actor"}) then {
+				indiCam_var_cameraSpeed = 0.5;
+			} else {
+				indiCam_var_cameraSpeed = ( 0.2  / (((speed indiCam_actor) / 200) + 0.001) );	// Defines how tightly the camera will track it's defined position
+			};
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.01;			// Defines how tightly the logic will track it's defined position
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at

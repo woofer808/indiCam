@@ -158,8 +158,8 @@ switch (_scriptMode) do {
 											
 										};
 										
-										// This will let the rocket thing happen only once during this scripted scne
-										indiCam_var_scriptedActor removeAllEventHandlers "FiredMan";
+										// This will let the rocket thing happen only once during this scripted scene
+										indiCam_var_scriptedActor removeEventHandler ["FiredMan", _ehFiredMan]; // Thanks to VileAce!
 										
 										// Switch camera target to the fired projectile as soon as it's fired
 										indiCam_camera camSetTarget indiCam_var_tempPos;
@@ -192,7 +192,8 @@ switch (_scriptMode) do {
 							};
 						};
 
-						indiCam_var_scriptedActor removeAllEventHandlers "FiredMan"; // Make sure the eventhandler is removed from the scripted actor after all is said and done
+						// Make sure the eventhandler is removed from the scripted actor after all is said and done
+						indiCam_var_scriptedActor removeEventHandler ["FiredMan", _ehFiredMan]; // Thanks to VileAce!
 
 
 

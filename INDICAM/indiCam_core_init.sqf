@@ -1,48 +1,59 @@
-/*
- * Author: woofer
- * Compile all functions and set all variables from start.
- *
- * Arguments:
- * None
- *
- * Return Value:
- * None
- *
- * Example:
- * call indicam_core_fnc_init
- *
- * Public: No
- */
-
-/*
-	Definitions:
-		- Scene: A predefined camera angle with camera movement along with take time, fov and so on.
-		- Variable names: indiCam_var_variableName
-		- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)
-		- Object names: indiCam_objectName
-*/
-
+//-------------------------------------------------------------------------------------------------------
+//											indiCam, by woofer.
+//
+//										independent cinematic camera									"
+//																										
+//																										
+//	The purpose of the init is to compile all functions and set all variables from start.				
+//																										
+//																										
+//	Definitions:																						
+//	- Scene: A predefined camera angle with camera movement along with take time, fov and so on.		
+//	- Variable names: indiCam_var_variableName															
+//	- Function and script names: indiCam_fnc_functionOrScriptName(.sqf)									
+//	- Object names: indiCam_objectName																	
+//																										
+//-------------------------------------------------------------------------------------------------------
 // Versioning: Significant new functionality adds to the tenth of a version, scene additions and fixes adds to the hundreds
 
-//REMOVED- Neither script nor mod version gives the cameraman an addaction anymore. Use default F1 or set your own key
+
+
+
+// Currently doing:
+
 
 
 /* Changelog version 1.31*/	
 ///		PRIORITIES / DONE
-//TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
-//TODO- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are still working.
-//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post
+//ADDED- Names of players now show in GUI map.
+//FIXED- Manual mode camera no longer resets after scene timer runs out or camera gets too far away from actor or actor gets hidden.
+//ADDED- Added CBA keybinds for when CBA is loaded. Without CBA, the legacy keypresses are used.
+//FIXED- Manual camera now targets the actual actor, not any proxy objects.
+//REMOVED- Neither script nor mod version gives the cameraman an addaction anymore. Use default F1 or set your own key
+//ADDED- Added a centralized debug system. Replacement of old system in code will be ongoing.
+//ADDED- Various new scenes to each of the vehicle types.
+//ADDED- New scenetype "stationaryCameraAbsoluteZ" for absolute altitude instead of relative to actor.
+//FIXED- Switching actor will now reset the automatic actor switch timer
+//FIXED- Some slight code optimization
+//FIXED- Zero divisor math error in a helicopter scene fixed. Thanks to Damien!
+//FIXED- Scene followTight is now used for infantry at action value 1. Thanks to VileAce!
+//FIXED- Automatic switching of random unit within distance from current actor always picked the current actor. Thanks to VileAce!
+//FIXED- removeAllEventHandlers was causing issues with other mods running in special scene atGuy - code fix by VileAce!
+//FIXED- Removed some comments used with the comment=""-command (Thanks to Brett)
 
-//TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.﻿﻿
-//TODO- F3 should reset auto switch timer for actor
+
+
+//TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
+//TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Thanks for this not so informative comment, past me.
+
+//TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
-//TODO- Make names of players show in GUI map
 //TODO- Make sure the camera keeps following actors after death.
 //TODO- Add "persistent actor" function if that's not already in by default by selecting "none" in randomizer. It would then need something else to do while respawning and come back to the same player unit after respawn.
 //TODO- Would be totally cool with a flashlight type function as with Zeus or the editor. Maybe spawn a local light above the actor?
 //TODO- Preventing scene switching doesn't seem to prevent scene switching by obscured actor. Are we fine with that?
 
-///		SCRIPTED SCENES
+///		SCRIPTED SCENES 
 //TODO- How do the new special scene actor stuff work alongside unconcious units with ace or reggs script?
 //TODO- Add "killer" as scripted scene as a death scene. Could be made to be shown on every occation in GUI.
 //TODO- Detect incoming mortar fire and switch to show an overview of the location at impact
@@ -51,6 +62,7 @@
 //TODO- Scripted scene: DropOff - Keep track of helicopters when they have low velocity < 70 and are close to ground (< 10m) and in camera vincinity
 
 ///		BACKLOG
+//TODO- Fog of war functionality. A checkbox in the GUI that only shows enemies that current camera side knowsAbout.
 //TODO- Might need to spawn a background function that keeps track of indiCam_running variable
 //TODO- Scripted scenes that makes jumps to close-by animals
 //TODO- Make a scene switch if the camera is stuck to the ground for too long
@@ -105,193 +117,254 @@
 //IDEA- A scene that checks for building windows around the actor and attempts to look through from the inside.
 //IDEA- Maybe use something like {_justPlayers = allPlayers - entities "HeadlessClient_F";} to find players instead of what's used now
 
-/* ----------------------------------------------------------------------------------------------------
-											init
-   ---------------------------------------------------------------------------------------------------- */
 
+// ------------------------------------------------------------------------------------------------------
+//													init												
+//-------------------------------------------------------------------------------------------------------
 // indiCam script should only init on player clients or on player hosts.
 if (!hasInterface) exitWith {};
 
-// Player is now either not spawned or has died
-waitUntil {alive player};
-
-indiCam_actor = player;
-
-// Read up on all the hottest settings
-// Execute this during camera operation to reset to normal
-_settings = [] execVM "INDICAM\indiCam_core_settings.sqf";
-waitUntil {scriptDone _settings};
+// Start of init function
+indiCam_fnc_init = {	// Here to suspend initialization if there is a mission control box.
 
 
-// initialize the graphical user interface
-[] execVM "INDICAM\indiCam_gui\indiCam_gui_init.sqf";
+
+	// Player is now either not spawned or has died
+	waitUntil {alive player};
 
 
-// Initialize running modes - possible modes are [default, interrupt, scripted, manual, off]
-indiCam_var_requestMode = "off";
-indiCam_var_currentMode = "off";
-indiCam_running = false;
 
-// Initialize the diary entry
-[] execVM "INDICAM\indiCam_core_diary.sqf";
+	indiCam_actor = player;
 
-/* ----------------------------------------------------------------------------------------------------
-												Variables
-   ---------------------------------------------------------------------------------------------------- */
-
-// Actor management
-indiCam_var_enterVehicleEH = 0;				// Eventhandler for actorManager
-indiCam_var_exitVehicleEH = 0;				// Eventhandler for actorManager
-indiCam_var_actorFiredEH = 0;				// Eventhandler for actorManager
-indiCam_var_actorDeletedEH = 0;				// Eventhandler for actorManager
-indiCam_var_actorKilledEH = 0;				// Eventhandler for actorManager
-indiCam_var_actorAutoSwitch = false;
+	// Read up on all the hottest settings
+	// Execute this during camera operation to reset to normal
+	_settings = [] execVM "INDICAM\indiCam_core_settings.sqf";
+	waitUntil {scriptDone _settings};
 
 
-// Initialize switching timers
-indiCam_var_sceneTimer = time + 9999999;
-indiCam_var_actorTimer = time + 9999999;
-indiCam_var_sceneSelectRunning = false;
-
-// Camera variables
-indiCam_var_activeEventHandlers = [];
-
-// More variables
-indiCam_var_mapselectAll = false;
-indiCam_var_mapOpened = false;
-indiCam_var_sceneList = [];
-indiCam_var_actionValue = 0;
-
-// Scene selection
-indiCam_var_scene = "";
-indiCam_var_sceneType = "";
-indiCam_var_previousScene = "none";
-
-indiCam_var_takeTime = 30;
-indiCam_var_cameraMovementRate = 0.5;
-indiCam_var_cameraPos = (getPos player);
-indiCam_var_targetPos = (getPos player);
-indiCam_var_cameraSpeed = 1;
-indiCam_var_targetSpeed = 1;
-indiCam_var_cameraTarget = player;
-indiCam_var_cameraTargetScripted = player;
-indiCam_var_cameraFov = 0.74;
-indiCam_var_maxDistance = 5000;
-indiCam_var_ignoreHiddenActor = false;
-indiCam_var_cameraType = "";
-indiCam_var_sceneHold = false;
-
-indiCam_appliedVar_takeTime = indiCam_var_takeTime;
-indiCam_appliedVar_cameraMovementRate = indiCam_var_cameraMovementRate;
-indiCam_appliedVar_cameraPos = indiCam_var_cameraPos;
-indiCam_appliedVar_targetPos = indiCam_var_targetPos;
-indiCam_appliedVar_cameraSpeed = indiCam_var_cameraSpeed;
-indiCam_appliedVar_targetSpeed = indiCam_var_targetSpeed;
-indiCam_appliedVar_cameraTarget = indiCam_var_cameraTarget;
-indiCam_appliedVar_cameraTargetScripted = indiCam_var_cameraTargetScripted;
-indiCam_appliedVar_cameraFov = indiCam_var_cameraFov;
-indiCam_appliedVar_maxDistance = indiCam_var_maxDistance;
-indiCam_appliedVar_ignoreHiddenActor = indiCam_var_ignoreHiddenActor;
-indiCam_appliedVar_cameraType = indiCam_var_cameraType;
-
-// Advanced scene scripts
-indiCam_scene_scriptedScene = {};
-indiCam_var_scriptedSceneRunning = false;
-indiCam_var_scriptedSceneType = "";
-indiCam_var_unitCooldown = [];
-indiCam_var_tempPos = [0,0,0];
-indiCam_var_launcherScanArray = [];
-
-// GUI controls
-indiCam_var_checkBoxOverride = false;
-indiCam_var_durationOverride = 30;
-indiCam_var_actorAutoSwitchCheckboxState = false;
-
-indiCam_var_SceneOverrideState = false;
-indiCam_var_guiSceneOverrideDuration = 30;
-indiCam_var_sceneSwitch = true;
-
-/* ----------------------------------------------------------------------------------------------------
-											functions
-   ---------------------------------------------------------------------------------------------------- */
-// Compile functions as a function. Makes it possible to compile on the fly
-indiCam_fnc_compileAll = {
-	indiCam_core_main = compile preprocessFileLineNumbers "INDICAM\indiCam_core_main.sqf";
-	indiCam_core_mainLoop = compile preprocessFileLineNumbers "INDICAM\indiCam_core_mainLoop.sqf";
-	indiCam_core_inputControls = compile preprocessFileLineNumbers "INDICAM\indiCam_core_inputControls.sqf";
-	
-	indiCam_fnc_sceneTest = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_sceneTest.sqf";
-	indiCam_fnc_actorSwitch = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorSwitch.sqf";
-	indiCam_fnc_actorList = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorList.sqf";
-	indiCam_fnc_distanceSort = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_distanceSort.sqf";
-	indiCam_fnc_situationCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_situationCheck.sqf";
-	indiCam_fnc_visibilityCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_visibilityCheck.sqf";
-	indiCam_fnc_environmentCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_environmentCheck.sqf";
-	indiCam_fnc_visionMode = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_visionMode.sqf";
-	indiCam_fnc_launcherScan = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_launcherScan.sqf";
-	indiCam_fnc_unitCooldown = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_unitCooldown.sqf";
-	indiCam_fnc_followLogicFPS = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicFPS.sqf";
-	indiCam_fnc_followLogicTurretAim = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicTurretAim.sqf";
-	indiCam_fnc_twopointLOS = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_twopointLOS.sqf";
-	
-	indiCam_scene_selectMain = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_selectMain.sqf";
-	indiCam_scene_selectScripted = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_selectScripted.sqf";
-	indiCam_scene_mainBoat = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainBoat.sqf";
-	indiCam_scene_mainCar = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainCar.sqf";
-	indiCam_scene_mainFoot = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainFoot.sqf";
-	indiCam_scene_mainHelicopter = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainHelicopter.sqf";
-	indiCam_scene_mainPlane = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainPlane.sqf";
-	indiCam_scene_mainTank = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainTank.sqf";
-	
-	if (indiCam_debug) then {systemChat "-- scripts compiled --"};
-};
-[] call indiCam_fnc_compileAll;
-
-// Set the player as the initial actor by calling the actor switch script thereby setting the proper eventhandlers
-// Always use this script to set a new actor. Don't use the regular actor for scripted scenes.
-[player] call indiCam_fnc_actorSwitch;
+	// initialize the graphical user interface
+	[] execVM "INDICAM\indiCam_gui\indiCam_gui_init.sqf";
 
 
-// This function removes eventhandlers of certain types stored in the global variable
-indiCam_fnc_clearEventhandlers = {
-	while { !(indiCam_var_activeEventHandlers isEqualTo []) } do {	// This extra while loop ensures array is empty
-		{
-			[_x, "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
-			indiCam_var_activeEventHandlers = indiCam_var_activeEventHandlers - [_x];
-		} forEach indiCam_var_activeEventHandlers;
+	// Initialize running modes - possible modes are [default, interrupt, scripted, manual, off]
+	indiCam_var_requestMode = "off";
+	indiCam_var_currentMode = "off";
+	indiCam_running = false;
+
+	// Initialize the diary entry
+	[] execVM "INDICAM\indiCam_core_diary.sqf";
+
+
+	//-------------------------------------------------------------------------------------------------------
+	//												variables												
+	//-------------------------------------------------------------------------------------------------------
+	// Actor management
+	indiCam_var_enterVehicleEH = 0;				// Eventhandler for actorManager
+	indiCam_var_exitVehicleEH = 0;				// Eventhandler for actorManager
+	indiCam_var_actorFiredEH = 0;				// Eventhandler for actorManager
+	indiCam_var_actorDeletedEH = 0;				// Eventhandler for actorManager
+	indiCam_var_actorKilledEH = 0;				// Eventhandler for actorManager
+	indiCam_var_actorAutoSwitch = false;
+
+
+	// Initialize switching timers
+	indiCam_var_sceneTimer = time + 9999999;
+	indiCam_var_actorTimer = time + 9999999;
+	indiCam_var_sceneSelectRunning = false;
+
+	// Camera variables
+	indiCam_var_activeEventHandlers = [];
+
+	// More variables
+	indiCam_var_mapselectAll = false;
+	indiCam_var_mapOpened = false;
+	indiCam_var_sceneList = [];
+	indiCam_var_actionValue = 0;
+
+	// Scene selection
+	indiCam_var_scene = "";
+	indiCam_var_sceneType = "";
+	indiCam_var_previousScene = "none";
+
+	indiCam_var_takeTime = 30;
+	indiCam_var_cameraMovementRate = 0.5;
+	indiCam_var_cameraPos = (getPos player);
+	indiCam_var_targetPos = (getPos player);
+	indiCam_var_cameraSpeed = 1;
+	indiCam_var_targetSpeed = 1;
+	indiCam_var_cameraTarget = player;
+	indiCam_var_cameraTargetScripted = player;
+	indiCam_var_cameraFov = 0.74;
+	indiCam_var_maxDistance = 5000;
+	indiCam_var_ignoreHiddenActor = false;
+	indiCam_var_cameraType = "";
+	indiCam_var_sceneHold = false;
+
+	indiCam_appliedVar_takeTime = indiCam_var_takeTime;
+	indiCam_appliedVar_cameraMovementRate = indiCam_var_cameraMovementRate;
+	indiCam_appliedVar_cameraPos = indiCam_var_cameraPos;
+	indiCam_appliedVar_targetPos = indiCam_var_targetPos;
+	indiCam_appliedVar_cameraSpeed = indiCam_var_cameraSpeed;
+	indiCam_appliedVar_targetSpeed = indiCam_var_targetSpeed;
+	indiCam_appliedVar_cameraTarget = indiCam_var_cameraTarget;
+	indiCam_appliedVar_cameraTargetScripted = indiCam_var_cameraTargetScripted;
+	indiCam_appliedVar_cameraFov = indiCam_var_cameraFov;
+	indiCam_appliedVar_maxDistance = indiCam_var_maxDistance;
+	indiCam_appliedVar_ignoreHiddenActor = indiCam_var_ignoreHiddenActor;
+	indiCam_appliedVar_cameraType = indiCam_var_cameraType;
+
+	// Advanced scene scripts
+	indiCam_scene_scriptedScene = {};
+	indiCam_var_scriptedSceneRunning = false;
+	indiCam_var_scriptedSceneType = "";
+	indiCam_var_unitCooldown = [];
+	indiCam_var_tempPos = [0,0,0];
+	indiCam_var_launcherScanArray = [];
+
+	// GUI controls
+	indiCam_var_checkBoxOverride = false;
+	indiCam_var_durationOverride = 30;
+	indiCam_var_actorAutoSwitchCheckboxState = false;
+
+	indiCam_var_SceneOverrideState = false;
+	indiCam_var_guiSceneOverrideDuration = 30;
+	indiCam_var_sceneSwitch = true;
+
+	// Variables to fix bugs
+	indiCam_var_visionIndex = 0;
+
+	//-------------------------------------------------------------------------------------------------------
+	//												functions												
+	//-------------------------------------------------------------------------------------------------------
+	// Compile functions as a function. Makes it possible to compile on the fly
+	indiCam_fnc_compileAll = {
+		indiCam_core_main = compile preprocessFileLineNumbers "INDICAM\indiCam_core_main.sqf";
+		indiCam_core_mainLoop = compile preprocessFileLineNumbers "INDICAM\indiCam_core_mainLoop.sqf";
+		indiCam_core_inputControls = compile preprocessFileLineNumbers "INDICAM\indiCam_core_inputControls.sqf";
+		
+		indiCam_fnc_debug = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_debug.sqf";
+		indiCam_fnc_sceneTest = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_sceneTest.sqf";
+		indiCam_fnc_actorSwitch = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorSwitch.sqf";
+		indiCam_fnc_actorList = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorList.sqf";
+		indiCam_fnc_distanceSort = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_distanceSort.sqf";
+		indiCam_fnc_situationCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_situationCheck.sqf";
+		indiCam_fnc_visibilityCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_visibilityCheck.sqf";
+		indiCam_fnc_environmentCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_environmentCheck.sqf";
+		indiCam_fnc_visionMode = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_visionMode.sqf";
+		indiCam_fnc_manualMode = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_manualMode.sqf";
+		indiCam_fnc_launcherScan = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_launcherScan.sqf";
+		indiCam_fnc_unitCooldown = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_unitCooldown.sqf";
+		indiCam_fnc_followLogicFPS = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicFPS.sqf";
+		indiCam_fnc_followLogicTurretAim = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicTurretAim.sqf";
+		indiCam_fnc_twopointLOS = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_twopointLOS.sqf";
+		
+		indiCam_scene_selectMain = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_selectMain.sqf";
+		indiCam_scene_selectScripted = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_selectScripted.sqf";
+		indiCam_scene_mainBoat = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainBoat.sqf";
+		indiCam_scene_mainCar = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainCar.sqf";
+		indiCam_scene_mainFoot = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainFoot.sqf";
+		indiCam_scene_mainHelicopter = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainHelicopter.sqf";
+		indiCam_scene_mainPlane = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainPlane.sqf";
+		indiCam_scene_mainTank = compile preprocessFileLineNumbers "INDICAM\scenes\indiCam_scene_mainTank.sqf";
+		
+		if (indiCam_debug) then {systemChat "-- scripts compiled --"};
 	};
+	[] call indiCam_fnc_compileAll;
 
-};
-
-
-// Give the player the option to start indiCam UI
-// Currently temporary. Make a script that makes sure that the player has these on him even after remoting with AIC
-// player addAction ["indiCam", "_handle=createdialog 'indiCam_gui_dialogMain'"];
+	// Set the player as the initial actor by calling the actor switch script thereby setting the proper eventhandlers
+	// Always use this script to set a new actor. Don't use the regular actor for scripted scenes.
+	[player] call indiCam_fnc_actorSwitch;
 
 
-
-
-
-// Define the function that is to run when the CBA bound key is pressed.
-indiCam_fnc_keyGUI = {
-	// Only open the dialog if it's not already open
-	if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
-};	
-
-/* DIK keycodes
-https://community.bistudio.com/wiki/DIK_KeyCodes
-DIK_F1	0x3B, DEC_F1 59
-*/
-if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {		// Only use CBA keybindings if CBA is loaded
-	["indiCam","GUI_key", "show/hide indiCam controls", {_this call indiCam_fnc_keyGUI}, {}, [59, [false, false, false]]] call CBA_fnc_addKeybind;
-} else {																// If CBA isn't present, use the legacy input control
-	// Legacy key input is currently located in indiCam_gui_init.sqf
-	systemChat "--> indiCam: CBA not loaded, using key for SelectGroupUnit1 (usually F1)";
-	[] spawn {
-		while {true} do {
-			waitUntil {inputAction "SelectGroupUnit1" > 0};
-			_handle=createdialog "indiCam_gui_dialogMain";
-			waitUntil {inputAction "SelectGroupUnit1" <= 0};
+	// This function removes eventhandlers of certain types stored in the global variable
+	indiCam_fnc_clearEventhandlers = {
+		while { !(indiCam_var_activeEventHandlers isEqualTo []) } do {	// This extra while loop ensures array is empty
+			{
+				[_x, "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+				indiCam_var_activeEventHandlers = indiCam_var_activeEventHandlers - [_x];
+			} forEach indiCam_var_activeEventHandlers;
 		};
+
 	};
+
+	/*
+	// Define the function that is to run when the CBA bound key is pressed.
+	indiCam_fnc_keyGUI = {
+		// Only open the dialog if it's not already open
+		if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
+	};
+	*/
+
+	
+
+	// Only init the GUI key if it's not already initialized
+	if (isNil {missionNamespace getVariable "indiCam_var_inizialized"}) then {
+		missionNamespace setVariable ["indiCam_var_inizialized", true];
+
+
+		//-------------------------------------------------------------------------------------------------------
+		//	Stop camera / Open GUI - F1-key																		
+		//-------------------------------------------------------------------------------------------------------
+
+		// Define the function that is to run when the CBA bound key is pressed.
+		indiCam_fnc_keyGUI = {
+			// Only open the dialog if it's not already open
+			if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
+		};	
+
+
+		// Assign the key depending on CBA being loaded or not
+		if (isClass(configFile >> "CfgPatches" >> "cba_main_a3")) then {
+
+			// [ "addonName" , "actionID" , ["pretty name","tooltip"] , {downCode} , {upCode} ]
+			["indiCam","guiKey", ["indiCam control windows", "Show or hide indiCam controls."], {_this spawn indiCam_fnc_keyGUI}, {}, [59, [false, false, false]]] call CBA_fnc_addKeybind;
+
+		} else {
+			
+			// This key needs to be persistent
+			[] spawn {
+				while {true} do {
+					waituntil {(inputAction "SelectGroupUnit1" > 0)};
+					["F1-key pressed.",true,true] call indiCam_fnc_debug;
+					[] spawn indiCam_fnc_keyGUI;
+					waituntil {inputAction "SelectGroupUnit1" <= 0};
+				};
+			};
+		};
+
+	};
+
+
+
+}; // end of init function
+
+
+// If there is an object in the mission called indiCam_missionControl that will get the action menu option to initialize at will
+// Perfect for when only a specific user should have access to the indiCam script version
+// This part makes sure indiCam only initializes if there is no mission control box
+if (isNil {missionNamespace getVariable "indiCam_missionControl"}) then {
+
+	[] spawn indiCam_fnc_init; 												// Initialize indiCam if no box was found
+	
+} else {
+	["Mission control box found.",true,true] call indiCam_fnc_debug;		// make debug debug
+	
+	indiCam_missionControl addAction ["start indiCam", {					// Put the addaction to the object
+		
+		[] spawn {
+			[] spawn indiCam_fnc_init;										// initialize indiCam scripts
+			hintSilent "indiCam starting...";
+			sleep 1;
+			createDialog "indiCam_gui_dialogMain";
+			hintSilent "indiCam initialized";
+		};
+		
+	}];
+
+
+
+
+
 };
+
+

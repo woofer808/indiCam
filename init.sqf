@@ -1,6 +1,5 @@
 
 
-//[] execVM "INDICAM\indiCam_init.sqf"; // initializes indiCam
 [] execVM "INDICAM\indiCam_core_init.sqf"; // initializes indiCam
 
 
