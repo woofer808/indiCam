@@ -49,25 +49,27 @@ switch (_case) do {
 
 	case 0: { // Only players of all sides anywhere
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between only players of all sides.", _case];};
-				_newActor = selectRandom allPlayers;
+				// Sort out cameraman from selection, but only if he's not alone
+				if (count (allPlayers - [player]) > 0) then {_newActor = selectRandom (allPlayers - [player])};
+				
 			};
 			
 	case 1: { // Closest unit of any side 
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to closest unit from any side.", _case];};
-				_unitArray = (allUnits - [player,indiCam_actor]);
+				_unitArray = (allUnits - [player,indiCam_actor]); // Sorts out cameradude and the current actor
 				_sortedArray = [_unitArray,indiCam_actor,-1] call indiCam_fnc_distanceSort;
 				_newActor = _sortedArray select 0;
 			};
 			
 	case 2: { // Any unit of any side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between all units in mission.", _case];};
-				_unitArray = (allUnits - [player]);
+				_unitArray = (allUnits - [player]); // Sort out cameraman
 				_newActor = selectRandom _unitArray;
 			};
 			
 	case 3: { // Random unit within distance of all sides
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to units on any side within given distance.", _case];};
-				_unitArray = (allUnits - [player]);
+				_unitArray = (allUnits - [player]); // Sort out cameraman
 				private _distance = 500;
 
 				while { ((count _sortedArray) < 1) && (_distance < 50000) } do { // Altis terrain is 47000m from corner to corner
@@ -81,7 +83,7 @@ switch (_case) do {
 			
 	case 4: { // Only players on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between only players on current side.", _case];};
-				_unitArray = allPlayers - [player];
+				_unitArray = allPlayers - [player]; // Sort out cameraman
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
 				} forEach _unitArray;
@@ -91,7 +93,7 @@ switch (_case) do {
 			
 	case 5: { // Closest unit on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to closest unit from current side.", _case];};
-				_unitArray = allUnits - [player,indiCam_actor];
+				_unitArray = allUnits - [player,indiCam_actor]; // Sorts out cameradude and the current actor
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
 				} forEach _unitArray;
@@ -100,7 +102,7 @@ switch (_case) do {
 			
 	case 6: { // All units on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between all on current side.", _case];};
-				_unitArray = allUnits - [player,indiCam_actor];
+				_unitArray = allUnits - [player,indiCam_actor]; // Sorts out cameradude and the current actor
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
 				} forEach _unitArray;
@@ -110,7 +112,7 @@ switch (_case) do {
 	case 7: { // Random unit search started within distance actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to units on current side within given distance.", _case];};
 				
-				_unitArray = allUnits - [player,indiCam_actor];
+				_unitArray = allUnits - [player,indiCam_actor]; // Sorts out cameradude and the current actor
 
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
@@ -132,7 +134,7 @@ switch (_case) do {
 	case 8: { // Random unit within group of current unit
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between units in current group.", _case];};
 				_unitArray = (units group indiCam_actor);
-				_unitArray = _unitArray - [player];
+				_unitArray = _unitArray - [player]; // Take out cameraman from array
 				
 				if ( (count _unitArray) > 0 ) then {_newActor = selectRandom _unitArray} else {/*No other unit was to be found, do nothing*/ };
 				

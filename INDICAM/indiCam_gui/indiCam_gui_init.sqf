@@ -16,6 +16,9 @@ indiCam_var_guiActorText = indiCam_actor;
 indiCam_fnc_guiDebug = {};
 indiCam_var_guiDebugCheckboxState = false;
 
+// Chat window
+indiCam_fnc_guiChatWindow = {};
+indiCam_var_guiChatWindowState = false;
 
 // Scene hold
 indiCam_fnc_guiSceneHold = {};
@@ -90,6 +93,7 @@ indiCam_id_guiActorAutoswitchSliderText = 828;
 indiCam_id_guiScriptedScenes = 829;
 indiCam_id_guiScriptedSceneSlider = 830;
 indiCam_id_guiScriptedSceneText = 831;
+indiCam_id_guiChatWindow = 833;
 
 
 /* ----------------------------------------------------------------------------------------------------
