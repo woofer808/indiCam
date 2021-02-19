@@ -1,8 +1,6 @@
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "								initialization of camera and main loop									";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* -------------------------------------------------------------------------------------------------------
+* 	initialization of camera and main loop
+*  ------------------------------------------------------------------------------------------------------- */
 indiCam_running = true;
 
 // Initialize the keyboard controls
@@ -44,11 +42,9 @@ if (indiCam_devMode) then {
 };
 
 
-
-comment "-------------------------------------------------------------------------------------------------------";
-comment "								initialization of background functions									";
-comment "-------------------------------------------------------------------------------------------------------";
-
+/* -------------------------------------------------------------------------------------------------------
+* 	initialization of background functions
+*  ------------------------------------------------------------------------------------------------------- */
 // Actor auto switching
 if (indiCam_var_actorAutoSwitch) then { // If actor autoswtiching is on, reset the timer with the current duration
 	indiCam_var_actorTimer = time + (indiCam_var_actorSwitchSettings select 4);

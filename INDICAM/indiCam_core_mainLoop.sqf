@@ -99,6 +99,9 @@ if (indiCam_var_currentMode != indiCam_var_requestMode) then {
 			
 			// Stop the main loop by killing the eventhandler that runs this function
 			["indiCam_id_mainLoop", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
+
+			// Make sure chat window is visible when camera isn't operating
+				showChat true;
 		};
 	
 	}; // End of switch

@@ -21,16 +21,27 @@
 
 // Currently doing:
 // - Can't seem to compile with 	#include "\a3\editor_f\Data\Scripts\dikCodes.h"  in config.cpp
+// - Better scenes for foot mobiles
+// - Listening to TFAR and ACRE radios
+		/*
+		A-a-ron Today at 6:45 PM
+		I know it was brought up/hinted at before but have you looked into the ACRE Spectator Display's for listening to radio/local comms.
+		https://acre2.idi-systems.com/wiki/frameworks/spectator-displays
+		*/
 
 
 /* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
-
-
+//TODO- Make sure that headless clients and dedicated servers are excluded from actor randomizations
+//TODO- More close-up views of foot mobiles during low intensity fighting There are too many far away shots going on
+//TODO- Balance action shots for being around units that are shooting alot.
+//DONE- Cameradude wasn't excluded from "only players" actor randomization
+//FIXED- Chat is now hidden by default during camera operation
+//ADDED- Checkbox in gui for showing chat during camera operation
+//FIXED- Purged more usages of comment command
 
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
 //TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Thanks for this not so informative comment, past me.
-
 //TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
 //TODO- Make sure the camera keeps following actors after death.

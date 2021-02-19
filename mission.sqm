@@ -8,7 +8,7 @@ class EditorData
 	toggles=9;
 	class ItemIDProvider
 	{
-		nextID=2513;
+		nextID=2515;
 	};
 	class MarkerIDProvider
 	{
@@ -16,10 +16,10 @@ class EditorData
 	};
 	class Camera
 	{
-		pos[]={17994.814,297.82391,11160.387};
-		dir[]={0.51493061,-0.68581229,0.5143066};
-		up[]={0.48523688,0.72777766,0.484649};
-		aside[]={0.70667869,-7.4855052e-008,-0.70753616};
+		pos[]={22930.443,14.334049,18879.07};
+		dir[]={0.69955099,-0.68561339,0.20146853};
+		up[]={0.65884179,0.72796077,0.18974416};
+		aside[]={0.2767517,2.2992026e-008,-0.96095407};
 	};
 };
 binarizationWanted=0;
@@ -48,14 +48,14 @@ class AddonsMetaData
 		class Item1
 		{
 			className="A3_Props_F_Enoch";
-			name="Arma 3 Enoch - Decorative and Mission Objects";
+			name="Arma 3 Contact Platform - Decorative and Mission Objects";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
 		class Item2
 		{
 			className="A3_Missions_F_Oldman";
-			name="Arma 3 Oldman - Playable Content";
+			name="Arma 3 Old Man - Playable Content";
 			author="Bohemia Interactive";
 			url="https://www.arma3.com";
 		};
@@ -116,7 +116,7 @@ class Mission
 	};
 	class Entities
 	{
-		items=15;
+		items=16;
 		class Item0
 		{
 			dataType="Group";
@@ -1206,6 +1206,78 @@ class Mission
 			{
 			};
 			id=2508;
+		};
+		class Item15
+		{
+			dataType="Group";
+			side="West";
+			class Entities
+			{
+				items=1;
+				class Item0
+				{
+					dataType="Object";
+					class PositionInfo
+					{
+						position[]={22938.012,5.2192655,18890.311};
+						angles[]={0,3.0243762,0};
+					};
+					side="West";
+					flags=7;
+					class Attributes
+					{
+						isPlayable=1;
+					};
+					id=2514;
+					type="B_Soldier_A_F";
+					class CustomAttributes
+					{
+						class Attribute0
+						{
+							property="speaker";
+							expression="_this setspeaker _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"STRING"
+										};
+									};
+									value="Male05ENG";
+								};
+							};
+						};
+						class Attribute1
+						{
+							property="pitch";
+							expression="_this setpitch _value;";
+							class Value
+							{
+								class data
+								{
+									class type
+									{
+										type[]=
+										{
+											"SCALAR"
+										};
+									};
+									value=1.01;
+								};
+							};
+						};
+						nAttributes=2;
+					};
+				};
+			};
+			class Attributes
+			{
+			};
+			id=2513;
 		};
 	};
 };

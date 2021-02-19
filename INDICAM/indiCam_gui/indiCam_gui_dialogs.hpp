@@ -22,7 +22,8 @@
 #define indiCam_id_guiScriptedScenes 829
 #define indiCam_id_guiScriptedSceneSlider 830
 #define indiCam_id_guiScriptedSceneText 831
-
+// 832 seems to be taken by Niipaa's workshop or something
+#define indiCam_id_guiChatWindow 833
 
 // Text size
 #define TEXT_SIZE_LARGE (((((safezoneW / safezoneH) min 1.2) / 1.2) / 25) * 1)
@@ -161,7 +162,28 @@ class indiCam_gui_dialogMain {
 		};
 
 		
+		////////////////// Chat window //////////////////
 		
+		class indiCam_gui_guiChatWindowCheckbox: indiCam_RscCheckbox {
+			idc = indiCam_id_guiChatWindow;
+			text = "Chat window";
+			x = (0.42 + 0.12) * safezoneW + safezoneX;
+			y = 0.643 * safezoneH + safezoneY;
+			tooltip = "Controls if chat window is visible during camera operation";
+			onCheckedChanged = "[] call indiCam_fnc_guiChatWindow";
+			
+		};
+		
+		class indiCam_gui_textChatWindow: indiCam_RscText {
+			idc = -1;
+			text = "show chat window";
+			x = (0.3 + 0.2) * safezoneW + safezoneX;
+			y = 0.65 * safezoneH + safezoneY;
+			w = 0.045 * safezoneW;
+			h = 0.02 * safezoneH;
+			tooltip = "Controls if chat window is visible during camera operation";
+		};
+
 		
 		
 		////////////////// Actor auto switch //////////////////
