@@ -19,6 +19,7 @@
 [] spawn {
 	sleep 1;
 	indiCam_devMode = false; // false will use compiled scripts
+
 	systemChat format ["DevMode %1...",indiCam_devMode];
 };
 

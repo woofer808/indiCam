@@ -112,12 +112,12 @@ indiCam_fnc_guiDebug = {
    ---------------------------------------------------------------------------------------------------- */
 // Upon opening of gui, let the control show the current selected value
 private _chatWindow = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiChatWindow; // Define the displaycontrol
-if (indiCam_var_guiChatWindowState) then {
-	// Set the checkbox to checked
-	_chatWindow cbSetChecked true; // Set the stored value
+if (indiCam_var_guiChatWindowState || indicam_debug) then {
+	// Set the checkbox to checked if the chat is supposed to be shown during camera operation
+	_chatWindow cbSetChecked true;
 } else {
 	// Set the checkbox to unchecked
-	_chatWindow cbSetChecked false; // Set the stored value
+	_chatWindow cbSetChecked false;
 };
 
 
@@ -131,7 +131,8 @@ indiCam_fnc_guiChatWindow = {
 		systemChat "Chat window enabled";
 	} else {
 		indiCam_var_guiChatWindowState = false;
-		showChat false;
+		if (indiCam_running) then {showChat false};
+		systemChat "Chat window disabled"
 	};
 
 };

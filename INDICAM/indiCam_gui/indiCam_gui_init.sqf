@@ -10,15 +10,18 @@ indiCam_fnc_guiActorText = {};
 indiCam_var_guiActorText = indiCam_actor;
 
 
-
-
 // Debug
 indiCam_fnc_guiDebug = {};
 indiCam_var_guiDebugCheckboxState = false;
 
 // Chat window
 indiCam_fnc_guiChatWindow = {};
-indiCam_var_guiChatWindowState = false;
+if (indiCam_devMode || indiCam_debug) then {
+	indiCam_var_guiChatWindowState = true;
+} else {
+	indiCam_var_guiChatWindowState = false;
+};
+
 
 // Scene hold
 indiCam_fnc_guiSceneHold = {};

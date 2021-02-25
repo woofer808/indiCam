@@ -59,7 +59,7 @@ if ( ((getPos vehicle indiCam_actor) select 2) < 3 ) then { // Aircraft on groun
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,30,3];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.1;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -164,7 +164,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 3) && (((getPos vehicle indiCa
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 15;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,30,3];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.1;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -244,7 +244,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			indiCam_var_targetSpeed = 0.3;			// Defines how tightly the logic will track it's defined position
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
 			indiCam_var_cameraFov = random [0.15,0.4,0.15];			// Field of view, standard Arma FOV is 0.74
-			indiCam_var_maxDistance = 2000;			// Max distance between actor and camera before scene switches
+			indiCam_var_maxDistance = 1000;			// Max distance between actor and camera before scene switches
 			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
 			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
 		}; // end of case
@@ -253,7 +253,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-1,-15,3];	// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.05;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,10,2];		// Position of camera target relative to the actor
@@ -269,7 +269,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			_posX = random [-4,0,4]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = -50; 							// Specifies the range for the camera position to the front and back of the actor
 			_posZ = 2;								// Specifies the range for the camera position vertically from the actor
@@ -288,7 +288,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 15;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,50,3];		// Position of camera relative to the actor
 			if (isNil {missionNamespace getVariable "indiCam_actor"}) then {
 				indiCam_var_cameraSpeed = 0.5;
@@ -328,7 +328,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 15) && (((getPos vehicle indiC
 			// Stationary camera in the sky looking down
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 12;				// Time after which a new scene will be selected
 			_posX = selectRandom [random [-100,-20,-150],random [20,100,20]]; 	// Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [random [-100,-20,-150],random [20,100,20]]; 	// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [100,150,200];				// Specifies the range for the camera position vertically from the actor
@@ -397,7 +397,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 600) ) then { // Aircraft high
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 12;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,150,3];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.01;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -414,7 +414,7 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 600) ) then { // Aircraft high
 			// Regular stationary camera tracking a logic target around the actor
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 15;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 12;				// Time after which a new scene will be selected
 			_posX = selectRandom [random [-80,-5,-80],random [5,80,5]]; 	// Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [random [-150,-20,-150],random [20,150,20]]; 	// Specifies the range for the camera position to the front and back of the actor
 			_posZ = selectRandom [random [-50,-5,-50],random [5,30,5]];	// Specifies the range for the camera position vertically from the actor

@@ -101,7 +101,8 @@ if (indiCam_var_currentMode != indiCam_var_requestMode) then {
 			["indiCam_id_mainLoop", "onEachFrame"] call BIS_fnc_removeStackedEventHandler;
 
 			// Make sure chat window is visible when camera isn't operating
-				showChat true;
+			showChat true;
+			
 		};
 	
 	}; // End of switch
@@ -135,8 +136,8 @@ if (indiCam_var_currentMode != indiCam_var_requestMode) then {
 		};
 
 		// This may be a bit overkill. I could just put an eventhandler on the player instead.
+		// camera isn't of much use if the player dies, is it?
 		if (!alive player) then {
-			// camera isn't of much use if the player dies, is it?
 			if (indiCam_debug) then {systemchat "mainLoop --> Cameraman died."};
 			// Set the proper ending condition that all live scripts will be looking for
 			indiCam_var_requestMode = "off";
