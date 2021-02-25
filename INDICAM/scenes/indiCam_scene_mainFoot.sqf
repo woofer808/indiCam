@@ -13,6 +13,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 								"randomWideFar",	// Smooth randomized stationary narrow shots for wide shot scenes
 								"randomNarrowFar",	// Smooth randomized stationary narrow shots for zoomed in scenes
 								"randomNarrowClose",// Smooth randomized stationary wide shots for run-bys
+								"stationaryFrontRandom",// Regular stationary camera tracking a logic target in front of the actor
 								"satellitePerson"	// Satellite type follow camera
 							];
 
@@ -87,7 +88,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			// Stationary camera in the sky looking down
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			_posX = random [-40,0,40]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = random [-40,0,40];				// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [40,60,80];				// Specifies the range for the camera position vertically from the actor
@@ -105,7 +106,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			// Highly positioned follow camera
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 		// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;					// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;					// Time after which a new scene will be selected
 			_posX = random [-15,0,15]; 					// Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [(random [-20,-15,-10]),(random [40,35,30])]; // Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [15,20,25];					// Specifies the range for the camera position vertically from the actor
@@ -141,7 +142,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			// Smooth randomized stationary narrow shots for wide shot scenes
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 15;				// Time after which a new scene will be selected
 			_posX = selectRandom [random [-150,-100,-150],random [-150,-100,-150]]; // Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [random [-150,-100,-150],random [-150,-100,-150]];	// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [20,50,75];				// Specifies the range for the camera position vertically from the actor
@@ -159,7 +160,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			// Smooth randomized stationary narrow shots for zoomed in scenes
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			_posX = selectRandom [random [-150,-100,-150],random [-150,-100,-150]]; // Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [random [-150,-100,-150],random [-150,-100,-150]];	// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [20,50,75];				// Specifies the range for the camera position vertically from the actor
@@ -195,7 +196,7 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			// Satellite type follow camera
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 		// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;					// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;					// Time after which a new scene will be selected
 			_posZ = random [150,175,200];					// Specifies the range for the camera position vertically from the actor
 			indiCam_var_cameraPos = [0.5,-1.5,_posZ];// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.1;				// Defines how tightly the camera will track it's defined position (higher is closer)
@@ -206,6 +207,24 @@ if (indiCam_var_actionValue == 0) then { // Low action value scenes
 			indiCam_var_maxDistance = 1000;				// Max distance between actor and camera before scene switches
 			indiCam_var_ignoreHiddenActor = false;		// True will disable line of sight checks during scene, actor may stay hidden
 			indiCam_var_cameraAttach = false;			// Control whether the camera should be attached to anything
+		}; // end of case
+
+		case "stationaryFrontRandom": {
+			// Regular stationary camera tracking a logic target in front of the actor
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			_posX = random [-2,0,2]; 				// Specifies the range for the camera position sideways to the actor
+			_posY = random [5,20,30];				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [1,2,5];				// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.5,0.74,1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 100;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
 		}; // end of case
 		
 	}; // end of switch
@@ -222,6 +241,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 								"faceCam",			// Advanced FPS-based chase cam with logic target
 								"skyCam",			// Still camera from far above tracking a slow logic
 								"followTight",		// Smooth non-jerky follow cam with closeup
+								"stationaryFrontRandom",// Regular stationary camera tracking a logic target in front of the actor
 								"followClose"		// Close over-shoulder follow
 								
 								];
@@ -232,7 +252,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-1,-5,2.5];	// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,10,2];		// Position of camera target relative to the actor
@@ -248,7 +268,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,-0.5,2];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.3;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0.75,0,1.8];	// Position of camera target relative to the actor
@@ -264,7 +284,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,5,1];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -281,7 +301,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Regular stationary camera tracking a logic target around the actor
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-10,0,2];		// Position of camera relative to the actor
 			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
@@ -297,11 +317,11 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Stationary camera in the sky looking down
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			_posX = random [-40,0,40]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = random [-40,0,40];				// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [40,60,80];				// Specifies the range for the camera position vertically from the actor
-			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];			// Position of camera relative to the actor
 			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.1;			// Defines how tightly the logic will track it's defined position
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
@@ -315,7 +335,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Smooth non-jerky follow cam with closeup
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 		// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;					// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;					// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [0.5,-1.5,2];// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.1;				// Defines how tightly the camera will track it's defined position (higher is closer)
 			indiCam_var_targetPos = [0,-0.5,1.7];			// Position of camera target relative to the actor
@@ -331,7 +351,7 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			// Close over-shoulder follow
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 		// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;					// Time after which a new scene will be selected
+			indiCam_var_takeTime = 40;					// Time after which a new scene will be selected
 			_posX = selectRandom [-0.5,0.5]; 			// Specifies the range for the camera position sideways to the actor
 			_posY = -1; 								// Specifies the range for the camera position to the front and back of the actor
 			
@@ -353,6 +373,24 @@ if (indiCam_var_actionValue == 1) then { // Medium action value scenes
 			indiCam_var_ignoreHiddenActor = false;		// True will disable line of sight checks during scene, actor may stay hidden
 			indiCam_var_cameraAttach = false;			// Control whether the camera should be attached to anything
 		}; // end of case
+
+		case "stationaryFrontRandom": {
+			// Regular stationary camera tracking a logic target in front of the actor
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
+			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 40;				// Time after which a new scene will be selected
+			_posX = random [-5,0,5]; 				// Specifies the range for the camera position sideways to the actor
+			_posY = random [5,10,15];				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [1,2,4];					// Specifies the range for the camera position vertically from the actor
+			indiCam_var_cameraPos = [_posX,_posY,_posZ];			// Position of camera relative to the actor
+			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
+			indiCam_var_cameraFov = random [0.5,0.74,1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 100;			// Max distance between actor and camera before scene switches
+			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
+			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
+		}; // end of case
 		
 	}; // end of switch
 
@@ -364,11 +402,11 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 
 			indiCam_var_scene = selectRandom [ // Choose a random scene from the list
 
-								"standardScene",		// Stationary camera tracking a logic
+								"standardScene",	// Stationary camera tracking a logic
 								"chaseCam",			// Advanced FPS-based chase cam
 								"cheeseCam",		// Advanced FPS-based chase cam with logic target
 								"faceCam",			// Advanced FPS-based chase cam with logic target
-								"lowCloseCam",			// Advanced FPS-based chase cam with logic target
+								"lowCloseCam",		// Advanced FPS-based chase cam with logic target
 								"skyCam"			// Still camera from far above tracking a slow logic
 							];
 
@@ -378,7 +416,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-1,-5,2.5];	// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,10,2];		// Position of camera target relative to the actor
@@ -394,7 +432,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,-0.5,2];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0.75,0,1.8];	// Position of camera target relative to the actor
@@ -410,7 +448,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,5,1];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -427,7 +465,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Regular stationary camera tracking a logic target around the actor
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-10,0,2];		// Position of camera relative to the actor
 			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
@@ -443,7 +481,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Regular stationary camera tracking a logic target around the actor close and low in higher action levels
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			_posX = selectRandom [random [-5,-2,-5],random [3,2,3]]; // Specifies the range for the camera position sideways to the actor
 			_posY = selectRandom [random [-5,-2,-5],random [5,2,5]];	// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [0.4,1,0.4];				// Specifies the range for the camera position vertically from the actor
@@ -462,7 +500,7 @@ if (indiCam_var_actionValue == 2) then { // High action value scenes
 			// Stationary camera in the sky looking down
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
 			_posX = random [-40,0,40]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = random [-40,0,40];				// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [40,60,80];				// Specifies the range for the camera position vertically from the actor
@@ -502,7 +540,7 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-1,-5,2.5];	// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,10,2];		// Position of camera target relative to the actor
@@ -518,7 +556,7 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,-0.5,2];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0.75,0,1.8];	// Position of camera target relative to the actor
@@ -534,7 +572,7 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";
 			indiCam_var_disqualifyScene = false; 	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [1,5,1];		// Position of camera relative to the actor
 			indiCam_var_cameraSpeed = 0.5;			// Defines how tightly the camera will track it's defined position
 			indiCam_var_targetPos = [0,0,1.8];		// Position of camera target relative to the actor
@@ -551,7 +589,7 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 			// Regular stationary camera tracking a logic target around the actor
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
 			indiCam_var_cameraPos = [-10,0,2];		// Position of camera relative to the actor
 			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
 			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
@@ -567,7 +605,7 @@ if (indiCam_var_actionValue == 3) then { // Very high action value scenes
 			// Stationary camera in the sky looking down
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			indiCam_var_takeTime = 10;				// Time after which a new scene will be selected
 			_posX = random [-40,0,40]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = random [-40,0,40];				// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [40,60,80];				// Specifies the range for the camera position vertically from the actor

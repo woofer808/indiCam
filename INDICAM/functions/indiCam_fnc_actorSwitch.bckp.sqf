@@ -30,12 +30,13 @@ if (!alive indiCam_actor) then {
 // Store the current position of the current actor
 private _actorPos = getPosASL indiCam_actor;
 
+
 // Make an updated list that contains only human players without current actor and cameraman
 private _humanPlayerArray = allPlayers - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _humanPlayerArray < 1) then {_humanPlayerArray = [player]}; // use the player if there is noone else
+if (count _humanPlayerArray < 1) then {_humanPlayerArray = [indiCam_actor]}; // use last actor if there is noone else
 // Make an updated list that contains only units which are alive
 private _allUnitsArray = allUnits - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _allUnitsArray < 1) then {_allUnitsArray = [player]}; // use player if there is noone else
+if (count _allUnitsArray < 1) then {_allUnitsArray = [indiCam_actor]}; // use last actor if there is noone else
 
 
 // Get all the current autoswitch preferences
@@ -185,63 +186,19 @@ switch (_case) do {
 											Eventhandlers												
    ---------------------------------------------------------------------------------------------------- */
 
-// This is where we strip the previous actor of any previous indicam eventhandlers
-// I should probably list all eventhandlers that I defined in here
+// This is where we strip off and equip the previous and current actor with eventhandlers
+_newActor call indiCam_fnc_actorEH;
 
-indiCam_actor removeEventHandler ["GetInMan",indiCam_var_enterVehicleEH];
-indiCam_actor removeEventHandler ["GetOutMan",indiCam_var_exitVehicleEH];
-indiCam_actor removeEventHandler ["Fired",indiCam_var_actorFiredEH];
-indiCam_actor removeEventHandler ["Deleted",indiCam_var_actorDeletedEH];
-indiCam_actor removeEventHandler ["Killed",indiCam_var_actorKilledEH];
-
-if (_newActor != player) then { // Dont bother with eventhandlers on the cameraman.
-
-	// This is where we put any new indicam eventhandlers on the new actor
-	indiCam_var_enterVehicleEH = _newActor addEventHandler ["GetInMan", {
-		indiCam_var_requestMode == "default";if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor mounted a vic"};
-	}];
-
-	// Detect actor dismounting a vic
-	indiCam_var_exitVehicleEH = _newActor addEventHandler ["GetOutMan", {
-		indiCam_var_requestMode == "default";if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor dismounted a vic"};
-	}];
-
-	// Detect actor firing his weapon
-	indiCam_var_actorFiredEH = _newActor addEventHandler ["Fired", {
-		indiCam_var_actorFiredTimestamp = time;
-		if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor has fired"};
-	}];
-
-	// Detect actor getting deleted
-	indiCam_var_actorDeletedEH = _newActor addEventHandler ["Deleted", {
-		// This is where we stop all eventhandlers
-		if (indiCam_debug && indiCam_running) then {systemchat "actor was deleted";};
-		//indiCam_actor = player; // Guess this isn't needed
-		[] call indiCam_fnc_actorSwitch;
-		indiCam_var_requestMode = "default";
-	}];
-
-	// Detect actor dying
-	indiCam_var_actorKilledEH = _newActor addEventHandler ["Killed", {
-		if ( indiCam_debug && indiCam_running ) then {systemChat "indiCam_actor was killed"};
-		// Request the actor death scripted scene
-		["actorDeath", indiCam_actor] spawn indiCam_scene_selectScripted;
-	}];
-
-};
-
-
-
-// Set the actor variable to the newly setup unit
-indiCam_actor = _newActor;
 
 
 /* ----------------------------------------------------------------------------------------------------
 											Store info												
    ---------------------------------------------------------------------------------------------------- */
 
-// Store current actorSide
-indiCam_var_actorSwitchSettings set [5,(side indiCam_actor)];
+// Set the global variables to the newly setup unit
+systemchat "this is where the indiCam_actor variable changes hands";
+indiCam_actor = _newActor;							// Store the current actor unit
+indiCam_var_actorSwitchSettings set [5,_actorSide];	// Store the current actorSide
 
 // Reset the actor switch timer if it's active
 if (indiCam_var_actorAutoSwitch) then {
@@ -253,5 +210,4 @@ if (indiCam_var_actorAutoSwitch) then {
 											Return values												
    ---------------------------------------------------------------------------------------------------- */
 
-// Return the new indiCam_actor as well
 _newActor;

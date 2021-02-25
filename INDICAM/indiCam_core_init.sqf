@@ -21,7 +21,6 @@
 
 // Currently doing:
 // - Can't seem to compile with 	#include "\a3\editor_f\Data\Scripts\dikCodes.h"  in config.cpp
-// - Better scenes for foot mobiles
 // - Listening to TFAR and ACRE radios
 		/*
 		A-a-ron Today at 6:45 PM
@@ -32,18 +31,35 @@
 
 /* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
-//TODO- Make sure that headless clients and dedicated servers are excluded from actor randomizations
-//TODO- More close-up views of foot mobiles during low intensity fighting There are too many far away shots going on
-//TODO- Balance action shots for being around units that are shooting alot.
-//DONE- Cameradude wasn't excluded from "only players" actor randomization
-//FIXED- Chat is now hidden by default during camera operation
-//ADDED- Checkbox in gui for showing chat during camera operation
-//FIXED- Purged more usages of comment command
+//FIXED- Headless clients and dedicated servers are now more excluded from actor randomizations (Thanks Gold John King)
+//FIXED- Cameradude wasn't excluded from "only players" actor randomization (Thanks Gold John King)
+//FIXED- Current actor wasn't excluded from selection pool in some actor auto switching modes
+//FIXED- Unit autoswitching mode within group now switches to another group if all units within the group dies.
+//FIXED- Unit autoswitching mode within group no longer makes dead units the actor.
+//FIXED- Chat is now hidden by default during camera operation.
+//ADDED- Checkbox in gui for showing chat during camera operation.
+//FIXED- Purged the last bunch of usages of comment command in scripts
+//TWEAKED- Foot scenes spend less time high above and more time at low and medium distance
+//TWEAKED- Foot scenes at higher action values have shorter scene duration by about a third
+//ADDED- New foot scene "stationaryFrontRandom"
+//TWEAKED- Helicopter scenes switch earlier when actor moves away from stationary camera
+//TWEAKED- Helicopter front facing scenes are shorter by about two thirds
+//TODO- Put a setting in indiCam_core_Settings to define auto switching minimum distance (case 3)
 
+//TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
+//TODO- Make the actor switching work with several indicam running in the same mp session by individualizing indicam_var_network on each machine
+//TODO- Situation checks do not work in multiplayer since local eventhandlers can't work on objects owned by remote machines.
+//TODO- Actor death do not work on players in MP because the death cam eventhandler isn't local to their machine
+//TEST- Actor switching modes in MP for not including actor, headless clients, dedis, player
+//TODO- indiCam_fnc_actorSwitch uses allUnits, make sure to remove headless clients from that
+
+//TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
+//TODO- Put in disqualification features on scenes and make one "not for MP use" to get rid of helicopter choppy scenes
+//TODO- Make sure actor deletion is handled the same way as actor getting killed.
+//TODO- Make a gui setting for autoswitching distance sort (case 3) instead of the currently hard coded 500m on a second settings screen.
 //TODO- Move keybinds from init to control script. Only F1 should work when camera is not running.
 //TODO- Make it so that the script can be started without the GUI stuff. vision index currently craps it up. check TETET's post. --> Thanks for this not so informative comment, past me.
 //TODO- Possibility to state conditions in a scene to disqualify it. For example if a scene should only be used for a specific vehicle.
-//TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
 //TODO- Make sure the camera keeps following actors after death.
 //TODO- Add "persistent actor" function if that's not already in by default by selecting "none" in randomizer. It would then need something else to do while respawning and come back to the same player unit after respawn.
 //TODO- Would be totally cool with a flashlight type function as with Zeus or the editor. Maybe spawn a local light above the actor?
@@ -155,13 +171,24 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	//												variables												
 	//-------------------------------------------------------------------------------------------------------
 	// Actor management
-	indiCam_var_enterVehicleEH = 0;				// Eventhandler for actorManager
-	indiCam_var_exitVehicleEH = 0;				// Eventhandler for actorManager
-	indiCam_var_actorFiredEH = 0;				// Eventhandler for actorManager
-	indiCam_var_actorDeletedEH = 0;				// Eventhandler for actorManager
-	indiCam_var_actorKilledEH = 0;				// Eventhandler for actorManager
+	indiCam_var_enterVehicleEH 	= 0;				// Eventhandler for actorManager
+	indiCam_var_exitVehicleEH 	= 0;				// Eventhandler for actorManager
+	indiCam_var_actorFiredEH 	= 0;				// Eventhandler for actorManager
+	indiCam_var_actorDeletedEH 	= 0;				// Eventhandler for actorManager
+	indiCam_var_actorKilledEH 	= 0;				// Eventhandler for actorManager
 	indiCam_var_actorAutoSwitch = false;
+	indiCam_var_actorSide		= side player;		// Keeps track of actor's side through death
 
+	// Networking
+	indiCam_var_network = [
+		(owner player),				// select 0: Indicam machine client ID
+		(owner indiCam_actor),		// select 1: Target machine client ID
+		indiCam_var_enterVehicleEH,	// select 2: Eventhandler enter vehicle
+		indiCam_var_exitVehicleEH,	// select 3: Eventhandler exit vehicle
+		indiCam_var_actorFiredEH,	// select 4: Eventhandler actor Fired
+		indiCam_var_actorDeletedEH,	// select 5: Eventhandler actor deleted
+		indiCam_var_actorKilledEH	// select 6: Eventhandler actor killed
+];
 
 	// Initialize switching timers
 	indiCam_var_sceneTimer = time + 9999999;
@@ -241,6 +268,7 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 		indiCam_fnc_debug = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_debug.sqf";
 		indiCam_fnc_sceneTest = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_sceneTest.sqf";
 		indiCam_fnc_actorSwitch = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorSwitch.sqf";
+		indiCam_fnc_actorEH = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorEH.sqf";
 		indiCam_fnc_actorList = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorList.sqf";
 		indiCam_fnc_distanceSort = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_distanceSort.sqf";
 		indiCam_fnc_situationCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_situationCheck.sqf";

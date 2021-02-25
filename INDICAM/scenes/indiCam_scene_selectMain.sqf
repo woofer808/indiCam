@@ -127,19 +127,19 @@ while {true} do {
 
 
 
-			// Stationary ground watch flyover
-			indiCam_var_cameraType = "stationaryCameraAbsoluteZ";
+			// Regular stationary camera tracking a logic target in front of the actor
+			indiCam_var_cameraType = "stationaryCameraLogicTarget";
 			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 20;				// Time after which a new scene will be selected
-			_posX = random [100,300,100]; 	// Specifies the range for the camera position sideways to the actor
-			_posY = selectRandom [random [-50,-20,-50],random [50,20,50]]; 				// Specifies the range for the camera position to the front and back of the actor
-			_posZ = 1;			// Specifies the range for the camera position vertically in absolute height
+			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			_posX = random [-2,0,2]; 				// Specifies the range for the camera position sideways to the actor
+			_posY = random [5,20,30];				// Specifies the range for the camera position to the front and back of the actor
+			_posZ = random [1,2,5];				// Specifies the range for the camera position vertically from the actor
 			indiCam_var_cameraPos = [_posX,_posY,_posZ];		// Position of camera relative to the actor
-			indiCam_var_targetPos = [60,0,0];		// Position of camera target relative to the actor
-			indiCam_var_targetSpeed = 0.3;			// Defines how tightly the logic will track it's defined position
+			indiCam_var_targetPos = [0,5,1.8];		// Position of camera target relative to the actor
+			indiCam_var_targetSpeed = 0.2;			// Defines how tightly the logic will track it's defined position
 			indiCam_var_cameraTarget = indiCam_var_proxyTarget;		// The object that the camera is aimed at
-			indiCam_var_cameraFov = random [0.15,0.4,0.15];			// Field of view, standard Arma FOV is 0.74
-			indiCam_var_maxDistance = 2000;			// Max distance between actor and camera before scene switches
+			indiCam_var_cameraFov = random [0.5,0.74,1];			// Field of view, standard Arma FOV is 0.74
+			indiCam_var_maxDistance = 100;			// Max distance between actor and camera before scene switches
 			indiCam_var_ignoreHiddenActor = false;	// True will disable line of sight checks during scene, actor may stay hidden
 			indiCam_var_cameraAttach = false;		// Control whether the camera should be attached to anything
 
