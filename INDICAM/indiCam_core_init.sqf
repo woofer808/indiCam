@@ -31,6 +31,14 @@
 
 /* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
+//TODO- Make clients that have a running indicam camera post put a note on the server so that they can be excluded from other indicam clients actor autoswitching
+//TODO- Make the actor switching work with several indicam running in the same mp session by individualizing indicam_var_network on each machine
+//TODO- Situation checks do not work in multiplayer since local eventhandlers can't work on objects owned by remote machines.
+//TODO- Actor death do not work on players in MP because the death cam eventhandler isn't local to their machine
+//TODO- Put a setting in indiCam_core_Settings to define auto switching minimum distance (case 3)
+//TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
+//TODO- indiCam_fnc_actorSwitch uses allUnits, make sure to remove headless clients from that
+//TEST- Actor switching modes in MP for not including actor, headless clients, dedis, player
 //FIXED- Headless clients and dedicated servers are now more excluded from actor randomizations (Thanks Gold John King)
 //FIXED- Cameradude wasn't excluded from "only players" actor randomization (Thanks Gold John King)
 //FIXED- Current actor wasn't excluded from selection pool in some actor auto switching modes
@@ -44,14 +52,8 @@
 //ADDED- New foot scene "stationaryFrontRandom"
 //TWEAKED- Helicopter scenes switch earlier when actor moves away from stationary camera
 //TWEAKED- Helicopter front facing scenes are shorter by about two thirds
-//TODO- Put a setting in indiCam_core_Settings to define auto switching minimum distance (case 3)
+//TWEAKED- Actor was set multiple times when using the mapclick selection method.
 
-//TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
-//TODO- Make the actor switching work with several indicam running in the same mp session by individualizing indicam_var_network on each machine
-//TODO- Situation checks do not work in multiplayer since local eventhandlers can't work on objects owned by remote machines.
-//TODO- Actor death do not work on players in MP because the death cam eventhandler isn't local to their machine
-//TEST- Actor switching modes in MP for not including actor, headless clients, dedis, player
-//TODO- indiCam_fnc_actorSwitch uses allUnits, make sure to remove headless clients from that
 
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
 //TODO- Put in disqualification features on scenes and make one "not for MP use" to get rid of helicopter choppy scenes
@@ -171,24 +173,18 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	//												variables												
 	//-------------------------------------------------------------------------------------------------------
 	// Actor management
-	indiCam_var_enterVehicleEH 	= 0;				// Eventhandler for actorManager
-	indiCam_var_exitVehicleEH 	= 0;				// Eventhandler for actorManager
-	indiCam_var_actorFiredEH 	= 0;				// Eventhandler for actorManager
-	indiCam_var_actorDeletedEH 	= 0;				// Eventhandler for actorManager
-	indiCam_var_actorKilledEH 	= 0;				// Eventhandler for actorManager
 	indiCam_var_actorAutoSwitch = false;
 	indiCam_var_actorSide		= side player;		// Keeps track of actor's side through death
+	
+	indiCam_var_network = [	// The network data for eventhandlers
+		player,			// 0: The new actor unit
+		2,		// 1: Target machine number in the network
+		2,	// 2: Indicam machine number in the network
+		123456789,		// 3: No UID in singleplayer - renders as "_SP_PLAYER_"
+		[],					// 4: the array containing EH name and id numbers
+		[]					// 5: accumulated eh's from select 4 for mopping up
+	];
 
-	// Networking
-	indiCam_var_network = [
-		(owner player),				// select 0: Indicam machine client ID
-		(owner indiCam_actor),		// select 1: Target machine client ID
-		indiCam_var_enterVehicleEH,	// select 2: Eventhandler enter vehicle
-		indiCam_var_exitVehicleEH,	// select 3: Eventhandler exit vehicle
-		indiCam_var_actorFiredEH,	// select 4: Eventhandler actor Fired
-		indiCam_var_actorDeletedEH,	// select 5: Eventhandler actor deleted
-		indiCam_var_actorKilledEH	// select 6: Eventhandler actor killed
-];
 
 	// Initialize switching timers
 	indiCam_var_sceneTimer = time + 9999999;
@@ -268,7 +264,10 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 		indiCam_fnc_debug = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_debug.sqf";
 		indiCam_fnc_sceneTest = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_sceneTest.sqf";
 		indiCam_fnc_actorSwitch = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorSwitch.sqf";
+		indiCam_fnc_EHsetup = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_EHsetup.sqf";
 		indiCam_fnc_actorEH = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorEH.sqf";
+		indiCam_fnc_clientEHToIndiCam = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_clientEHToIndiCam.sqf";
+		indiCam_fnc_indiCamEHToClient = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_indiCamEHToClient.sqf";
 		indiCam_fnc_actorList = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_actorList.sqf";
 		indiCam_fnc_distanceSort = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_distanceSort.sqf";
 		indiCam_fnc_situationCheck = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_situationCheck.sqf";
@@ -296,8 +295,11 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	[] call indiCam_fnc_compileAll;
 
 	// Set the player as the initial actor by calling the actor switch script thereby setting the proper eventhandlers
+	// Initialize the network eventhandler system before though
+	call indiCam_fnc_EHsetup;
 	// Always use this script to set a new actor. Don't use the regular actor for scripted scenes.
 	[player] call indiCam_fnc_actorSwitch;
+
 
 
 	// This function removes eventhandlers of certain types stored in the global variable

@@ -17,9 +17,10 @@
  */
 
 // Default setting, make better by figuring out how params really work
-private _newActor = player;
+private _newActor = _this select 0;
 private _unitArray = [];
 private _sortedArray = [];
+
 
 // Find out what side the current actor is before disconnecting him from the variable, but only if he's alive
 private _actorSide = side indiCam_actor;
@@ -30,13 +31,12 @@ if (!alive indiCam_actor) then {
 // Store the current position of the current actor
 private _actorPos = getPosASL indiCam_actor;
 
-
 // Make an updated list that contains only human players without current actor and cameraman
 private _humanPlayerArray = allPlayers - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _humanPlayerArray < 1) then {_humanPlayerArray = [indiCam_actor]}; // use last actor if there is noone else
+if (count _humanPlayerArray < 1) then {_humanPlayerArray = [player]}; // use the player if there is noone else
 // Make an updated list that contains only units which are alive
 private _allUnitsArray = allUnits - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _allUnitsArray < 1) then {_allUnitsArray = [indiCam_actor]}; // use last actor if there is noone else
+if (count _allUnitsArray < 1) then {_allUnitsArray = [player]}; // use player if there is noone else
 
 
 // Get all the current autoswitch preferences
@@ -182,23 +182,23 @@ switch (_case) do {
 	_newActor = (_this select 0);
 };
 
+
+
+
+
 /* ----------------------------------------------------------------------------------------------------
 											Eventhandlers												
    ---------------------------------------------------------------------------------------------------- */
 
-// This is where we strip off and equip the previous and current actor with eventhandlers
-_newActor call indiCam_fnc_actorEH;
-
+// This is where indiCam_fnc_indiCamEHToClient should be executed
 
 
 /* ----------------------------------------------------------------------------------------------------
 											Store info												
    ---------------------------------------------------------------------------------------------------- */
 
-// Set the global variables to the newly setup unit
-systemchat "this is where the indiCam_actor variable changes hands";
-indiCam_actor = _newActor;							// Store the current actor unit
-indiCam_var_actorSwitchSettings set [5,_actorSide];	// Store the current actorSide
+// Store current actorSide
+indiCam_var_actorSwitchSettings set [5,(side indiCam_actor)];
 
 // Reset the actor switch timer if it's active
 if (indiCam_var_actorAutoSwitch) then {
@@ -210,4 +210,5 @@ if (indiCam_var_actorAutoSwitch) then {
 											Return values												
    ---------------------------------------------------------------------------------------------------- */
 
+// Return the new indiCam_actor as well
 _newActor;

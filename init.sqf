@@ -23,4 +23,3 @@
 	systemChat format ["DevMode %1...",indiCam_devMode];
 };
 
-

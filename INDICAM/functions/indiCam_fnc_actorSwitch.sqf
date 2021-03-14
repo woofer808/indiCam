@@ -21,21 +21,10 @@ private _newActor = player;
 private _unitArray = [];
 private _sortedArray = [];
 
-// Find out what side the current actor is before disconnecting him from the variable, but only if he's alive
+// Find out what side the current actor is before disconnecting him from the variable
 private _actorSide = side indiCam_actor;
-if (!alive indiCam_actor) then {
-	_actorSide = (indiCam_var_actorSwitchSettings select 5); // Use the globally stored side instead
-};
-
 // Store the current position of the current actor
 private _actorPos = getPosASL indiCam_actor;
-
-// Make an updated list that contains only human players without current actor and cameraman
-private _humanPlayerArray = allPlayers - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _humanPlayerArray < 1) then {_humanPlayerArray = [player]}; // use the player if there is noone else
-// Make an updated list that contains only units which are alive
-private _allUnitsArray = allUnits - (entities "HeadlessClient_F") - [player, indiCam_actor];
-if (count _allUnitsArray < 1) then {_allUnitsArray = [player]}; // use player if there is noone else
 
 
 // Get all the current autoswitch preferences
@@ -60,63 +49,68 @@ switch (_case) do {
 
 	case 0: { // Only players of all sides anywhere
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between only players of all sides.", _case];};
-				// Sort out cameraman from selection, but only if he's not alone
-				_newActor = selectRandom _humanPlayerArray;
-				
+				_newActor = selectRandom allPlayers;
 			};
 			
 	case 1: { // Closest unit of any side 
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to closest unit from any side.", _case];};
-				_sortedArray = [_allUnitsArray,indiCam_actor,-1] call indiCam_fnc_distanceSort; // Sort with no distance limit out from curent actor
-				_newActor = _sortedArray select 0; // select the first unit in the sorted list which should be the closest
+				_unitArray = (allUnits - [player,indiCam_actor]);
+				_sortedArray = [_unitArray,indiCam_actor,-1] call indiCam_fnc_distanceSort;
+				_newActor = _sortedArray select 0;
 			};
 			
 	case 2: { // Any unit of any side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between all units in mission.", _case];};
-				_newActor = selectRandom _allUnitsArray; // Select from any eligable unit that is alive
+				_unitArray = (allUnits - [player]);
+				_newActor = selectRandom _unitArray;
 			};
 			
-	case 3: { // Random unit within distance (hardcoded for now) of all sides
+	case 3: { // Random unit within distance of all sides
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to units on any side within given distance.", _case];};
+				_unitArray = (allUnits - [player]);
 				private _distance = 500;
 
 				while { ((count _sortedArray) < 1) && (_distance < 50000) } do { // Altis terrain is 47000m from corner to corner
 					
-					_sortedArray = [_allUnitsArray,indiCam_actor,_distance] call indiCam_fnc_distanceSort;
-					_distance = _distance * 1.25; // Next iteration will happen 25% further out
+					_sortedArray = [_unitArray,indiCam_actor,_distance] call indiCam_fnc_distanceSort;
+
+					_distance = _distance * 1.25;
 				};
 				if (count _sortedArray > 1) then {_newActor = selectRandom _sortedArray} else {/*No other unit was to be found, do nothing*/ };
 			};
 			
 	case 4: { // Only players on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between only players on current side.", _case];};
+				_unitArray = allPlayers - [player];
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
-				} forEach _humanPlayerArray;
+				} forEach _unitArray;
 				if (count _sortedArray > 1) then {_newActor = selectRandom _sortedArray} else {/*No other unit was to be found, do nothing*/ };
 				
 			};
 			
 	case 5: { // Closest unit on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to closest unit from current side.", _case];};
+				_unitArray = allUnits - [player,indiCam_actor];
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
-				} forEach _allUnitsArray;
+				} forEach _unitArray;
 				if (count _sortedArray > 1) then {_newActor = _sortedArray select 0} else {/*No other unit was to be found, do nothing*/ };
 			};
 			
 	case 6: { // All units on actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between all on current side.", _case];};
+				_unitArray = allUnits - [player,indiCam_actor];
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
-				} forEach _allUnitsArray;
+				} forEach _unitArray;
 				if (count _sortedArray > 1) then {_newActor = selectRandom _sortedArray} else {/*No other unit was to be found, do nothing*/ };
 			};
 			
 	case 7: { // Random unit search started within distance actor side
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching to units on current side within given distance.", _case];};
 				
-				_unitArray = _allUnitsArray; // Rest from rewrite, couldn't be bothered to rewrite the rest
+				_unitArray = allUnits - [player,indiCam_actor];
 
 				{
 					if (side _x == _actorSide) then {_sortedArray pushback _x};
@@ -125,7 +119,7 @@ switch (_case) do {
 				_unitArray = _sortedArray;
 				_sortedArray = [];
 				
-				private _distance = 500; // Needs a gui distance, but probably on a second settings screen.
+				private _distance = 500;
 				while { ((count _unitArray) < 2) || (_distance < 50000) } do { // Altis terrain is 47000m from corner to corner
 					
 					_sortedArray = [_unitArray,indiCam_actor,_distance] call indiCam_fnc_distanceSort;
@@ -137,35 +131,10 @@ switch (_case) do {
 			
 	case 8: { // Random unit within group of current unit
 				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between units in current group.", _case];};
-
-				// This is where we need to take dead units out of the pool, since they are considered part of the group until reported as dead
-				// Looks like the best option is to rebuild the _unitArray from scratch
-				_unitArray = [];
-				{
-				if (alive _x) then {_unitArray pushBackUnique _x};
-				} forEach (units group indiCam_actor);
-
-				// Take out cameraman from array in case he's in the same group but keep current actor in
+				_unitArray = (units group indiCam_actor);
 				_unitArray = _unitArray - [player];
 				
-				// Select a random unit from the current group as long as the trimmed group size is larger than 0
-				_unitsAlive = { alive _x; } count _unitArray;
-				if ( _unitsAlive > 0 ) then {
-					_newActor = selectRandom _unitArray;
-				} else {
-					// If no other unit was found, it means the actor is the lone member, or the group is dead
-					// so let's find a new group to follow as close as possible
-
-					_sortedArray = [];
-					{
-						if (side _x == _actorSide) then {_sortedArray pushback _x};
-					} forEach _allUnitsArray;
-
-					if (count _sortedArray > 0) then {_newActor = _sortedArray select 0} else {
-						_newActor = selectRandom _allUnitsArray; // If nothing could be found, just get any unit on the terrain
-					};
-
-				};
+				if ( (count _unitArray) > 0 ) then {_newActor = selectRandom _unitArray} else {/*No other unit was to be found, do nothing*/ };
 				
 			};
 			
@@ -185,60 +154,17 @@ switch (_case) do {
 											Eventhandlers												
    ---------------------------------------------------------------------------------------------------- */
 
-// This is where we strip the previous actor of any previous indicam eventhandlers
-// I should probably list all eventhandlers that I defined in here
+[_newActor] call indiCam_fnc_indiCamEHToClient;
 
-indiCam_actor removeEventHandler ["GetInMan",indiCam_var_enterVehicleEH];
-indiCam_actor removeEventHandler ["GetOutMan",indiCam_var_exitVehicleEH];
-indiCam_actor removeEventHandler ["Fired",indiCam_var_actorFiredEH];
-indiCam_actor removeEventHandler ["Deleted",indiCam_var_actorDeletedEH];
-indiCam_actor removeEventHandler ["Killed",indiCam_var_actorKilledEH];
 
-if (_newActor != player) then { // Dont bother with eventhandlers on the cameraman.
-
-	// This is where we put any new indicam eventhandlers on the new actor
-	indiCam_var_enterVehicleEH = _newActor addEventHandler ["GetInMan", {
-		indiCam_var_requestMode == "default";if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor mounted a vic"};
-	}];
-
-	// Detect actor dismounting a vic
-	indiCam_var_exitVehicleEH = _newActor addEventHandler ["GetOutMan", {
-		indiCam_var_requestMode == "default";if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor dismounted a vic"};
-	}];
-
-	// Detect actor firing his weapon
-	indiCam_var_actorFiredEH = _newActor addEventHandler ["Fired", {
-		indiCam_var_actorFiredTimestamp = time;
-		if (indiCam_debug && (indiCam_var_currentMode == "default") ) then {systemChat "actor has fired"};
-	}];
-
-	// Detect actor getting deleted
-	indiCam_var_actorDeletedEH = _newActor addEventHandler ["Deleted", {
-		// This is where we stop all eventhandlers
-		if (indiCam_debug && indiCam_running) then {systemchat "actor was deleted";};
-		//indiCam_actor = player; // Guess this isn't needed
-		[] call indiCam_fnc_actorSwitch;
-		indiCam_var_requestMode = "default";
-	}];
-
-	// Detect actor dying
-	indiCam_var_actorKilledEH = _newActor addEventHandler ["Killed", {
-		if ( indiCam_debug && indiCam_running ) then {systemChat "indiCam_actor was killed"};
-		// Request the actor death scripted scene
-		["actorDeath", indiCam_actor] spawn indiCam_scene_selectScripted;
-	}];
-
-};
+/* ----------------------------------------------------------------------------------------------------
+											Return values												
+   ---------------------------------------------------------------------------------------------------- */
 
 
 
 // Set the actor variable to the newly setup unit
 indiCam_actor = _newActor;
-
-
-/* ----------------------------------------------------------------------------------------------------
-											Store info												
-   ---------------------------------------------------------------------------------------------------- */
 
 // Store current actorSide
 indiCam_var_actorSwitchSettings set [5,(side indiCam_actor)];
@@ -248,10 +174,6 @@ if (indiCam_var_actorAutoSwitch) then {
 	indiCam_var_actorTimer = time + (indiCam_var_actorSwitchSettings select 4);
 };
 
-
-/* ----------------------------------------------------------------------------------------------------
-											Return values												
-   ---------------------------------------------------------------------------------------------------- */
 
 // Return the new indiCam_actor as well
 _newActor;
