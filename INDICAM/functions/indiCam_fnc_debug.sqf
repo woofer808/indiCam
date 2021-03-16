@@ -43,7 +43,27 @@ If you want to format (inject params) to your debug message use this
 // I will probably want to externally force information put into screen and into log.
 
 
-// ["message string",_toScreenBool,_toLogBool] call indiCam_fnc_debug;
+// ["message string",_toScreenBool,_toLogBool,_devModeBool] call indiCam_fnc_debug;
+
+
+
+
+/*
+private ["_message","_toScreen","_toLog","_devMode"];
+
+if !(isNil (_this select 0)) then {_message ="INDICAM debug"};    // (string) Message
+if !(isNil (_this select 1)) then {_toScreen = false};            // (bool) Systemchat
+if !(isNil (_this select 2)) then {_toLog = false};               // (bool) Write to log
+if !(isNil (_this select 3)) then {_devMode = false};             // (bool) Write even if only devMode
+
+
+// Put together the information needed for the report.
+
+if (indiCam_debug && _toScreen) then {systemchat format ["-----> INDICAM: %1, %2",time,_message]};
+if (_toLog) then {diag_log format ["-----> INDICAM: %1, %2",time,_message]};
+
+*/
+
 
 private _message = 	_this select 0;
 private _toScreen = _this select 1;
