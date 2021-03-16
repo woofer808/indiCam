@@ -31,6 +31,7 @@
 
 /* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
+//TODO- waitUntil {alive player}; not enough at start of indicam_core_init
 //TODO- Make clients that have a running indicam camera post put a note on the server so that they can be excluded from other indicam clients actor autoswitching
 //TODO- Make the actor switching work with several indicam running in the same mp session by individualizing indicam_var_network on each machine
 //TODO- Situation checks do not work in multiplayer since local eventhandlers can't work on objects owned by remote machines.
@@ -143,7 +144,8 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 
 
 
-	// Player is now either not spawned or has died
+	// Player is now either not spawned or has died --> NO! Not enough when autospawning into editor placed units as in indicam dev mission
+	// Needs something more robust
 	waitUntil {alive player};
 
 

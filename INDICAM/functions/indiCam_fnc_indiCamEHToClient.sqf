@@ -6,7 +6,11 @@ It has a daughter script named indiCam_fnc_actorEH
 */
 
 
-// waitUntil {dialog};
+
+if (_newActor == player) exitwith {
+    ["Actor is the same as the cameraman, not applying eventhandlers.",true,false] call indiCam_fnc_debug;
+}; // Actor is the cameraman, not applying eventhandlers
+
 
 
 private _newActor		= _this select 0;
@@ -103,7 +107,19 @@ if (isServer && hasInterface) then {systemchat "this is a player hosted game"}; 
 // !!!!!!!!!!!!!!!!! This is where we strip the previous actor of his eventhandler
 // But first we gotta make sure that the first set of EH's are in the array.
 
+private _EHArray = (indicam_var_network select 4);	// _x = [_machineID,"EH name string",EHID]
+{
 
+	call compile format ["
+
+		{
+			(indiCam_var_network_%4_%5 select 0) removeEventHandler [%2,%3];
+			systemchat 'removed eventhandler %2 at pos %3';
+		} remoteExec ['call', %1]
+
+	", _x select 0, str (_x select 1), _x select 2,_clientOwnerID,_indiCamOwnerID];
+
+} forEach _EHArray;
 
 
 
@@ -121,14 +137,12 @@ indiCam_var_network set [3,_indiCamUID]; 				// 3: No UID in singleplayer - rend
 // Update the variable on the target machine so that it can be read
 missionNamespace setVariable ['indiCam_var_network',indiCam_var_network, _clientOwnerID];
 
-systemchat format ["the new actor attempted: %1", _newActor];
-
 // Then we put the network data on the client and give it a name that reflects this specific interaction
 // Push the named network variable to the target machine
 call compile format ["
 	missionNamespace setVariable ['indiCam_var_network_%1_%2',indiCam_var_network, %1];
+	[{systemChat 'Just wrote indiCam_var_network_%1_%2 to this machine';}] remoteExec ['call', %1, false];
 ", _clientOwnerID, _indiCamOwnerID];
-	// [{systemChat 'Just wrote indiCam_var_network_%1_%2 to this machine';}] remoteExec ['call', %1, false];
 
 // Put the function that the target machine is to run locally on that machine
 missionNamespace setVariable ['indiCam_fnc_actorEH',indiCam_fnc_actorEH, _clientOwnerID];
