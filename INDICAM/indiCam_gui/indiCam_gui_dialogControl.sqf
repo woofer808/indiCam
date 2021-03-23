@@ -49,8 +49,16 @@ indiCam_fnc_guiStart = {
 		if (indiCam_var_guiSceneOverrideCheckboxState) then {
 			indiCam_var_sceneTimer = time + indiCam_var_SceneOverrideDuration;
 		};
+
+		// Check whether the chat window should display during camera operation
+		if (indiCam_var_guiChatWindowState) then {
+			showChat true;
+		} else {
+			showChat false;
+		};
 		
-		indiCam_var_sceneList = [];	// Reset the sceneList array before starting the camera from being off
+		// Reset the sceneList array before starting the camera from being off
+		indiCam_var_sceneList = [];
 		
 		
 		
@@ -97,6 +105,39 @@ indiCam_fnc_guiDebug = {
 	};
 
 };
+
+
+/* ----------------------------------------------------------------------------------------------------
+									Chat window toggle
+   ---------------------------------------------------------------------------------------------------- */
+// Upon opening of gui, let the control show the current selected value
+private _chatWindow = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiChatWindow; // Define the displaycontrol
+if (indiCam_var_guiChatWindowState || indicam_debug) then {
+	// Set the checkbox to checked if the chat is supposed to be shown during camera operation
+	_chatWindow cbSetChecked true;
+} else {
+	// Set the checkbox to unchecked
+	_chatWindow cbSetChecked false;
+};
+
+
+// This will fire when the checkbox eventhandler in dialogs is triggered by clicking the checkbox
+indiCam_fnc_guiChatWindow = {
+	private _chatWindow = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiChatWindow; // Define the displaycontrol
+	private _checkedChatWindow = cbChecked _chatWindow; // Checks state of checkbox
+	if (_checkedChatWindow) then {
+		indiCam_var_guiChatWindowState = true;
+		showChat true;
+		systemChat "Chat window enabled";
+	} else {
+		indiCam_var_guiChatWindowState = false;
+		if (indiCam_running) then {showChat false};
+		systemChat "Chat window disabled"
+	};
+
+};
+
+
 
 /* ----------------------------------------------------------------------------------------------------
 									Scripted scenes

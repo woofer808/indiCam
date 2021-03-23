@@ -43,12 +43,12 @@ private _selectedScene = "";
 if (_sceneType == "actorDeath") then { // Start of actor death scene type
 	// These scenes should always run and not be subject to scene Chance tests
 	_selectedScene = selectRandom [
-								"actorDeathOne",	// Basic scripted death scene
-								"actorDeathTwo"		// Basic scripted death scene
+								"actorDeathSceneOne",	// Basic scripted death scene
+								"actorDeathSceneTwo"		// Basic scripted death scene
 							];
 
 	switch (_selectedScene) do {
-		case "actorDeathOne": {	
+		case "actorDeathSceneOne": {	
 			// Get the actual position of the actor
 			private _pos = getPosASL _unit;
 			
@@ -70,7 +70,7 @@ if (_sceneType == "actorDeath") then { // Start of actor death scene type
 			[] call indiCam_fnc_actorSwitch;
 		}; // end of case
 
-		case "actorDeathTwo": {
+		case "actorDeathSceneTwo": {
 			
 			// Get the actual position of the actor
 			private _pos = getPosASL _unit;

@@ -85,18 +85,20 @@ indiCam_fnc_guiMapSide = { // function contains sleep and should be spawned
 			onMapSingleClick { // Using the old version of this EH, is that bad?
 				private _friendlyUnitsData = [];
 				private _allUnitsData = [];
+				private _unit = 1;
 
 				{ // forEach that splits all the units into separate arrays depending on if we want all or just friendlies
 				
 					if (side _x == WEST) then {_friendlyUnitsData pushBack [_x,(getPos _x distance2D _pos)]};
 					_friendlyUnitsData sort true;
 					_unit = ((_friendlyUnitsData select 0) select 0); // Set the unit closest to the clicked position as the actor
-					[_unit] call indiCam_fnc_actorSwitch;
 					indiCam_var_requestMode = "default";
 					
 				} forEach allUnits;
+
+				[_unit] call indiCam_fnc_actorSwitch;
 			
-				hint format ["Actor set to: %1",indiCam_actor];
+				hint format ["Actor set to: %1",indiCam_actor]; // This will only show if the camera is not running
 			
 				// Update the text showing who the current actor is
 				private _currentActorDisplay = (findDisplay indiCam_id_guiDialogMain) displayCtrl indiCam_id_guiActorDisplay; // Define the displaycontrol
