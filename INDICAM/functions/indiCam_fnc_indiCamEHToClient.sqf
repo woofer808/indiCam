@@ -7,35 +7,12 @@ It has a daughter script named indiCam_fnc_actorEH
 
 
 
-if (_newActor == player) exitwith {
-    ["Actor is the same as the cameraman, not applying eventhandlers.",true,false] call indiCam_fnc_debug;
-}; // Actor is the cameraman, not applying eventhandlers
-
-
-
-private _newActor		= _this select 0;
-
-private _clientOwnerID	= owner _newActor;
-if ( (_clientOwnerID == 0 || _clientOwnerID == 2) && isMultiplayer) then {
-	_clientOwnerID = 2; // Server is always ID 2
-};
-if (!isMultiplayer) then {_clientOwnerID == 0};
-
-private _indiCamOwnerID = clientOwner;
-private _indiCamUID 	= getPlayerUID player;
-
-
-
-
-
 /*
 
 Singleplayer:
 -------------------------------------------
 clientOwner 		// everything returns 0
 owner			 	// everything returns 0
-
-
 
 Hosted game:
 -----------------------------------------------------
@@ -71,42 +48,43 @@ Bohemia says that "A server always has an ID of 2" which is what I'm looking for
 MEANING:
 I should be able to say "if actor belongs to server use 2, otherwise use the respective ID"
 
-
-
-
-
-private _indiCamOwnerID = clientOwner;
-private _clientOwnerID = owner indicam_actor;
-systemchat format ["target is on: %1", _clientOwnerID];
-if ( (_clientOwnerID == 0 || _clientOwnerID == 2) && isMultiplayer) then { 
- systemchat "unit is owned by the server."; 
- _clientOwnerID = 2;
-};
-systemchat format ["decided on: %1", _clientOwnerID];
-systemchat str isMultiplayer;
-
-
-
-
-if (isServer && hasInterface) then {systemchat "this is a player hosted game"}; // Confirmed working on player host
-
-{
-	systemchat format ["I am machine ID: %1",clientOwner]
-
-} remoteExec ["call", 0, false];
-
-
 */
 
 
 
+// -----------------------------------------------------------------------
+//
+//	Init 
+//
+//	-----------------------------------------------------------------------
+
+// This is to prevent EH's to be assigned unnecessarily,
+// but it's also to prevent EH's to get a machine target ID of 0 at spawn in the case of a hosted game.
+if (_newActor == player) exitwith {
+    ["Actor is the same as the cameraman, not applying eventhandlers.",true,false] call indiCam_fnc_debug;
+}; // Actor is the cameraman, not applying eventhandlers
+
+
+// -----------------------------------------------------------------------
+//
+//	Get params and set up data
+//
+//	-----------------------------------------------------------------------
+
+private _newActor		= _this select 0;
+
+private _clientOwnerID	= owner _newActor;
+if ( (_clientOwnerID == 0 || _clientOwnerID == 2) && isMultiplayer) then {
+	_clientOwnerID = 2; // Server is always ID 2
+};
+if (!isMultiplayer) then {_clientOwnerID == 0};
+
+private _indiCamOwnerID = clientOwner;
+private _indiCamUID 	= getPlayerUID player;
 
 
 
-
-// !!!!!!!!!!!!!!!!! This is where we strip the previous actor of his eventhandler
-// But first we gotta make sure that the first set of EH's are in the array.
-
+// Strip EH's from the previous actor
 private _EHArray = (indicam_var_network select 4);	// _x = [_machineID,"EH name string",EHID]
 {
 
@@ -114,17 +92,11 @@ private _EHArray = (indicam_var_network select 4);	// _x = [_machineID,"EH name 
 
 		{
 			(indiCam_var_network_%4_%5 select 0) removeEventHandler [%2,%3];
-			systemchat 'removed eventhandler %2 at pos %3';
 		} remoteExec ['call', %1]
 
 	", _x select 0, str (_x select 1), _x select 2,_clientOwnerID,_indiCamOwnerID];
 
 } forEach _EHArray;
-
-
-
-
-
 
 
 
@@ -141,8 +113,8 @@ missionNamespace setVariable ['indiCam_var_network',indiCam_var_network, _client
 // Push the named network variable to the target machine
 call compile format ["
 	missionNamespace setVariable ['indiCam_var_network_%1_%2',indiCam_var_network, %1];
-	[{systemChat 'Just wrote indiCam_var_network_%1_%2 to this machine';}] remoteExec ['call', %1, false];
 ", _clientOwnerID, _indiCamOwnerID];
+	// [{systemChat 'Just wrote indiCam_var_network_%1_%2 to this machine';}] remoteExec ['call', %1, false];
 
 // Put the function that the target machine is to run locally on that machine
 missionNamespace setVariable ['indiCam_fnc_actorEH',indiCam_fnc_actorEH, _clientOwnerID];

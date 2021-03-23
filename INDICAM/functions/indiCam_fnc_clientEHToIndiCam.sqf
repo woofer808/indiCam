@@ -5,6 +5,8 @@ It has a mother script named indiCam_fnc_indiCamEHToClient
 
 It will be executed by the client script when the EH's are set up on the newly selected actor
 
+This is the place to add cleanup scripts for remote EH's
+
 */
 
 // Received by the script run on the client:

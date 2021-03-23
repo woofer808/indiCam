@@ -19,8 +19,6 @@ call compile format ["
 
 _newActor = indiCam_var_network_%1_%2 select 0;
 
-systemchat 'Assigning eventhandlers locally';
-
 private _ehGetInMan = _newActor addEventHandler ['GetInMan',
 	{
 		[] remoteExec ['indiCam_fnc_EHGetInMan', %2, false];
@@ -35,7 +33,7 @@ private _ehGetOutMan = _newActor addEventHandler ['GetOutMan',
 
 private _ehFired = _newActor addEventHandler ['Fired',
 	{
-		[123456] remoteExec ['indiCam_fnc_EHFired', %2, false];
+		[] remoteExec ['indiCam_fnc_EHFired', %2, false];
 	}
 ];
 

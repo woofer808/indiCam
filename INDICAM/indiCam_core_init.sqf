@@ -17,9 +17,8 @@
 // Versioning: Significant new functionality adds to the tenth of a version, scene additions and fixes adds to the hundreds
 
 
-
-
 // Currently doing:
+// - Cinematics - add and make launcherScan work with remote EH's
 // - Can't seem to compile with 	#include "\a3\editor_f\Data\Scripts\dikCodes.h"  in config.cpp
 // - Listening to TFAR and ACRE radios
 		/*
@@ -31,31 +30,31 @@
 
 /* Changelog version 1.32*/	
 ///		PRIORITIES / DONE
-//TODO- waitUntil {alive player}; not enough at start of indicam_core_init
-//TODO- Make clients that have a running indicam camera post put a note on the server so that they can be excluded from other indicam clients actor autoswitching
-//TODO- Make the actor switching work with several indicam running in the same mp session by individualizing indicam_var_network on each machine
-//TODO- Situation checks do not work in multiplayer since local eventhandlers can't work on objects owned by remote machines.
-//TODO- Actor death do not work on players in MP because the death cam eventhandler isn't local to their machine
-//TODO- Put a setting in indiCam_core_Settings to define auto switching minimum distance (case 3)
-//TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
-//TODO- indiCam_fnc_actorSwitch uses allUnits, make sure to remove headless clients from that
-//TEST- Actor switching modes in MP for not including actor, headless clients, dedis, player
+//KNOWN- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
+//ADDED- indiCam clients in a multiplayer game won't be part of the actor selection pool while they have their indiCam camera running. It is to avoid getting footage of a still player in a field somewhere (thanks Reggs).
+//ADDED- Checkbox in gui for showing chat during camera operation.
+//FIXED- Actor switching won't include headless clients anymore.
+//FIXED- Situation checks did not work in multiplayer. Eventhandlers are now rewritten to be put onto the actors' client over the network and comnmunicating to the instance of indiCam that put them there.
+//FIXED- Actor death did not work on players in MP because the death cam eventhandler wasn't local to their machine
 //FIXED- Headless clients and dedicated servers are now more excluded from actor randomizations (Thanks Gold John King)
 //FIXED- Cameradude wasn't excluded from "only players" actor randomization (Thanks Gold John King)
 //FIXED- Current actor wasn't excluded from selection pool in some actor auto switching modes
 //FIXED- Unit autoswitching mode within group now switches to another group if all units within the group dies.
 //FIXED- Unit autoswitching mode within group no longer makes dead units the actor.
 //FIXED- Chat is now hidden by default during camera operation.
-//ADDED- Checkbox in gui for showing chat during camera operation.
 //FIXED- Purged the last bunch of usages of comment command in scripts
+//ADDED- New foot scene "stationaryFrontRandom"
 //TWEAKED- Foot scenes spend less time high above and more time at low and medium distance
 //TWEAKED- Foot scenes at higher action values have shorter scene duration by about a third
-//ADDED- New foot scene "stationaryFrontRandom"
 //TWEAKED- Helicopter scenes switch earlier when actor moves away from stationary camera
 //TWEAKED- Helicopter front facing scenes are shorter by about two thirds
 //TWEAKED- Actor was set multiple times when using the mapclick selection method.
 
-
+//TODO- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
+//TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
+//TODO- side indicam_actor is CIV on mission start
+//TODO- Apply the new debug function to the debug system.
+//TODO- Put a setting in indiCam_core_Settings to define auto switching minimum distance (case 3)
 //TODO- When a player actor enters a vehicle, the camera autoswitches actor according to current settings instead of staying with the unit.
 //TODO- Put in disqualification features on scenes and make one "not for MP use" to get rid of helicopter choppy scenes
 //TODO- Make sure actor deletion is handled the same way as actor getting killed.
@@ -69,7 +68,7 @@
 //TODO- Preventing scene switching doesn't seem to prevent scene switching by obscured actor. Are we fine with that?
 
 ///		SCRIPTED SCENES 
-//TODO- How do the new special scene actor stuff work alongside unconcious units with ace or reggs script?
+//TODO- How do the new special scene actor stuff work alongside unconcious units with ace or AIS?
 //TODO- Add "killer" as scripted scene as a death scene. Could be made to be shown on every occation in GUI.
 //TODO- Detect incoming mortar fire and switch to show an overview of the location at impact
 //TODO- Soemthing weird with launcherScan sometimes. It's like it's being looped endlessly on having an AT actor on cooldown
@@ -136,19 +135,15 @@
 // ------------------------------------------------------------------------------------------------------
 //													init												
 //-------------------------------------------------------------------------------------------------------
-// indiCam script should only init on player clients or on player hosts.
+// indiCam script should only init on player clients or on player hosts
 if (!hasInterface) exitWith {};
 
 // Start of init function
 indiCam_fnc_init = {	// Here to suspend initialization if there is a mission control box.
 
-
-
 	// Player is now either not spawned or has died --> NO! Not enough when autospawning into editor placed units as in indicam dev mission
-	// Needs something more robust
+	// Needs something more robust, but is currently working
 	waitUntil {alive player};
-
-
 
 	indiCam_actor = player;
 
@@ -178,14 +173,31 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	indiCam_var_actorAutoSwitch = false;
 	indiCam_var_actorSide		= side player;		// Keeps track of actor's side through death
 	
+	// Networking
 	indiCam_var_network = [	// The network data for eventhandlers
-		player,			// 0: The new actor unit
-		2,		// 1: Target machine number in the network
-		2,	// 2: Indicam machine number in the network
-		123456789,		// 3: No UID in singleplayer - renders as "_SP_PLAYER_"
+		player,				// 0: The new actor unit
+		2,					// 1: Target machine number in the network
+		2,					// 2: Indicam machine number in the network
+		123456789,			// 3: No UID in singleplayer - renders as "_SP_PLAYER_"
 		[],					// 4: the array containing EH name and id numbers
 		[]					// 5: accumulated eh's from select 4 for mopping up
 	];
+
+	// Check to see if another client already has defined the instance variable on the whole network
+	// Create it on the server and push to everybody if needed.
+	{
+		if (isNil {missionNamespace getVariable "indiCam_var_indiCamInstance"}) then {
+			// indiCam instance is nil on the server, so go ahead and define it globally
+			indiCam_var_indiCamInstance = [];
+			publicVariable "indiCam_var_indiCamInstance";
+			//{systemChat "indiCam instance was nil, created it"} remoteExec ["call", remoteExecutedOwner];
+
+		} else { // Saved for posterity. Remove this "else" when everything has proven itself.
+			
+			// indiCam instance already exists on the server and therefore should already be pushed to this machine
+			//{systemChat "indicam instance var exists"} remoteExec ["call", remoteExecutedOwner];
+		};
+	} remoteExec ["call", 2]; // Confirmed to work just as well in SP
 
 
 	// Initialize switching timers
@@ -303,7 +315,6 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 	[player] call indiCam_fnc_actorSwitch;
 
 
-
 	// This function removes eventhandlers of certain types stored in the global variable
 	indiCam_fnc_clearEventhandlers = {
 		while { !(indiCam_var_activeEventHandlers isEqualTo []) } do {	// This extra while loop ensures array is empty
@@ -389,10 +400,4 @@ if (isNil {missionNamespace getVariable "indiCam_missionControl"}) then {
 		
 	}];
 
-
-
-
-
 };
-
-

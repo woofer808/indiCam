@@ -75,4 +75,30 @@ if (indiCam_devMode) then {
 };
 
 
+// Post the player unit of this indicam instance to the server so that he can be excluded from other peoples' actor auto switching
+if (isMultiplayer) then {
+
+	indiCam_var_indiCamInstance pushBackUnique player;
+	/* // Saved for posterity in case publicVariable "indiCam_var_indiCamInstance" from indiCam_core_init doesn't get sent in time
+	if (isNil {missionNamespace getVariable "indiCam_var_indiCamInstance"}) then {
+
+		// The server hasn't had a chance to push the variable just yet
+		indiCam_var_indiCamInstance = [player];
+	};
+	*/
+
+	// Spawn code that waits for the camera to shut down and therefore remove this user from the array
+	// This has the benefit of everything being in the same place of the script.
+	[] spawn {
+		waitUntil {indiCam_running}; // I can't be sure that this has been set just yet. Doing it like this for now.
+		waitUntil {!indiCam_running};
+		indiCam_var_indiCamInstance = indiCam_var_indiCamInstance - [player];
+		publicVariable "indiCam_var_indiCamInstance";
+	};
+	// Publish the variable for the duration of the mission to all connected clients, servers and JIP
+	publicVariable "indiCam_var_indiCamInstance";
+
+};
+
+
 indiCam_var_requestMode = "default";
