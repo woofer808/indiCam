@@ -28,27 +28,10 @@
 		*/
 
 
-/* Changelog version 1.32*/	
+/* Changelog version 1.321*/	
 ///		PRIORITIES / DONE
 //KNOWN- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
-//ADDED- indiCam clients in a multiplayer game won't be part of the actor selection pool while they have their indiCam camera running. It is to avoid getting footage of a still player in a field somewhere (thanks Reggs).
-//ADDED- Checkbox in gui for showing chat during camera operation.
-//FIXED- Actor switching won't include headless clients anymore.
-//FIXED- Situation checks did not work in multiplayer. Eventhandlers are now rewritten to be put onto the actors' client over the network and comnmunicating to the instance of indiCam that put them there.
-//FIXED- Actor death did not work on players in MP because the death cam eventhandler wasn't local to their machine
-//FIXED- Headless clients and dedicated servers are now more excluded from actor randomizations (Thanks Gold John King)
-//FIXED- Cameradude wasn't excluded from "only players" actor randomization (Thanks Gold John King)
-//FIXED- Current actor wasn't excluded from selection pool in some actor auto switching modes
-//FIXED- Unit autoswitching mode within group now switches to another group if all units within the group dies.
-//FIXED- Unit autoswitching mode within group no longer makes dead units the actor.
-//FIXED- Chat is now hidden by default during camera operation.
-//FIXED- Purged the last bunch of usages of comment command in scripts
-//ADDED- New foot scene "stationaryFrontRandom"
-//TWEAKED- Foot scenes spend less time high above and more time at low and medium distance
-//TWEAKED- Foot scenes at higher action values have shorter scene duration by about a third
-//TWEAKED- Helicopter scenes switch earlier when actor moves away from stationary camera
-//TWEAKED- Helicopter front facing scenes are shorter by about two thirds
-//TWEAKED- Actor was set multiple times when using the mapclick selection method.
+//FIXED- HOTFIX for mod version not loading correctly in conjunction with some mods.
 
 //TODO- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
 //TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
@@ -199,6 +182,9 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 		};
 	} remoteExec ["call", 2]; // Confirmed to work just as well in SP
 
+	if (isNil {missionNamespace getVariable "indiCam_var_indiCamInstance"}) then {
+		indiCam_var_indiCamInstance = [];
+	};
 
 	// Initialize switching timers
 	indiCam_var_sceneTimer = time + 9999999;
