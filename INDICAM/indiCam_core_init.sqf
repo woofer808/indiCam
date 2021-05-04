@@ -33,6 +33,7 @@
 //KNOWN- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
 //FIXED- HOTFIX for mod version not loading correctly in conjunction with some mods.
 
+//TODO- Player remote controls could be done with CBA fleximenu. From Pvt_Parker's stream it seeems "put camera on this" and "next scene" are the two most important ones
 //TODO- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
 //TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
 //TODO- side indicam_actor is CIV on mission start
@@ -59,6 +60,7 @@
 //TODO- Scripted scene: DropOff - Keep track of helicopters when they have low velocity < 70 and are close to ground (< 10m) and in camera vincinity
 
 ///		BACKLOG
+//TODO- When clicking on the map to select a unit and there are a lot of possible targets, show a pop-up menu to avoid having to zoom in (idea by NeK0ArroW)
 //TODO- Fog of war functionality. A checkbox in the GUI that only shows enemies that current camera side knowsAbout.
 //TODO- Might need to spawn a background function that keeps track of indiCam_running variable
 //TODO- Scripted scenes that makes jumps to close-by animals
@@ -72,7 +74,6 @@
 //TODO- Make indiCam_fnc_distanceSort function test if proper params were passed.
 //TODO- Add cleanup script that waits for the camera to close. Should make for a more stable cleanup if the main scripts gets interrupted
 //TODO- Check to see if we can detect weapon switching. That would help with camera views on vehicles (compare current ammo to weapon type?)
-//TODO- Rewrite game logics according to the new method used in randomLinear ro remove dependency on the logic objects.
 //TODO- Make vehicles and aircraft detect shooting scenes with either a single fire category or by actionLevel
 //TODO- Now that I have the environmentCheck I may want to add disqualification with something like (_urbanBool) then {find a new scene};
 //TODO- Add indiCam_var_proximityValue functionality to situationCheck
@@ -105,7 +106,6 @@
 //IDEA- Add camera control for other players. Maybe by broadcasting a variable containing connection ID or having a user grab the cameraman ID.
 //IDEA- Add the possibility for the camera to follow objects around that has object name starting with indiCam_baton* in it's inventory
 //IDEA- Maybe I should convert the main loop's interrupt to a function that I can call wherever?
-//IDEA- Let any player walk up to the cameraman and action menu himself a set of addactions controls. that way we can send the vars to the correct connection id.
 //IDEA- Is it possible to keep the follow logics away from buildings? Would help with LOS stuff
 //IDEA- Maybe add a counter to sceneSelect so that the next scene test only tries a set number of times before waiting a little while before trying again.
 //IDEA- How to stream the camera input to only an HUD element? Problem is camera commit. Maybe if the camera is created but not started it will work just fine? See KK's blog.
@@ -312,13 +312,6 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 
 	};
 
-	/*
-	// Define the function that is to run when the CBA bound key is pressed.
-	indiCam_fnc_keyGUI = {
-		// Only open the dialog if it's not already open
-		if (isNull (findDisplay indiCam_id_guiDialogMain)) then {createDialog "indiCam_gui_dialogMain";} else {closeDialog 0};
-	};
-	*/
 
 	
 
