@@ -468,15 +468,18 @@ private _autoswitchCombo = (findDisplay indiCam_id_guiDialogMain) displayCtrl in
 {
 	_autoswitchCombo lbAdd _x;
 } forEach 	[ // The order is dependent on index number to match function in main indiCam script
-			"Only players",
-			"Closest unit",
-			"All units",
-			"Random unit within proximity",
-			"Only players on actor side",
-			"Closest unit on actor side",
-			"All units on actor side",
-			"Random unit within proximity on actor side",
-			"Random unit within current group"
+			  // in indiCam_fnc_actorSwitch.sqf
+			"Only players",									// 0
+			"Closest unit",									// 1
+			"All units",									// 2
+			"Random unit within proximity",					// 3
+			"Only players on actor side",					// 4
+			"Closest unit on actor side",					// 5
+			"All units on actor side",						// 6
+			"Random unit within proximity on actor side",	// 7
+			"Random unit within current group",				// 8
+			"Random group leader on actor side",			// 9
+			"Random unit in aircraft on actor side"			// 10
 			];
 
 // After loading gui, set the dropdown to it's current value

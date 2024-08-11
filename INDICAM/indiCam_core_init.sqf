@@ -28,11 +28,16 @@
 		*/
 
 
-/* Changelog version 1.321*/	
+/* Changelog version 1.33*/	
 ///		PRIORITIES / DONE
 //KNOWN- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
-//FIXED- HOTFIX for mod version not loading correctly in conjunction with some mods.
+//ADDED- Spawned aircraft CAS detection for usage with scripted scenes. Array indiCam_var_CASVehicles for aircraft class names is available to mission makers to use.
+//FIXED- Various general commenting added
+//ADDED- New actor switching modes added
+//FIXED- A helicopter scene would try to divide by zero speed if vehicle was stationary.
 
+//TODO- Make an "only players" randomization checkbox work in tandem with unit selection rules dropdown
+//TODO- deleteVehicleCrew creates a state where the camera stops being able to switch, reports "Current actor: Error: No Vehicle"
 //TODO- Player remote controls could be done with CBA fleximenu. From Pvt_Parker's stream it seeems "put camera on this" and "next scene" are the two most important ones
 //TODO- Issue with map selection in GUI breaking at times. Fix is to close indicam gui then opening and closing the regular map before going back to the gui.
 //TODO- Dead units are considered SIDE CIV, meaning we need a last confirmed actorSide that wasn't polluted by death
@@ -52,6 +57,7 @@
 //TODO- Preventing scene switching doesn't seem to prevent scene switching by obscured actor. Are we fine with that?
 
 ///		SCRIPTED SCENES 
+//TODO- New follow scenes for airplanes, most picks now are flybys
 //TODO- How do the new special scene actor stuff work alongside unconcious units with ace or AIS?
 //TODO- Add "killer" as scripted scene as a death scene. Could be made to be shown on every occation in GUI.
 //TODO- Detect incoming mortar fire and switch to show an overview of the location at impact
@@ -276,6 +282,7 @@ indiCam_fnc_init = {	// Here to suspend initialization if there is a mission con
 		indiCam_fnc_visionMode = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_visionMode.sqf";
 		indiCam_fnc_manualMode = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_manualMode.sqf";
 		indiCam_fnc_launcherScan = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_launcherScan.sqf";
+		indiCam_fnc_CASScan = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_CASScan.sqf";
 		indiCam_fnc_unitCooldown = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_unitCooldown.sqf";
 		indiCam_fnc_followLogicFPS = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicFPS.sqf";
 		indiCam_fnc_followLogicTurretAim = compile preprocessFileLineNumbers "INDICAM\functions\indiCam_fnc_followLogicTurretAim.sqf";

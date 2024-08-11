@@ -5,13 +5,13 @@ private _scriptMode = _this select 0;
 private _unit = (_this select 1);		// The desired unit
 private _scriptedTimer = time + 30;		// Timer to check that the script will time out if needed
 
-scopeName "topLevel";
+scopeName "topLevel"; // For subroutines in this script to exit to this level (like a GOTO almost)
 
 // All the different ATguy scripts are located in here, select the appropriate one based on what was passed here
 switch (_scriptMode) do {
 
 	// Run this if mode wasn't provided
-		default {};
+	default {};
 
 	case "new": {
 				
