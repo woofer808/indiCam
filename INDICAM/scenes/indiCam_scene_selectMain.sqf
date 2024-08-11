@@ -117,7 +117,7 @@ while {true} do {
 	/* ----------------------------------------------------------------------------------------------------
 									Scene prototyping area
    	   ---------------------------------------------------------------------------------------------------- */
-	private _prototypeScene = false; 				// Switch this to true to use the prototyping area
+	private _prototypeScene = true; 				// Switch this to true to use the prototyping area
 		
 	if (_prototypeScene) then {
 		indiCam_devMode = true;	indiCam_debug = true;	// Activate debug and devmode stuff to speed up development. Refresh scene in Arma.
@@ -127,10 +127,18 @@ while {true} do {
 
 
 
-			// Regular stationary camera tracking a logic target in front of the actor
+			// Optimized helicopter landing scene to capture passenger drop-offs
+			// Dependent on speed
 			indiCam_var_cameraType = "stationaryCameraLogicTarget";
-			indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
-			indiCam_var_takeTime = 60;				// Time after which a new scene will be selected
+			
+			_velocity = (velocityModelSpace (vehicle indiCam_actor)); 
+			_speed = (3.6*(vectorMagnitude _velocity));
+			systemchat str _speed;
+
+			if (_speed > 15) then {indiCam_var_disqualifyScene = true;} else {indiCam_var_disqualifyScene = false;};
+			
+			//indiCam_var_disqualifyScene = false;	// If true, this scene will not be applied and a new one will be selected
+			indiCam_var_takeTime = 30;				// Time after which a new scene will be selected
 			_posX = random [-2,0,2]; 				// Specifies the range for the camera position sideways to the actor
 			_posY = random [5,20,30];				// Specifies the range for the camera position to the front and back of the actor
 			_posZ = random [1,2,5];				// Specifies the range for the camera position vertically from the actor

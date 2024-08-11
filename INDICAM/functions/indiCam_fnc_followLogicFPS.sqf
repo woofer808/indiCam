@@ -54,7 +54,7 @@ if (_distance > 100000) then {
 
 	// If _distance exceeds too high of a number during iterations, it will reset to 1. Not battle proven, but works for now.
 	_distance = 1;
-	if (indiCam_debug) then {systemChat "memory overflow in:\nindiCam_fnc_followLogicFPS\n\nwas prevented..."};
+	if (indiCam_debug) then {systemChat "memory overflow in:\indiCam_fnc_followLogicFPS\n\nwas prevented..."};
 	indiCam_fnc_requestMode = "default";
 
 	// The following two lines was the previous way to work around the memory overflow issue by stopping the camera

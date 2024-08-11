@@ -135,7 +135,47 @@ switch (_case) do {
 				if ( (count _unitArray) > 0 ) then {_newActor = selectRandom _unitArray} else {_newActor = player};
 				
 			};
-			
+
+	case 9: { // Random group leader within selected side
+				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between group leaders of current side.", _case];};
+
+				// Get all eligible units from actor side
+				_unitArray = _eligibleUnits select {side _x == _actorSide};
+
+				// Sort out only group leaders
+				_unitArray = _unitArray select {_x == leader (group _x)};
+
+				// Make sure group leaders have at least one subordinate
+				_groupCount = count units group _x;
+				
+				_unitArray = _unitArray select {count units group _x > 1};
+
+				// If there aren't any group leaders that match the selection, pick a random unit from the actor side.
+				if ( (count _unitArray) > 0 ) then {_newActor = selectRandom _unitArray} else {_newActor = player};
+				
+			};
+
+		case 10: { // Random unit in aircraft on actor side
+				if (indiCam_debug) then {systemChat format ["Case: %1 - Auto switching between airborne units of current side.", _case];};
+
+				// Get all eligible units from actor side
+				_unitArray = _eligibleUnits select {side _x == _actorSide};
+
+				// Sort out units in aircraft
+				_unitArray = _unitArray select {
+					(vehicle _x isKindOf "Helicopter") ||
+					(vehicle _x isKindOf "Plane")
+				};
+
+				// If there aren't any units that match the selection, pick a random unit from the actor side.
+				if ( (count _unitArray) > 0 ) then {
+					_newActor = selectRandom _unitArray
+				} else {
+					_unitArray = _eligibleUnits select {side _x == _actorSide};
+					_newActor = selectRandom _unitArray;
+				};
+
+			};
 
 }; // End of switch
 

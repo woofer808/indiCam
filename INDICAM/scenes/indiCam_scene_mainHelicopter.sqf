@@ -125,6 +125,14 @@ if ( (((getPos vehicle indiCam_actor) select 2) > 3) && (((getPos vehicle indiCa
 
 	switch (indiCam_var_scene) do {
 		
+
+		
+
+		// Put a scene here that requires a minimal velocity that gets disqualified if conditions aren't met
+		// Remember that there is a prototyping area in indiCam_scene_selectMain.sqf
+
+
+
 		case "cheeseCam": {
 			// Advanced chase cam with logic target updated on every frame
 			indiCam_var_cameraType = "followCameraLogicTarget";

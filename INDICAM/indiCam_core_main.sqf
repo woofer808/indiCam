@@ -74,7 +74,15 @@ if (indiCam_devMode) then {
 	[] spawn indiCam_fnc_launcherScan;
 };
 
+// This initializes the detection of a CAS event happening
+if (indiCam_devMode) then {
+	[] execVM "INDICAM\functions\indiCam_fnc_CASScan.sqf";
+} else {
+	[] spawn indiCam_fnc_CASScan;
+};
 
+
+// This is for situations where multiple instances of indiCam are running in the same game.
 // Post the player unit of this indicam instance to the server so that he can be excluded from other peoples' actor auto switching
 if (isMultiplayer) then {
 

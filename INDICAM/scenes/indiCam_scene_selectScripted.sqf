@@ -96,7 +96,7 @@ if (_sceneType == "actorDeath") then { // Start of actor death scene type
 }; // End of actor death scenes
 
 /* ----------------------------------------------------------------------------------------------------
-									Scripted scenes
+									Scripted scenes - AT Guy
    ---------------------------------------------------------------------------------------------------- */
 
 if (_sceneType == "ATGuy") then {
@@ -123,6 +123,37 @@ if (_sceneType == "ATGuy") then {
 	}; // End of switch
 
 }; // End of ATGuy scenes
+
+
+/* ----------------------------------------------------------------------------------------------------
+									Scripted scenes - CAS
+   ---------------------------------------------------------------------------------------------------- */
+
+if (_sceneType == "CAS") then {
+	// Evaluate the chance of these scenes to happen in the corresponding monitoring function
+	
+	_selectedScene = selectRandom [
+								"huntsmenCAS"//,	// Basic scripted CAS scene that tracks projectile
+								//"generic"	// Basic scripted AT scene that tracks projectile
+							];
+	
+	switch (_selectedScene) do {
+		
+		case "huntsmenCAS": {
+				_handle = ["huntsmenCAS",_unit] execVM "INDICAM\scenes\indiCam_scene_CAS.sqf";
+				waitUntil {scriptDone _handle};
+		}; // end of case
+		
+		
+		case "generic": {
+				_handle = ["generic",_unit] execVM "INDICAM\scenes\indiCam_scene_CAS.sqf";
+				waitUntil {scriptDone _handle};
+		}; // end of case
+		
+	}; // End of switch
+
+}; // End of CAS scenes
+
 
 indiCam_var_scriptedSceneRunning = false;
 // When done, resume normal operations
